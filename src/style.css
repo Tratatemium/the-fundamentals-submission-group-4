@@ -115,8 +115,14 @@ button:focus-visible {
 /* #region CSS CUSTOM PROPERTIES (VARIABLES)                                                         */
 /* ================================================================================================= */
 
-:root {
 
+:root {
+  --primary-color : #F5F4F1;
+  --secondary-color : #D6CEC2;
+  --accent-color : #4E0707;
+  --text-color : #1D1615;
+  --font-primary : 'Roboto' , sans-serif;
+  --font-secondary : 'Playfair' , serif;
 }
 
 /* #endregion CSS CUSTOM PROPERTIES (VARIABLES) */ 
