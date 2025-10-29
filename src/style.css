@@ -68,8 +68,28 @@ textarea:not([rows]) {
   min-height: 10em;
 }
 
+
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 5ex;
+}
+
+
+
+
+
+/* ================================================================================================= */
+/* #region CSS CUSTOM PROPERTIES (VARIABLES)                                                         */
+/* ================================================================================================= */
+
+
+:root {
+  --primary-color : #F5F4F1;
+  --secondary-color : #D6CEC2;
+  --accent-color : #4E0707;
+  --text-color : #1D1615;
+  --font-primary : 'Roboto' , sans-serif;
+  --font-secondary : 'Playfair' , serif;
+
 }
 
