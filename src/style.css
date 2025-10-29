@@ -1,113 +1,80 @@
-/* ================================================================================================= */
-/* #region NEW REGION                                                                                */
-/* ================================================================================================= */
 
-
-/* #region NEW REGION */ 
-
-
-/* ================================================================================================= */
-/* #region DEFAULT STYLES FROM TASK                                                                  */
-/* ================================================================================================= */
-
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Prevent font size inflation */
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
+/* Remove default margin in favour of better control in authored CSS */
+body, h1, h2, h3, h4, p,
+figure, blockquote, dl, dd {
+  margin-block-end: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core body defaults */
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  line-height: 1.5;
 }
 
-h1 {
-  font-size: 3.2em;
+/* Set shorter line heights on headings and interactive elements */
+h1, h2, h3, h4,
+button, input, label {
   line-height: 1.1;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Balance text wrapping on headings */
+h1, h2,
+h3, h4 {
+  text-wrap: balance;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: currentColor;
 }
 
-.card {
-  padding: 2em;
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
 }
 
-.read-the-docs {
-  color: #888;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+/* Inherit fonts for inputs and buttons */
+input, button,
+textarea, select {
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  font-size: inherit;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+  min-height: 10em;
 }
 
-/* #endregion DEFAULT STYLES FROM TASK     */
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+  scroll-margin-block: 5ex;
+}
+
+
 
 
 
@@ -123,45 +90,6 @@ button:focus-visible {
   --text-color : #1D1615;
   --font-primary : 'Roboto' , sans-serif;
   --font-secondary : 'Playfair' , serif;
+
 }
-
-/* #endregion CSS CUSTOM PROPERTIES (VARIABLES) */ 
-
-
-/* ================================================================================================= */
-/* #region HEADER                                                                                    */
-/* ================================================================================================= */
-
-/* #endregion HEADER */
-
-
-/* ================================================================================================= */
-/* #region FOOTER                                                                                    */
-/* ================================================================================================= */
-
-/* #endregion FOOTER */
-
-
-/* ================================================================================================= */
-/* #region APP (GALERY)                                                                              */
-/* ================================================================================================= */
-
-#app {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1em; 
-  align-items: center;
-  justify-content: center;
-}
-
-.app-img {
-  width: 12em;
-  height: 12em;
-  border-radius: 8px;
-  border: 2px solid orangered;
-}
-
-/* #endregion APP (GALERY) */
-
 
