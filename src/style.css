@@ -126,19 +126,24 @@ textarea:not([rows]) {
 /* ================================================================================================= */
 
 #app {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1em; 
-  align-items: center;
-  justify-content: center;
+    max-width: 67em; /* Sets a maximum width for the container */
+  margin: 0 auto; /* Centers the container horizontally */
+  padding: 1.5em; /* Adds padding around the content */
+
+  display: grid; /* Uses CSS Grid for layout */
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* Creates four equal-width columns */
+  column-gap: 1em; /* Sets the gap between columns */
+  row-gap: 1em; /* Sets the gap between rows */
+  padding: 1em; /* Adds padding around the grid */
+  place-content: center; /* Centers the grid content */
+  align-items: center; /* Aligns items vertically in the center */
+  justify-content: center; /* Aligns items horizontally in the center */
 }
 
 .app-img {
-  width: 12em;
-  height: 12em;
-  border-radius: 8px;
-  border: var(--accent-color);
+  width: 16em; /* Sets a fixed width for the images */
+  height: 16em; /* Sets a fixed height for the images */
+  border-radius: 4px; /* Rounds the corners of the images */
+  border: var(--accent-color); /* Sets the border color using the accent color variable */
 }
-
 /* #endregion APP (GALERY) */

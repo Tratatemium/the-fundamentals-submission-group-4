@@ -25,10 +25,14 @@ import './style.css';
     // Ensure the app container exists before proceeding
     if (!appContainer) appContainer = document.getElementById('app');
     
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('image-container'); 
+    appContainer.appendChild(imageContainer);
+
     const appImg = document.createElement('img');  // Create new image element
     appImg.classList.add('app-img');               // Add CSS class for styling
     appImg.src = src;                              // Set the image source URL
-    appContainer.appendChild(appImg);              // Append the image to the app container
+    imageContainer.appendChild(appImg);              // Append the image to the app container
   };
 
 /* #endregion DOM MANIPULATION */ 
@@ -75,3 +79,5 @@ const appContainer = document.getElementById('app');
 
 // Alternative: Fetch and display all available images (currently commented out)
 fetchImages();
+
+fetchImages(2); // Fetch and display images from page 2
