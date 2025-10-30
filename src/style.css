@@ -134,11 +134,23 @@ textarea:not([rows]) {
   justify-content: center;
 }
 
+.image-item-wrapper {
+  position:relative;
+  overflow:hidden;
+  overflow: hidden;
+  height: 20rem;
+
+}
 .app-img {
-  width: 12em;
-  height: 12em;
-  border-radius: 8px;
-  border: var(--accent-color);
+  border: none;
+  border-radius: 2rem;
+}
+.hover-container {
+  position:absolute;
+  width: 100%;
+  height: 4rem;
+  background-color: #3e252556;
+  border-radius:2rem;
 }
 
 /* #endregion APP (GALERY) */
