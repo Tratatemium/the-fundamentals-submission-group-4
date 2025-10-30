@@ -75,3 +75,5 @@ const appContainer = document.getElementById('app');
 
 // Alternative: Fetch and display all available images (currently commented out)
 fetchImages();
+
+fetchImages(2); // Fetch and display images from page 2
