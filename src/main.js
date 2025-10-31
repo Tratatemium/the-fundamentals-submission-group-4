@@ -75,6 +75,8 @@ import './style.css';
 
 import { GoogleGenAI, Type,} from '@google/genai';
 
+
+
 const ellipsisAnimation = () => {
   let count = 0;
 
@@ -84,12 +86,12 @@ const ellipsisAnimation = () => {
   }, 500);
 };
 
-
-
 const stopEllipsisAnimation = () => {
   clearInterval(intervalId);
   intervalId = null;
 };
+
+
 
 const fetchData = (page = 1) => { // Fetches the first page by default
     return fetch(`https://image-feed-api.vercel.app/api/images?page=${page}`)
@@ -285,6 +287,12 @@ const GEMINI_API_KEY = 'AIzaSyDu4TSQ7WaK_QCP8rUus6eN6-sAEpJ1qbs';
 
 
 const headerContainer = document.querySelector('header');
+
+const buttonLoadImages = document.createElement('button');
+buttonLoadImages.classList.add('button-load-images');
+buttonLoadImages.textContent = 'Load images';
+headerContainer.appendChild(buttonLoadImages);
+
 const buttonAI = document.createElement('button');
 buttonAI.classList.add('button-AI');
 buttonAI.textContent = 'Get metadata';
@@ -301,9 +309,16 @@ dots.textContent = '';
 headerContainer.appendChild(dots);
 let intervalId = null;
 
+let imagesLoadedCounter = 1;
+buttonLoadImages.addEventListener('click', () => {
+  fetchImages(imagesLoadedCounter++);
+});
+
 buttonAI.addEventListener('click', () => {
   getImageMetadata();
 });
+
+
 /* #endregion GEMENI API  */ 
 
 
@@ -316,4 +331,4 @@ const appContainer = document.getElementById('app');
 // fetchOneImage('e8cd3ffd-794c-4ec6-b375-7788dbb14275')
 
 // Alternative: Fetch and display all available images (currently commented out)
-fetchImages();
+
