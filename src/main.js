@@ -75,7 +75,32 @@ import './style.css';
 
 import { GoogleGenAI, Type,} from '@google/genai';
 
-async function fetchImageFromUrl(url) {
+const ellipsisAnimation = () => {
+  let count = 0;
+
+  intervalId = setInterval(() => {
+    count = (count + 1) % 4;
+    dots.textContent = ".".repeat(count);
+  }, 500);
+};
+
+
+
+const stopEllipsisAnimation = () => {
+  clearInterval(intervalId);
+  intervalId = null;
+};
+
+const fetchData = (page = 1) => { // Fetches the first page by default
+    return fetch(`https://image-feed-api.vercel.app/api/images?page=${page}`)
+      .then(resp => resp.json())                                                       // Parse response as JSON
+      .then(json => json.data);     // Return the data array
+};
+
+
+
+async function fetchOneImageFromUrl(url) {
+  
   // 1. Fetch the image
   const response = await fetch(url);
 
@@ -106,25 +131,79 @@ async function fetchImageFromUrl(url) {
   return { mimeType, base64Data };
 };
 
-async function main() {
 
-  // --- Define your image URL here ---
-  const IMAGE_URL = 'https://image-feed-api.vercel.app/api/images/proxy?url=https%3A%2F%2Fpicsum.photos%2Fseed%2F197%2F300%2F300';
+async function fetchImagesFromUrl(page) {
+  // Get the data first
+  const data = await fetchData(page);
+  const imageUrls = data.map(element => element.image_url);
+  
+  const processedImages = [];
+  
+  for (const url of imageUrls) {
+    try {
+      const response = await fetch(url);
 
-  let imagePart;
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: Status ${response.status} ${response.statusText}`);
+      }
+
+      // 2. Get the MIME type
+      const mimeType = response.headers.get('content-type');
+      if (!mimeType || !mimeType.startsWith('image/')) {
+        throw new Error(`Invalid content type: ${mimeType || 'none'}. URL must point to an image.`);
+      }
+
+      // 3. Get the image data as an ArrayBuffer
+      const arrayBuffer = await response.arrayBuffer();
+
+      // 4. Convert ArrayBuffer to Base64 string
+      // First, convert to a string of raw bytes
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let byteString = '';
+      uint8Array.forEach((byte) => {
+        byteString += String.fromCharCode(byte);
+      });
+
+      // Second, encode the byte string to Base64
+      const base64Data = btoa(byteString);
+
+      processedImages.push({ mimeType, base64Data });
+    } catch (error) {
+      console.error(`Error processing image ${url}:`, error);
+    }
+  }
+  
+  return processedImages;
+}
+
+
+
+async function getImageMetadata() {
+  
+  let imageParts = [];
   try {
-    // 1. Fetch the image and convert it
-    const { mimeType, base64Data } = await fetchImageFromUrl(IMAGE_URL);
-
-    // 2. Create the image part for the API request
-    imagePart = {
+    textAI.textContent = 'Fetching multiple images from API';
+    ellipsisAnimation();
+    
+    // 1. Fetch all images from the first page and convert them
+    const processedImages = await fetchImagesFromUrl(1);
+    
+    // 2. Create image parts for the API request
+    imageParts = processedImages.map(({ mimeType, base64Data }) => ({
       inlineData: {
         mimeType: mimeType,
         data: base64Data,
       },
-    };
+    }));
+    
+    if (imageParts.length === 0) {
+      throw new Error('No images were successfully processed');
+    }
+    
   } catch (err) {
-    console.error("Error fetching image:", err.message);
+    console.error("Error fetching images:", err.message);
+    textAI.textContent = '🚨 Error fetching images 🚨';
+    stopEllipsisAnimation();
     return; // Stop execution if image fetching fails
   }
 
@@ -138,23 +217,26 @@ async function main() {
     },
     responseMimeType: 'application/json',
     responseSchema: {
-      type: Type.OBJECT,
-      required: ["category", "description", "authorName"],
-      properties: {
-        category: {
-          type: Type.STRING,
-        },
-        description: {
-          type: Type.STRING,
-        },
-        authorName: {
-          type: Type.STRING,
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        required: ["category", "description", "authorName"],
+        properties: {
+          category: {
+            type: Type.STRING,
+          },
+          description: {
+            type: Type.STRING,
+          },
+          authorName: {
+            type: Type.STRING,
+          },
         },
       },
     },
     systemInstruction: [
         {
-          text: `generate structured output based on an image: category, description of an image and a random full name (as 'authorName')`,
+          text: `generate structured output based on images: for each image provide category, description of the image and a random full name (as 'authorName')`,
         }
     ],
   };
@@ -165,35 +247,63 @@ async function main() {
       role: 'user',
       parts: [
         {
-          text: `Analyze the attached image and provide the requested JSON fields.`,
+          text: `Analyze the attached images and provide the requested JSON fields for each image in an array format.`,
         },
-        imagePart // Add the image part here
+        ...imageParts // Add all image parts here
       ],
     },
   ];
 
   try {
-    const response = await ai.models.generateContentStream({
+    textAI.textContent = 'Generating metadata with Gemini for multiple images';
+    const response = await ai.models.generateContent({
       model,
       config,
       contents,
     });
 
-    // Note: The stream will likely come in one big chunk for JSON output
-    console.log("Model Response (stream):");
-    for await (const chunk of response) {
-      console.log(chunk.text);
-    }
+    // Log the complete response
+    console.log("Model Response:");
+    console.log(response.text);
+    
+    // Parse and display the results
+    const metadata = JSON.parse(response.text);
+    console.log(`Generated metadata for ${metadata.length} images`);
+    
   } catch (err) {
     console.error("Error generating content:", err);
+    textAI.textContent = '🚨 Error generating content 🚨';
+    stopEllipsisAnimation();
+    return;
   }
+  
+  textAI.textContent = '🎉 Metadata generation: success! 🎉';
+  stopEllipsisAnimation();
 }
 
 const GEMINI_API_KEY = 'AIzaSyDu4TSQ7WaK_QCP8rUus6eN6-sAEpJ1qbs';
 
-main();
 
+const headerContainer = document.querySelector('header');
+const buttonAI = document.createElement('button');
+buttonAI.classList.add('button-AI');
+buttonAI.textContent = 'Get metadata';
+headerContainer.appendChild(buttonAI);
 
+const textAI = document.createElement('p');
+textAI.classList.add('text-AI');
+textAI.textContent = '';
+headerContainer.appendChild(textAI);
+
+const dots = document.createElement('p');
+dots.classList.add('dots-AI');
+dots.textContent = '';
+headerContainer.appendChild(dots);
+let intervalId = null;
+
+buttonAI.addEventListener('click', () => {
+  getImageMetadata();
+});
 /* #endregion GEMENI API  */ 
 
 
