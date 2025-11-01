@@ -8,7 +8,8 @@
 
 import './style.css';
 
-
+let imagesLoadedCounter = 1;
+let imagesData = [];
 
 
 /* ================================================================================================= */
@@ -33,6 +34,18 @@ import './style.css';
     appImg.classList.add('app-img');               // Add CSS class for styling
     appImg.src = src;                              // Set the image source URL
     imageContainer.appendChild(appImg);              // Append the image to the app container
+
+    const textContainer = document.createElement('div');
+    textContainer.classList.add('text-container'); 
+    imageContainer.appendChild(textContainer);
+
+    const imageCategory = document.createElement('p');
+    imageCategory.classList.add('image-category'); 
+    textContainer.appendChild(imageCategory);
+
+    const imageAuthor = document.createElement('p');
+    imageAuthor.classList.add('image-author'); 
+    textContainer.appendChild(imageAuthor);
   };
 
 /* #endregion DOM MANIPULATION */ 
@@ -56,16 +69,29 @@ import './style.css';
 
   /**
    * Fetches images from the image API with pagination support
-   * @param {number} [page=1] - The page number to fetch (defaults to 1 for the first page)
    * @description Makes an API request to retrieve images from a specific page,
    * then iterates through the data array and creates image elements for each one.
    * Supports pagination to load different sets of images from the API.
    */
-  const fetchImages = (page = 1) => { // Fetches the first page by default
-    fetch(`https://image-feed-api.vercel.app/api/images?page=${page}`)
-      .then(resp => resp.json())                                                       // Parse response as JSON
-      .then(json => json.data.forEach(element => createImage(element.image_url)));     // Create images for each item
-  };
+  // Improved fetchImages with async/await, error handling, and validation
+  async function fetchImages() {
+    try {
+      const response = await fetch(`https://image-feed-api.vercel.app/api/images?page=${imagesLoadedCounter}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const json = await response.json();
+      if (!json.data || !Array.isArray(json.data)) {
+        throw new Error('Invalid data format received from API');
+      }
+      imagesData.push(...json.data);
+      json.data.forEach(item => createImage(item.image_url));
+      imagesLoadedCounter++ 
+    } catch (error) {
+      console.error('Failed to fetch images:', error);
+      // Optionally, show user-friendly error message in UI
+    }
+  }
 
 /* #endregion API REQUESTS */ 
 
@@ -93,7 +119,32 @@ const ellipsisAnimation = () => {
 const stopEllipsisAnimation = () => {
   clearInterval(intervalId);
   intervalId = null;
+  dots.textContent = "";
 };
+
+
+
+const updateImagesData = (newMetadata) => {
+  let i = 0;
+  for (const oneImageData of imagesData) {
+    if (oneImageData.category) {
+      continue;
+    } else {
+      Object.assign(oneImageData, newMetadata[i]);
+      i++;
+    }
+  }
+};
+
+const updateImagesDOM = () => {
+  const imageCategoryContainers = Array.from(document.querySelectorAll('.image-category'));
+  const imageAuthorContainers = Array.from(document.querySelectorAll('.image-author'));
+
+  for (let i = 0; i < imageCategoryContainers.length; i++) {
+    imageCategoryContainers[i].textContent = imagesData[i].category;
+    imageAuthorContainers[i].textContent = imagesData[i].authorName;
+  }
+}
 
 
 
@@ -138,11 +189,10 @@ async function fetchOneImageFromUrl(url) {
 };
 
 
-async function fetchImagesFromUrl(page) {
-  // Get the data first
-  const data = await fetchData(page);
-  const imageUrls = data.map(element => element.image_url);
-  
+async function fetchImagesFromUrl() {
+
+  const imagesToFetch = imagesData.filter(oneImageData => !oneImageData.category);
+  const imageUrls = imagesToFetch.map(oneImageData => oneImageData.image_url);  
   const processedImages = [];
   
   for (const url of imageUrls) {
@@ -185,15 +235,22 @@ async function fetchImagesFromUrl(page) {
 
 
 async function getImageMetadata() {
-  
+
+  let initialArrayLength;
   let imageParts = [];
+
   try {
     textAI.textContent = 'Fetching multiple images from API';
     ellipsisAnimation();
     
     // 1. Fetch all images from the first page and convert them
-    const processedImages = await fetchImagesFromUrl(1);
-    
+    const processedImages = await fetchImagesFromUrl();
+    initialArrayLength = processedImages.length;
+    if (initialArrayLength === 0) {
+      textAI.textContent = 'All image metadata is already loaded.';
+      stopEllipsisAnimation();
+      return;
+    }
     // 2. Create image parts for the API request
     imageParts = processedImages.map(({ mimeType, base64Data }) => ({
       inlineData: {
@@ -267,14 +324,19 @@ async function getImageMetadata() {
       config,
       contents,
     });
-
-    // Log the complete response
-    console.log("Model Response:");
-    console.log(response.text);
-    
+      
     // Parse and display the results
     const metadata = JSON.parse(response.text);
     console.log(`Generated metadata for ${metadata.length} images`);
+    if (metadata.length !== initialArrayLength) {
+      textAI.textContent = '🚨 Error: Some metadata has been lost 🚨';
+    } else {
+      console.log(metadata);
+      updateImagesData(metadata);
+      console.log(imagesData);
+      updateImagesDOM();
+    }
+    
     
   } catch (err) {
     console.error("Error generating content:", err);
@@ -288,7 +350,6 @@ async function getImageMetadata() {
 }
 
 const GEMINI_API_KEY = 'AIzaSyDu4TSQ7WaK_QCP8rUus6eN6-sAEpJ1qbs';
-
 
 const headerContainer = document.querySelector('header');
 
@@ -313,13 +374,15 @@ dots.textContent = '';
 headerContainer.appendChild(dots);
 let intervalId = null;
 
-let imagesLoadedCounter = 1;
+
 buttonLoadImages.addEventListener('click', () => {
-  fetchImages(imagesLoadedCounter++);
+  fetchImages();
 });
 
-buttonAI.addEventListener('click', () => {
-  getImageMetadata();
+buttonAI.addEventListener('click', async () => {
+  buttonAI.disabled = true;
+  await getImageMetadata();
+  buttonAI.disabled = false;
 });
 
 
@@ -335,5 +398,5 @@ const appContainer = document.getElementById('app');
 // fetchOneImage('e8cd3ffd-794c-4ec6-b375-7788dbb14275')
 
 // Alternative: Fetch and display all available images (currently commented out)
-// fetchImages();
+fetchImages();
 // fetchImages(2); // Fetch and display images from page 2

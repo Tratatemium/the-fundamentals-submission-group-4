@@ -210,6 +210,26 @@ header {
   transition: all 0.2s ease;
 }
 
+.button-AI:disabled,
+.button-load-images:disabled {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.button-AI:disabled:hover,
+.button-load-images:disabled:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 .text-AI {
   margin: auto 0 auto 3rem;
 }
@@ -232,7 +252,64 @@ header {
   border-color: #3a0505;
 }
 
+.image-container{
+  position: relative;
+  display: inline-block;
+}
 
+.text-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
+  color: white;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.image-container:hover .text-container {
+  opacity: 1;
+}
+
+.image-category{
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.image-author{
+  color: var(--primary-color);
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
 
 /* #endregion GEMENI API */
 
+.image-container{
+  position: relative;
+  display: inline-block;
+}
+
+.hover-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.image-container:hover .hover-container {
+  opacity: 1;
+}
