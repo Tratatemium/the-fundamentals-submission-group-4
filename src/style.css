@@ -148,7 +148,7 @@ main  {
 }
 
 #app {
-  max-width: 72em; /* Sets a maximum width for the container */
+  max-width: 80em; /* Sets a maximum width for the container */
   margin: 0 auto; /* Centers the container horizontally */
   padding: 1.5em; /* Adds padding around the content */
 
@@ -162,8 +162,8 @@ main  {
 }
 
 .app-img {
-  width: 16em; /* Sets a fixed width for the images */
-  height: 16em; /* Sets a fixed height for the images */
+  width: 18em; /* Sets a fixed width for the images */
+  height: 18em; /* Sets a fixed height for the images */
   border-radius: 4px; /* Rounds the corners of the images */
   border: var(--accent-color); /* Sets the border color using the accent color variable */
 }
