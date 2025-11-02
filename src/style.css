@@ -300,7 +300,8 @@ header {
  * UI STATUS COMPONENTS
  * ===================
  * 
- * Styling for user feedback elements including status text and loading animations
+ * Styling for user feedback elements including status text, loading animations,
+ * and elapsed time display during AI processing operations.
  */
 
 /* Status text display for user feedback */
@@ -308,9 +309,16 @@ header {
   margin: auto 0 auto 3rem;
 }
 
-/* Animated loading dots */
+/* Animated loading dots with fixed width for consistent layout */
 .dots-AI {
+  margin: auto 0 auto 0;
+  width: 1rem; /* Fixed width prevents layout shift during animation */
+}
+
+/* Elapsed time timer display during AI processing */
+.timer-AI {
   margin: auto auto auto 0;
+  width: fit-content; /* Adjusts to content width */
 }
 
 /* #endregion STATUS DISPLAY ELEMENTS */

@@ -305,28 +305,40 @@ let activeCategory = 'All';
 import { GoogleGenAI, Type,} from '@google/genai';
 
 /**
- * Starts the animated ellipsis loading indicator
+ * Starts the animated ellipsis loading indicator with timer
  * @function
  * @description Creates a visual loading animation by cycling through
- * different numbers of dots (0-3) every 500ms
+ * different numbers of dots (0-3) every 500ms. Also displays an elapsed
+ * time counter to show users how long the AI processing has been running.
+ * 
+ * Features:
+ * - Animated dots cycling every 500ms
+ * - Real-time elapsed time display in seconds
+ * - Provides user feedback during long AI operations
  */
 const ellipsisAnimation = () => {
   let count = 0;
+  const timerStart = Date.now();
+  let timerNow;
   intervalId = setInterval(() => {
     count = (count + 1) % 4;
-    dots.textContent = ".".repeat(count);
+    dotsAI.textContent = ".".repeat(count);
+    timerNow = Math.floor( (Date.now() - timerStart) / 1000 );
+    timerAI.textContent = `${timerNow}s elapsed`
   }, 500);
 };
 
 /**
- * Stops the ellipsis animation and clears the dots
+ * Stops the ellipsis animation and clears all loading indicators
  * @function
- * @description Clears the interval timer and resets the dots display
+ * @description Clears the interval timer and resets both the dots display
+ * and elapsed timer. Called when AI processing completes or fails.
  */
 const stopEllipsisAnimation = () => {
   clearInterval(intervalId);
   intervalId = null;
-  dots.textContent = "";
+  dotsAI.textContent = '';
+  timerAI.textContent = '';
 };
 
 /**
@@ -470,6 +482,9 @@ const getImageMetadata = async () => {
     return;
   }
 
+  stopEllipsisAnimation();
+  ellipsisAnimation();
+
   // Initialize Google Gemini AI
   const ai = new GoogleGenAI({
     apiKey: GEMINI_API_KEY,
@@ -577,6 +592,7 @@ const getImageMetadata = async () => {
  * - AI metadata generation button
  * - Status text display
  * - Loading animation dots
+ * - Elapsed time timer display
  * - Interval ID for animation control
  */
 
@@ -623,10 +639,21 @@ headerContainer.appendChild(textAI);
  * Element for animated loading dots
  * @type {HTMLParagraphElement}
  */
-const dots = document.createElement('p');
-dots.classList.add('dots-AI');
-dots.textContent = '';
-headerContainer.appendChild(dots);
+const dotsAI = document.createElement('p');
+dotsAI.classList.add('dots-AI');
+dotsAI.textContent = '';
+headerContainer.appendChild(dotsAI);
+
+/**
+ * Element for displaying elapsed processing time
+ * @type {HTMLParagraphElement}
+ * @description Shows real-time elapsed time during AI metadata generation
+ * to provide users with feedback on processing duration
+ */
+const timerAI = document.createElement('p');
+timerAI.classList.add('timer-AI');
+timerAI.textContent = '';
+headerContainer.appendChild(timerAI);
 
 /**
  * Interval ID for controlling the loading animation
@@ -713,8 +740,9 @@ updateCategoriesDOM();
  * ✅ Responsive design with CSS Grid
  * ✅ State management for images and metadata
  * ✅ Button state management during async operations
- * ✅ Animated loading indicators
+ * ✅ Animated loading indicators with elapsed time display
  * ✅ Dynamic category button generation
+ * ✅ Real-time processing timer for user feedback
  * 
  * Usage:
  * 1. Page loads with initial set of images
