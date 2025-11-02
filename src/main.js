@@ -98,6 +98,7 @@ let imagesData = [];
    * with data from the imagesData array. This is called after AI metadata generation.
    */
   const updateImagesDOM = () => {
+    const imageContainers = Array.from(document.querySelectorAll('.image-container'));
     const imageCategoryContainers = Array.from(document.querySelectorAll('.image-category'));
     const imageAuthorContainers = Array.from(document.querySelectorAll('.image-author'));
 
@@ -105,8 +106,71 @@ let imagesData = [];
     for (let i = 0; i < imageCategoryContainers.length; i++) {
       imageCategoryContainers[i].textContent = imagesData[i].category;
       imageAuthorContainers[i].textContent = imagesData[i].authorName;
+      if (imagesData[i].category) {
+        imageContainers[i].classList.add(`category-${imagesData[i].category.replaceAll(" ", "-")}`)
+      }
     }
   }
+
+  const displayByCategoriesDOM = () => {
+    const categoryButtons = Array.from(document.querySelectorAll('.button-category'));
+  };
+
+  const updateCategoriesDOM = () => {
+    let categoryButtons = Array.from(document.querySelectorAll('.button-category'));
+    const categoriesContainer = document.querySelector('.categories-container');
+    categoryButtons.forEach(button => categoriesContainer.removeChild(button));
+
+    const categoriesList = ['All', 'Uncategorised', ...new Set(imagesData.map(element => element.category))];
+
+    for (const category of categoriesList) {
+      const button = document.createElement('button');
+      button.classList.add('button-category');
+      button.classList.add(category.replaceAll(" ", "-"));
+      button.textContent = category;
+      categoriesContainer.appendChild(button);
+      categoryButtons.push(button);
+    }
+
+    categoryButtons = Array.from(document.querySelectorAll('.button-category'));
+
+    const categoryButtonsOnClick = (button) => {
+      if (!button.classList.contains('active')){
+        categoryButtons.forEach(button => button.classList.remove('active'));
+        button.classList.add('active');
+
+        const images = Array.from(document.querySelectorAll('.image-container'));
+
+        const buttonCategory = Array.from(button.classList).find(el => (el !== 'button-category' && el !== 'active'))
+
+        images.forEach(image => {
+          switch (buttonCategory) {
+            case 'All':
+              image.classList.remove('hidden');
+              break;
+            case 'Uncategorised':
+              if (Array.from(image.classList).some(el => el.startsWith('category-'))) {
+                image.classList.add('hidden');
+              } else {
+                image.classList.remove('hidden');
+              }
+              break;
+            default:
+              let imageCategory = Array.from(image.classList).find(el => el.startsWith('category-'));
+              if (imageCategory) imageCategory = imageCategory.slice('category-'.length);
+              if (imageCategory === buttonCategory) {
+                image.classList.remove('hidden');
+              } else {
+                image.classList.add('hidden');
+              }
+
+          }
+        });
+      }
+    };
+
+    categoryButtons.forEach(button => button.addEventListener('click', (event) => categoryButtonsOnClick(event.target)));
+  };
 
 /* #endregion DOM MANIPULATION */ 
 
@@ -424,6 +488,7 @@ const getImageMetadata = async () => {
       updateImagesData(metadata);
       console.log(imagesData);
       updateImagesDOM();
+      updateCategoriesDOM();
     }    
     
   } catch (err) {
@@ -566,6 +631,7 @@ buttonAI.addEventListener('click', async () => {
 
 // Load initial set of images on application start
 fetchImages();
+updateCategoriesDOM();
 
 /* #endregion APPLICATION INITIALIZATION */
 

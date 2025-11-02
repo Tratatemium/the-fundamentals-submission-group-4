@@ -165,6 +165,7 @@ body {
 
 main {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -196,6 +197,7 @@ header {
   border: 2px solid var(--accent-color);
 }
 
+.button-category,
 .button-AI,
 .button-load-images {
   background-color: var(--secondary-color);
@@ -205,9 +207,44 @@ header {
   padding: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  margin-left: 2rem;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.button-AI,
+.button-load-images {
+    margin-left: 2rem;
+}
+
+.button-category.active,
+.button-AI:hover,
+.button-load-images:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  transform: translateY(1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-category:hover {
+  background-color: var(--accent-color);
+  opacity: 0.7;
+  color: var(--primary-color);
+  transform: translateY(1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-category.active:hover {
+  opacity: 1;
+}
+
+
+.button-category:active,
+.button-AI:active,
+.button-load-images:active {
+  background-color: #3a0505;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-color: #3a0505;
 }
 
 .button-AI:disabled,
@@ -238,23 +275,13 @@ header {
   margin: auto auto auto 0;
 }
 
-.button-AI:hover {
-  background-color: var(--accent-color);
-  color: var(--primary-color);
-  transform: translateY(1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.button-AI:active {
-  background-color: #3a0505;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  border-color: #3a0505;
-}
-
 .image-container{
   position: relative;
   display: inline-block;
+}
+
+.image-container.hidden {
+  display: none;
 }
 
 .text-container{
@@ -278,38 +305,28 @@ header {
   opacity: 1;
 }
 
-.image-category{
+.image-category {
   color: var(--primary-color);
   font-size: 0.8rem;
   opacity: 0.9;
   margin: 0;
 }
 
-.image-author{
+.image-author {
   color: var(--primary-color);
   font-weight: bold;
   font-size: 1rem;
   margin: 0;
 }
 
+.categories-container {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  padding-inline: 3rem;
+}
+
 /* #endregion GEMENI API */
-
-.image-container{
-  position: relative;
-  display: inline-block;
-}
-
-.hover-container{
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 10;
-}
-
-.image-container:hover .hover-container {
-  opacity: 1;
-}
