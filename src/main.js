@@ -45,6 +45,10 @@ let imagesLoadedCounter = 1;
  */
 let imagesData = [];
 
+/**
+ * Currently active category filter for displaying images
+ * @type {string} Can be 'All', 'Uncategorised', or any specific category name
+ */
 let activeCategory = 'All';
 
 /* #endregion VARIABLES DECLARATION */ 
@@ -93,13 +97,15 @@ let activeCategory = 'All';
     imageAuthor.classList.add('image-author'); 
     textContainer.appendChild(imageAuthor);
 
+    // Update category filtering after adding new image
     displayByCategoriesDOM();
   };
 
   /**
    * Updates the DOM with metadata for all loaded images
    * @description Finds all category and author containers and populates them
-   * with data from the imagesData array. This is called after AI metadata generation.
+   * with data from the imagesData array. Also adds category CSS classes for filtering.
+   * This is called after AI metadata generation.
    */
   const updateImagesDOM = () => {
     const imageContainers = Array.from(document.querySelectorAll('.image-container'));
@@ -110,20 +116,33 @@ let activeCategory = 'All';
     for (let i = 0; i < imageCategoryContainers.length; i++) {
       imageCategoryContainers[i].textContent = imagesData[i].category;
       imageAuthorContainers[i].textContent = imagesData[i].authorName;
+      // Add category class for filtering functionality
       if (imagesData[i].category) {
         imageContainers[i].classList.add(`category-${imagesData[i].category.replaceAll(" ", "-")}`)
       }
     }
   }
 
+  /**
+   * Filters and displays images based on the currently active category
+   * @function
+   * @description Controls visibility of image containers based on category selection:
+   * - 'All': Shows all images
+   * - 'Uncategorised': Shows only images without AI-generated categories
+   * - Specific category: Shows only images matching that category
+   * 
+   * Uses CSS classes to hide/show images with smooth transitions.
+   */
   const displayByCategoriesDOM = () => {
     const images = Array.from(document.querySelectorAll('.image-container'));
     images.forEach(image => {
       switch (activeCategory) {
         case 'All':
+          // Show all images
           image.classList.remove('hidden');
           break;
         case 'Uncategorised':
+          // Show only images without category classes
           if (Array.from(image.classList).some(el => el.startsWith('category-'))) {
             image.classList.add('hidden');
           } else {
@@ -131,6 +150,7 @@ let activeCategory = 'All';
           }
           break;
         default:
+          // Show only images matching the selected category
           let imageCategory = Array.from(image.classList).find(el => el.startsWith('category-'));
           if (imageCategory) imageCategory = imageCategory.slice('category-'.length);
           if (imageCategory === activeCategory) {
@@ -142,38 +162,71 @@ let activeCategory = 'All';
     });
   };
 
+  /**
+   * Creates and updates category filter buttons in the UI
+   * @function
+   * @description Dynamically generates filter buttons based on available categories:
+   * 1. Removes existing category buttons
+   * 2. Creates a list of unique categories from loaded images
+   * 3. Generates buttons for 'All', 'Uncategorised', and each unique category
+   * 4. Adds click event listeners for category switching
+   * 5. Highlights the currently active category
+   * 
+   * Features:
+   * - Dynamic button generation based on available data
+   * - Active state management for visual feedback
+   * - Automatic category name normalization for CSS classes
+   */
   const updateCategoriesDOM = () => {
     let categoryButtons = Array.from(document.querySelectorAll('.button-category'));
     const categoriesContainer = document.querySelector('.categories-container');
+    
+    // Remove existing category buttons
     categoryButtons.forEach(button => categoriesContainer.removeChild(button));
 
+    // Create list of all available categories
     const categoriesList = ['All', 'Uncategorised', ...new Set(imagesData.map(element => element.category))];
 
+    // Generate button for each category
     for (const category of categoriesList) {
       const button = document.createElement('button');
       button.classList.add('button-category');
       button.classList.add(category.replaceAll(" ", "-"));
       button.textContent = category;
-      if (category.replaceAll(" ", "-") === activeCategory)  button.classList.add('active');
+      // Mark active category button
+      if (category.replaceAll(" ", "-") === activeCategory) button.classList.add('active');
       categoriesContainer.appendChild(button);
     }
 
+    // Get updated button list and add event listeners
     categoryButtons = Array.from(document.querySelectorAll('.button-category'));
 
+    /**
+     * Handles category button click events
+     * @param {HTMLButtonElement} button - The clicked category button
+     * @description Updates active category and refreshes the display when a different
+     * category button is clicked. Prevents unnecessary updates for already active buttons.
+     */
     const categoryButtonsOnClick = (button) => {
       if (!button.classList.contains('active')){
+        // Remove active state from all buttons
         categoryButtons.forEach(button => button.classList.remove('active'));
+        // Set clicked button as active
         button.classList.add('active');
 
+        // Extract category name from button classes
         const buttonCategory = Array.from(button.classList).find(el => (el !== 'button-category' && el !== 'active'))
         activeCategory = buttonCategory;
 
+        // Update image display based on new category
         displayByCategoriesDOM();
       }
     };
 
+    // Add click listeners to all category buttons
     categoryButtons.forEach(button => button.addEventListener('click', (event) => categoryButtonsOnClick(event.target)));
 
+    // Apply current category filter
     displayByCategoriesDOM();
   };
 
@@ -599,6 +652,7 @@ let intervalId = null;
  * Load Images Button Event Listener
  * @description Triggers the fetchImages function to load the next page of images
  * from the API. Supports pagination through the global imagesLoadedCounter.
+ * Also provides user feedback when new images are loaded.
  */
 buttonLoadImages.addEventListener('click', () => {
   fetchImages();
@@ -631,12 +685,14 @@ buttonAI.addEventListener('click', async () => {
  * APPLICATION STARTUP
  * ===================
  * 
- * Initialize the application by loading the first set of images.
- * This provides immediate content for users when the page loads.
+ * Initialize the application by loading the first set of images and setting up
+ * the category filtering system. This provides immediate content for users when 
+ * the page loads and establishes the filtering interface.
  */
 
 // Load initial set of images on application start
 fetchImages();
+// Initialize category filter buttons (starts with just 'All' and 'Uncategorised')
 updateCategoriesDOM();
 
 /* #endregion APPLICATION INITIALIZATION */
@@ -652,17 +708,20 @@ updateCategoriesDOM();
  * ✅ Dynamic image loading with pagination
  * ✅ Google Gemini AI integration for metadata generation  
  * ✅ Interactive UI with hover overlays
+ * ✅ Category-based filtering system
  * ✅ Error handling and loading states
  * ✅ Responsive design with CSS Grid
  * ✅ State management for images and metadata
  * ✅ Button state management during async operations
  * ✅ Animated loading indicators
+ * ✅ Dynamic category button generation
  * 
  * Usage:
  * 1. Page loads with initial set of images
  * 2. Click "Load images" to fetch more images 
  * 3. Click "Get metadata" to generate AI descriptions
- * 4. Hover over images to see generated metadata
+ * 4. Use category buttons to filter images by type
+ * 5. Hover over images to see generated metadata
  * 
  * Dependencies:
  * - @google/genai for AI functionality
