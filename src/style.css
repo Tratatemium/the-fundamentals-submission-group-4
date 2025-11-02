@@ -142,6 +142,10 @@ textarea:not([rows]) {
 /* #region APP (GALERY)                                                                              */
 /* ================================================================================================= */
 
+main  {
+  background-color: var(--primary-color);
+  margin: -1em; /* Adjust margin to fill webpage background */
+}
 
 #app {
   max-width: 72em; /* Sets a maximum width for the container */
