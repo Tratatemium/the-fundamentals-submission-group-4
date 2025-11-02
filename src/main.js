@@ -45,6 +45,8 @@ let imagesLoadedCounter = 1;
  */
 let imagesData = [];
 
+let activeCategory = 'All';
+
 /* #endregion VARIABLES DECLARATION */ 
 
 
@@ -90,6 +92,8 @@ let imagesData = [];
     const imageAuthor = document.createElement('p');
     imageAuthor.classList.add('image-author'); 
     textContainer.appendChild(imageAuthor);
+
+    displayByCategoriesDOM();
   };
 
   /**
@@ -113,7 +117,29 @@ let imagesData = [];
   }
 
   const displayByCategoriesDOM = () => {
-    const categoryButtons = Array.from(document.querySelectorAll('.button-category'));
+    const images = Array.from(document.querySelectorAll('.image-container'));
+    images.forEach(image => {
+      switch (activeCategory) {
+        case 'All':
+          image.classList.remove('hidden');
+          break;
+        case 'Uncategorised':
+          if (Array.from(image.classList).some(el => el.startsWith('category-'))) {
+            image.classList.add('hidden');
+          } else {
+            image.classList.remove('hidden');
+          }
+          break;
+        default:
+          let imageCategory = Array.from(image.classList).find(el => el.startsWith('category-'));
+          if (imageCategory) imageCategory = imageCategory.slice('category-'.length);
+          if (imageCategory === activeCategory) {
+            image.classList.remove('hidden');
+          } else {
+            image.classList.add('hidden');
+          }
+      }
+    });
   };
 
   const updateCategoriesDOM = () => {
@@ -128,8 +154,8 @@ let imagesData = [];
       button.classList.add('button-category');
       button.classList.add(category.replaceAll(" ", "-"));
       button.textContent = category;
+      if (category.replaceAll(" ", "-") === activeCategory)  button.classList.add('active');
       categoriesContainer.appendChild(button);
-      categoryButtons.push(button);
     }
 
     categoryButtons = Array.from(document.querySelectorAll('.button-category'));
@@ -139,37 +165,16 @@ let imagesData = [];
         categoryButtons.forEach(button => button.classList.remove('active'));
         button.classList.add('active');
 
-        const images = Array.from(document.querySelectorAll('.image-container'));
-
         const buttonCategory = Array.from(button.classList).find(el => (el !== 'button-category' && el !== 'active'))
+        activeCategory = buttonCategory;
 
-        images.forEach(image => {
-          switch (buttonCategory) {
-            case 'All':
-              image.classList.remove('hidden');
-              break;
-            case 'Uncategorised':
-              if (Array.from(image.classList).some(el => el.startsWith('category-'))) {
-                image.classList.add('hidden');
-              } else {
-                image.classList.remove('hidden');
-              }
-              break;
-            default:
-              let imageCategory = Array.from(image.classList).find(el => el.startsWith('category-'));
-              if (imageCategory) imageCategory = imageCategory.slice('category-'.length);
-              if (imageCategory === buttonCategory) {
-                image.classList.remove('hidden');
-              } else {
-                image.classList.add('hidden');
-              }
-
-          }
-        });
+        displayByCategoriesDOM();
       }
     };
 
     categoryButtons.forEach(button => button.addEventListener('click', (event) => categoryButtonsOnClick(event.target)));
+
+    displayByCategoriesDOM();
   };
 
 /* #endregion DOM MANIPULATION */ 
@@ -597,6 +602,7 @@ let intervalId = null;
  */
 buttonLoadImages.addEventListener('click', () => {
   fetchImages();
+  textAI.textContent = 'More images loaded 🖼️';
 });
 
 /**
