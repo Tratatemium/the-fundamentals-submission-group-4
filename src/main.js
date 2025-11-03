@@ -31,7 +31,7 @@ import './style.css';
  * API key for Google Gemini AI service
  * @constant {string}
  */
-const GEMINI_API_KEY = 'AIzaSyDu4TSQ7WaK_QCP8rUus6eN6-sAEpJ1qbs';
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 /**
  * Counter to track which page of images to load next
