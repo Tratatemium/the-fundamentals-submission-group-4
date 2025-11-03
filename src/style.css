@@ -3,9 +3,9 @@
 /* ================================================================================================= */
 
 
-/* #endregion NEW REGION */ 
+/* #endregion NEW REGION */
 
- 
+
 /* ================================================================================================= */
 /* #region CSS RESET                                                                                 */
 /* ================================================================================================= */
@@ -25,8 +25,16 @@ html {
 }
 
 /* Remove default margin in favour of better control in authored CSS */
-body, h1, h2, h3, h4, p,
-figure, blockquote, dl, dd {
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
   margin-block-end: 0;
 }
 
@@ -43,14 +51,21 @@ body {
 }
 
 /* Set shorter line heights on headings and interactive elements */
-h1, h2, h3, h4,
-button, input, label {
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
   line-height: 1.1;
 }
 
 /* Balance text wrapping on headings */
-h1, h2,
-h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   text-wrap: balance;
 }
 
@@ -68,8 +83,10 @@ picture {
 }
 
 /* Inherit fonts for inputs and buttons */
-input, button,
-textarea, select {
+input,
+button,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
 }
@@ -95,12 +112,12 @@ textarea:not([rows]) {
 
 
 :root {
-  --primary-color : #F5F4F1;
-  --secondary-color : #D6CEC2;
-  --accent-color : #4E0707;
-  --text-color : #1D1615;
-  --font-primary : 'Roboto' , sans-serif;
-  --font-secondary : 'Playfair' , serif;
+  --primary-color: #F5F4F1;
+  --secondary-color: #D6CEC2;
+  --accent-color: #4E0707;
+  --text-color: #1D1615;
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Playfair', serif;
 
 }
 
@@ -122,22 +139,31 @@ textarea:not([rows]) {
 
 
 /* ================================================================================================= */
-/* #region APP (GALERY)                                                                              */
+/* #region APP (GALLERY)                                                                              */
 /* ================================================================================================= */
 
+main  {
+  background-color: var(--primary-color);
+  margin: -1em; /* Adjust margin to fill webpage background */
+}
+
 #app {
-    max-width: 67em; /* Sets a maximum width for the container */
+  max-width: 80em; /* Sets a maximum width for the container */
   margin: 0 auto; /* Centers the container horizontally */
   padding: 1.5em; /* Adds padding around the content */
 
-  display: grid; /* Uses CSS Grid for layout */
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* Creates four equal-width columns */
-  column-gap: 1em; /* Sets the gap between columns */
-  row-gap: 1em; /* Sets the gap between rows */
-  padding: 1em; /* Adds padding around the grid */
+  display: flex; /* Uses Flexbox for layout */
+  flex-direction: row; /* Arranges items in a row */
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  gap: 1.5em; /* Adds space between items */
   place-content: center; /* Centers the grid content */
   align-items: center; /* Aligns items vertically in the center */
   justify-content: center; /* Aligns items horizontally in the center */
+}
+
+.image-container {
+  position: relative; /* Reference point for the container. */
+  width: fit-content;
 }
 
 .app-img {
@@ -145,6 +171,28 @@ textarea:not([rows]) {
   height: 16em; /* Sets a fixed height for the images */
   border-radius: 4px; /* Rounds the corners of the images */
   border: var(--accent-color); /* Sets the border color using the accent color variable */
+}
+
+.hover-container {
+  position: absolute; /* Uses image-container as its reference point*/
+  bottom: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.hover-container svg {
+    width: 20px;  
+    height: 20px;  
+    color: white;
 }
 
 /* #endregion APP (GALERY) */
