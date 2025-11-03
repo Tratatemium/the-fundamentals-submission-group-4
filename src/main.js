@@ -809,6 +809,14 @@ fetchImages();
 // Initialize category filter buttons (starts with just 'All' and 'Uncategorised')
 updateCategoriesDOM();
 
+const fetchApiKey = async () => {
+  fetch('/.netlify/functions/hello')
+  .then(res => res.json())
+  .then(data => console.log(data.message));
+}
+
+fetchApiKey()
+
 /* #endregion APPLICATION INITIALIZATION */
 
 /**
