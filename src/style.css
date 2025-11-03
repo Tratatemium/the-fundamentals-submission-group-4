@@ -185,14 +185,21 @@ main  {
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
   gap: 1rem;
   padding-bottom: 0.5rem;
   padding-left: 0.5rem;
+
 }
 .hover-container svg {
     width: 20px;  
     height: 20px;  
-    color: white;
+    color: var(--primary-color);
 }
 
 .like-number, .comment-number {
