@@ -155,15 +155,15 @@ main  {
   display: flex; /* Uses Flexbox for layout */
   flex-direction: row; /* Arranges items in a row */
   flex-wrap: wrap; /* Allows items to wrap to the next line */
-  gap: 1em; /* Adds space between items */
+  gap: 1.5em; /* Adds space between items */
   place-content: center; /* Centers the grid content */
   align-items: center; /* Aligns items vertically in the center */
   justify-content: center; /* Aligns items horizontally in the center */
 }
 
 .app-img {
-  width: 18em; /* Sets a fixed width for the images */
-  height: 18em; /* Sets a fixed height for the images */
+  width: 16em; /* Sets a fixed width for the images */
+  height: 16em; /* Sets a fixed height for the images */
   border-radius: 4px; /* Rounds the corners of the images */
   border: var(--accent-color); /* Sets the border color using the accent color variable */
 }
