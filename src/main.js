@@ -16,7 +16,7 @@ import "./style.css";
  * @description This function dynamically creates an img element, applies styling class,
  * sets the source URL, and appends it to the main app container in the DOM
  */
-const createImage = (src) => {
+const createImage = (imageData) => {
   // Ensure the app container exists before proceeding
   if (!appContainer) appContainer = document.getElementById("app");
 
@@ -26,7 +26,7 @@ const createImage = (src) => {
 
   const appImg = document.createElement("img"); // Create new image element
   appImg.classList.add("app-img"); // Add CSS class for styling
-  appImg.src = src; // Set the image source URL
+  appImg.src = imageData.image_url; // Set the image source URL
   imageContainer.appendChild(appImg); // Append the image to the app container
 
   const hoverContainer = document.createElement("div");
@@ -45,6 +45,11 @@ const createImage = (src) => {
   const svgDoc = parser.parseFromString(svgIconHeart, "image/svg+xml"); //Parse the SVG string into an SVG Document object
   const svgElement = svgDoc.documentElement; // Get the root SVG element from the parsed document
   hoverContainer.appendChild(svgElement); // Append the actual SVG element to  'hoverContainer'
+
+  const likeNumber = document.createElement("p"); 
+  likeNumber.classList.add("like-number"); // Add CSS class for styling in stylesheet (for Emma) 
+  likeNumber.textContent = imageData.likes_count;
+  hoverContainer.appendChild(likeNumber);
 
   const svgIconComment = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M144 208c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zM256 32C114.6 32 0 125.1 0 240c0 47.6 19.9 91.2 52.9 126.3C38 405.7 7 439.1 6.5 439.5c-6.6 7-8.4 17.2-4.6 26S14.4 480 24 480c61.5 0 110-25.7 139.1-46.3C192 442.8 223.2 448 256 448c141.4 0 256-93.1 256-208S397.4 32 256 32zm0 368c-26.7 0-53.1-4.1-78.4-12.1l-22.7-7.2-19.5 13.8c-14.3 10.1-33.9 21.4-57.5 29 7.3-12.1 14.4-25.7 19.9-40.2l10.6-28.1-20.6-21.8C69.7 314.1 48 282.2 48 240c0-88.2 93.3-160 208-160s208 71.8 208 160-93.3 160-208 160z"/></svg>`;
@@ -84,7 +89,8 @@ const fetchImages = (page = 1) => {
   fetch(`https://image-feed-api.vercel.app/api/images?page=${page}`)
     .then((resp) => resp.json()) // Parse response as JSON
     .then((json) =>
-      json.data.forEach((element) => createImage(element.image_url))
+      json.data.forEach((element) => createImage(element))
+
     ); // Create images for each item
 };
 
