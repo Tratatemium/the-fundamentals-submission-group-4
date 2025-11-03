@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 package-lock.json
+
+# Don't upload environment files to GitHub
 .env

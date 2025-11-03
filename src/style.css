@@ -161,12 +161,11 @@ main  {
   justify-content: center; /* Aligns items horizontally in the center */
 }
 
-
-
 .image-container {
   position: relative; /* Reference point for the container. */
   width: fit-content;
 }
+
 .app-img {
   width: 16em; /* Sets a fixed width for the images */
   height: 16em; /* Sets a fixed height for the images */
@@ -194,8 +193,8 @@ main  {
   gap: 1rem;
   padding-bottom: 0.5rem;
   padding-left: 0.5rem;
-
 }
+
 .hover-container svg {
     width: 20px;  
     height: 20px;  
@@ -208,3 +207,233 @@ main  {
 }
 
 /* #endregion APP (GALERY) */
+
+
+/* ================================================================================================= */
+/* #region GEMENI API                                                                                */
+/* ================================================================================================= */
+
+body {
+  font-family: var(--font-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+header {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items:center;
+  margin-bottom: 2em;
+  padding-top: 2em;
+}
+
+/* ================================================================================================= */
+/* #region BUTTON STYLES                                                                             */
+/* ================================================================================================= */
+
+/**
+ * BUTTON COMPONENT STYLES
+ * =======================
+ * 
+ * Unified styling for all application buttons including:
+ * - Category filter buttons
+ * - AI metadata generation button  
+ * - Load more images button
+ * 
+ * Features consistent design with hover/active states and transitions
+ */
+
+/* Base button styles shared across all button types */
+.button-category,
+.button-AI,
+.button-load-images {
+  background-color: var(--secondary-color);
+  border: 2px solid var(--accent-color);
+  border-radius: 1rem;
+  color: var(--text-color);
+  padding: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth transitions for interactions */
+}
+
+/* Specific spacing for main action buttons */
+.button-AI,
+.button-load-images {
+    margin-left: 2rem;
+}
+
+/* Hover and active state styles for main buttons */
+.button-category.active,
+.button-AI:hover,
+.button-load-images:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  transform: translateY(1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Category button hover effect (with reduced opacity) */
+.button-category:hover {
+  background-color: var(--accent-color);
+  opacity: 0.7;
+  color: var(--primary-color);
+  transform: translateY(1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active category button maintains full opacity on hover */
+.button-category.active:hover {
+  opacity: 1;
+}
+
+/* Click/active state for all buttons */
+.button-category:active,
+.button-AI:active,
+.button-load-images:active {
+  background-color: #3a0505; /* Darker accent color */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-color: #3a0505;
+}
+
+/* Disabled button styles for loading states */
+.button-AI:disabled,
+.button-load-images:disabled {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Prevent hover effects on disabled buttons */
+.button-AI:disabled:hover,
+.button-load-images:disabled:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* #endregion BUTTON STYLES */
+
+/* ================================================================================================= */
+/* #region STATUS DISPLAY ELEMENTS                                                                   */
+/* ================================================================================================= */
+
+/**
+ * UI STATUS COMPONENTS
+ * ===================
+ * 
+ * Styling for user feedback elements including status text, loading animations,
+ * and elapsed time display during AI processing operations.
+ */
+
+/* Status text display for user feedback */
+.text-AI {
+  margin: auto 0 auto 3rem;
+}
+
+/* Animated loading dots with fixed width for consistent layout */
+.dots-AI {
+  margin: auto 0 auto 0;
+  width: 1rem; /* Fixed width prevents layout shift during animation */
+}
+
+/* Elapsed time timer display during AI processing */
+.timer-AI {
+  margin: auto auto auto 0;
+  width: fit-content; /* Adjusts to content width */
+}
+
+/* #endregion STATUS DISPLAY ELEMENTS */
+
+/* ================================================================================================= */
+/* #region IMAGE CONTAINER & OVERLAY SYSTEM                                                         */
+/* ================================================================================================= */
+
+/**
+ * IMAGE DISPLAY COMPONENTS
+ * ========================
+ * 
+ * Styles for the image gallery including:
+ * - Image container positioning
+ * - Hide/show functionality for filtering
+ * - Hover overlay system for metadata display
+ * - Text positioning and styling within overlays
+ */
+
+
+/* Hidden state for category filtering */
+.image-container.hidden {
+  display: none;
+}
+
+/* Overlay container that appears on hover */
+.text-container{
+
+}
+
+
+
+/* Category text styling within overlay */
+.image-category {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+/* Author text styling within overlay */
+.image-author {
+  color: var(--primary-color);
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* #endregion IMAGE CONTAINER & OVERLAY SYSTEM */
+
+/* ================================================================================================= */
+/* #region CATEGORY FILTER INTERFACE                                                                */
+/* ================================================================================================= */
+
+/**
+ * CATEGORY FILTERING SYSTEM
+ * =========================
+ * 
+ * Layout and styling for the dynamic category filter buttons
+ * that allow users to filter images by AI-generated categories
+ */
+
+/* Container for category filter buttons */
+.categories-container {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Allow buttons to wrap to new lines */
+  gap: 0.5rem; /* Space between buttons */
+  justify-content: center; /* Center buttons horizontally */
+  padding-inline: 3rem; /* Horizontal padding */
+}
+
+/* #endregion CATEGORY FILTER INTERFACE */
+
+/* #endregion GEMENI API */
