@@ -16,7 +16,7 @@ import "./style.css";
  * @description This function dynamically creates an img element, applies styling class,
  * sets the source URL, and appends it to the main app container in the DOM
  */
-const createImage = (src) => {
+const createImage = (imageData) => {
   // Ensure the app container exists before proceeding
   if (!appContainer) appContainer = document.getElementById("app");
 
@@ -26,7 +26,7 @@ const createImage = (src) => {
 
   const appImg = document.createElement("img"); // Create new image element
   appImg.classList.add("app-img"); // Add CSS class for styling
-  appImg.src = src; // Set the image source URL
+  appImg.src = imageData.image_url; // Set the image source URL
   imageContainer.appendChild(appImg); // Append the image to the app container
 
   const hoverContainer = document.createElement("div");
@@ -47,8 +47,8 @@ const createImage = (src) => {
   hoverContainer.appendChild(svgElement); // Append the actual SVG element to  'hoverContainer'
 
   const likeNumber = document.createElement("p"); 
-  likeNumber.classList.add("like-number");
-  likeNumber.textContent = '261';
+  likeNumber.classList.add("like-number"); // Add CSS class for styling in stylesheet (for Emma) 
+  likeNumber.textContent = imageData.likes_count;
   hoverContainer.appendChild(likeNumber);
 
   const svgIconComment = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
@@ -89,7 +89,7 @@ const fetchImages = (page = 1) => {
   fetch(`https://image-feed-api.vercel.app/api/images?page=${page}`)
     .then((resp) => resp.json()) // Parse response as JSON
     .then((json) =>
-      json.data.forEach((element) => createImage(element.image_url))
+      json.data.forEach((element) => createImage(element))
 
     ); // Create images for each item
 };
