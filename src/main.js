@@ -119,6 +119,10 @@ let activeCategory = 'All';
     hoverContainer.classList.add("hover-container");
     imageContainer.appendChild(hoverContainer);
 
+    const iconContainer = document.createElement("div");
+    iconContainer.classList.add("icon-container");
+    hoverContainer.appendChild(iconContainer);
+
     // --- Adding Icons --- //
     /* Used DOMParser because direct 'innerHTML = svgContent`caused syntax error*/
     const parser = new DOMParser(); // Creates a new DOMParser
