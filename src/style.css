@@ -195,4 +195,8 @@ main  {
     color: white;
 }
 
+.like-number, .comment-number {
+  font-family: var(--font-primary);
+  color: var(--primary-color);
+}
 /* #endregion APP (GALERY) */
