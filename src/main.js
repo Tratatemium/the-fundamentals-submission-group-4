@@ -47,8 +47,8 @@ const createImage = (imageData) => {
   hoverContainer.appendChild(heartIcon); // Append the actual SVG element to  'hoverContainer'
   heartIcon.classList.add("heart-icon");
 
-  const likeNumber = document.createElement("p"); 
-  likeNumber.classList.add("like-number"); // Add CSS class for styling in stylesheet (for Emma) 
+  const likeNumber = document.createElement("p");
+  likeNumber.classList.add("like-number"); // Add CSS class for styling in stylesheet (for Emma)
   likeNumber.textContent = imageData.likes_count;
   hoverContainer.appendChild(likeNumber);
 
@@ -62,7 +62,7 @@ const createImage = (imageData) => {
 
   const commentNumber = document.createElement("p");
   commentNumber.classList.add("comment-number");
-  commentNumber.textContent = "100";
+  commentNumber.textContent = imageData.comments.length;
   hoverContainer.appendChild(commentNumber);
 };
 
@@ -95,10 +95,7 @@ const fetchImages = (page = 1) => {
   // Fetches the first page by default
   fetch(`https://image-feed-api.vercel.app/api/images?page=${page}`)
     .then((resp) => resp.json()) // Parse response as JSON
-    .then((json) =>
-      json.data.forEach((element) => createImage(element))
-
-    ); // Create images for each item
+    .then((json) => json.data.forEach((element) => createImage(element))); // Create images for each item
 };
 
 /* #endregion API REQUESTS */
