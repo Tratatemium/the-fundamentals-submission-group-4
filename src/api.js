@@ -23,11 +23,12 @@ import { createImage } from './main.js'
  *
  * @throws {Error} When API request fails or response format is invalid
  */
-export const fetchImages = async () => {
+export const fetchImages = async (page) => {
+  const pageToLoad = page ? page : state.pagesLoadedCounter++;
   try {
     // Make API request to current page
     const response = await fetch(
-      `https://image-feed-api.vercel.app/api/images?page=${state.pagesLoadedCounter}`
+      `https://image-feed-api.vercel.app/api/images?page=${pageToLoad}`
     );
 
     // Check if request was successful
@@ -47,8 +48,6 @@ export const fetchImages = async () => {
     state.imagesData.push(...json.data);
     json.data.forEach((item) => createImage(item));
 
-    // Increment counter for next page load
-    state.pagesLoadedCounter++;
   } catch (error) {
     console.error("Failed to fetch images:", error);
     // TODO: Show user-friendly error message in UI

@@ -4,7 +4,7 @@
  *
  * This application creates an interactive image gallery that fetches images from an API
  * and uses Google's Gemini AI to generate metadata (category, description, author) for each image.
- * The AI functionality has been modularized into a separate gemeni-api.js file for better code organization.
+ * The application features a fully modular architecture with separated concerns across multiple files.
  *
  * Features:
  * - Dynamic image loading with pagination
@@ -15,31 +15,52 @@
  * - Category-based filtering system
  * - Error handling and loading states
  * - Responsive grid layout with CSS animations
- * - Modular architecture with separated AI functionality
+ * - Fully modular architecture with separated concerns
+ * - Centralized state management
  *
  * Dependencies:
  * - ./gemeni-api.js - Modular Gemini AI integration for metadata generation
+ * - ./api.js - External API integration for image fetching
  * - Custom CSS for styling and animations
- 
+ * - Environment Variables: VITE_GEMINI_API_KEY for AI functionality
+ *
  * Architecture:
- * - main.js (this file): Core application logic, UI management, and user interactions
+ * - main.js (this file): Core application logic, UI management, state, and user interactions
  * - gemeni-api.js: Separated Gemini AI functionality, API calls, and utilities
+ * - api.js: External image API integration with pagination support
  * - style.css: Comprehensive styling, animations, and responsive design
  *
- 
+ * @author Group 4
+ * @version 1.5.0 - Fully modular architecture with separated API and state management
  */
 
 import "./style.css";
+
 // Import AI functionality from modular gemeni-api.js file
 // This module handles all Gemini AI integration, API calls, timer functionality, and utilities
 import { getImageMetadata } from './gemeni-api.js';
 
+// Import external API functionality from modular api.js file
+// This module handles image fetching, pagination, and external API integration
 import { fetchImages } from './api.js';
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
 /* ================================================================================================= */
 
+/**
+ * CENTRALIZED STATE MANAGEMENT
+ * ============================
+ * 
+ * Global application state object that manages all core data and UI state.
+ * This centralized approach provides better organization and makes state
+ * accessible to other modules through exports.
+ * 
+ * @type {Object}
+ * @property {number} pagesLoadedCounter - Tracks which page of images to load next for pagination
+ * @property {Array<Object>} imagesData - Array storing all loaded image data including metadata
+ * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
+ */
 export const state = {
   pagesLoadedCounter: 1,
   imagesData: [],
@@ -465,16 +486,17 @@ updateCategoriesDOM();
  * =====================================================================================================
  *
  * This completes the main application file for the image gallery with AI-powered metadata generation.
- * The application now features a fully modular architecture with separated concerns.
+ * The application now features a fully modular architecture with three-module separation of concerns.
  *
  * Key Features Implemented:
  * ✅ Dynamic image loading with pagination
  * ✅ Modular Google Gemini AI integration (via gemeni-api.js)
+ * ✅ Modular external API integration (via api.js)
  * ✅ Interactive UI with hover overlays and social elements
  * ✅ Category-based filtering system with dynamic button generation
  * ✅ Error handling and loading states
  * ✅ Responsive design with CSS Grid
- * ✅ State management for images and metadata
+ * ✅ Centralized state management with exports
  * ✅ Button state management during async operations
  * ✅ Animated loading indicators with elapsed time display
  * ✅ Real-time processing timer for user feedback
@@ -488,8 +510,29 @@ updateCategoriesDOM();
  * 4. Use category buttons to filter images by type
  * 5. Hover over images to see generated metadata and social stats
  *
+ * Three-Module Architecture:
+ * 
+ * 1. main.js (this file): 
+ *    - Core application logic and UI management
+ *    - Centralized state management and exports
+ *    - DOM manipulation and user interactions
+ *    - Event listeners and application initialization
+ * 
+ * 2. gemeni-api.js:
+ *    - Dedicated Gemini AI functionality and API calls
+ *    - Loading animations and timer management
+ *    - AI response processing and error handling
+ *    - Metadata generation and validation
+ * 
+ * 3. api.js:
+ *    - External image API integration
+ *    - Pagination and data fetching logic
+ *    - Response validation and error handling
+ *    - Integration with centralized state management
+ *
  * Module Dependencies:
- * - ./gemeni-api.js: Handles all Gemini AI functionality, API calls, and utilities
+ * - ./gemeni-api.js: Handles all Gemini AI functionality, animations, and utilities
+ * - ./api.js: Handles external image API calls and pagination
  * - ./style.css: Comprehensive styling for gallery, animations, and responsive design
  * - Environment: VITE_GEMINI_API_KEY for AI functionality
  * - External API: https://image-feed-api.vercel.app/ for image data
@@ -498,21 +541,22 @@ updateCategoriesDOM();
  * - createImage(): DOM creation for image containers with social elements
  * - updateImagesDOM(): Gallery rendering and category filtering
  * - updateCategoriesDOM(): Dynamic category button management
- * - fetchImages(): API integration for image loading
+ * - state: Centralized state management object (exported)
+ * - DOM elements: UI component exports for other modules
  * - Event listeners: User interaction handling
  *
- * AI Functionality (in gemeni-api.js):
- * - getImageMetadata(): AI metadata generation using Gemini 2.5 Pro
- * - ellipsisAnimation(): Loading animation management
- * - stopEllipsisAnimation(): Animation cleanup
- * - Timer functionality: Real-time processing feedback
- * - Error handling: Comprehensive AI API error management
+ * External Module Functions:
+ * - getImageMetadata() (gemeni-api.js): AI metadata generation using Gemini 2.5 Pro
+ * - fetchImages() (api.js): External API integration for image loading
+ * - Animation utilities (gemeni-api.js): Timer and loading feedback systems
  *
  * Modular Architecture Benefits:
- * ✅ Clear separation of concerns (UI logic vs AI logic)
+ * ✅ Clear separation of concerns (UI, AI, API logic)
  * ✅ Improved code organization and maintainability
  * ✅ Enhanced error handling and user feedback
- * ✅ Reusable AI functionality across projects
+ * ✅ Reusable functionality across projects
  * ✅ Easier testing and debugging
  * ✅ Better code readability and documentation
+ * ✅ Centralized state management
+ * ✅ Scalable architecture for future features
  */
