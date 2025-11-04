@@ -21,6 +21,7 @@
  */
 
 import "./style.css";
+import { getImageMetadata } from './gemeni-api.js'
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -42,7 +43,7 @@ let imagesLoadedCounter = 1;
  * Array to store all loaded image data including metadata
  * @type {Array<Object>}
  */
-let imagesData = [];
+export let imagesData = [];
 
 /**
  * Currently active category filter for displaying images
@@ -126,9 +127,9 @@ const createImage = (imageData) => {
   const parser = new DOMParser(); // Creates a new DOMParser
 
   const svgIconHeart = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
+    <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
 
   const svgDocHeart = parser.parseFromString(svgIconHeart, "image/svg+xml"); //Parse the SVG string into an SVG Document object
   const heartIcon = svgDocHeart.documentElement; // Get the root SVG element from the parsed document
@@ -141,7 +142,7 @@ const createImage = (imageData) => {
   iconContainer.appendChild(likeNumber);
 
   const svgIconComment = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-      <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M144 208c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zM256 32C114.6 32 0 125.1 0 240c0 47.6 19.9 91.2 52.9 126.3C38 405.7 7 439.1 6.5 439.5c-6.6 7-8.4 17.2-4.6 26S14.4 480 24 480c61.5 0 110-25.7 139.1-46.3C192 442.8 223.2 448 256 448c141.4 0 256-93.1 256-208S397.4 32 256 32zm0 368c-26.7 0-53.1-4.1-78.4-12.1l-22.7-7.2-19.5 13.8c-14.3 10.1-33.9 21.4-57.5 29 7.3-12.1 14.4-25.7 19.9-40.2l10.6-28.1-20.6-21.8C69.7 314.1 48 282.2 48 240c0-88.2 93.3-160 208-160s208 71.8 208 160-93.3 160-208 160z"/></svg>`;
+    <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M144 208c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zM256 32C114.6 32 0 125.1 0 240c0 47.6 19.9 91.2 52.9 126.3C38 405.7 7 439.1 6.5 439.5c-6.6 7-8.4 17.2-4.6 26S14.4 480 24 480c61.5 0 110-25.7 139.1-46.3C192 442.8 223.2 448 256 448c141.4 0 256-93.1 256-208S397.4 32 256 32zm0 368c-26.7 0-53.1-4.1-78.4-12.1l-22.7-7.2-19.5 13.8c-14.3 10.1-33.9 21.4-57.5 29 7.3-12.1 14.4-25.7 19.9-40.2l10.6-28.1-20.6-21.8C69.7 314.1 48 282.2 48 240c0-88.2 93.3-160 208-160s208 71.8 208 160-93.3 160-208 160z"/></svg>`;
 
   const svgDocComment = parser.parseFromString(svgIconComment, "image/svg+xml");
   const commentIcon = svgDocComment.documentElement;
@@ -163,7 +164,7 @@ const createImage = (imageData) => {
  * with data from the imagesData array. Also adds category CSS classes for filtering.
  * This is called after AI metadata generation.
  */
-const updateImagesDOM = () => {
+export const updateImagesDOM = () => {
   const imageContainers = Array.from(
     document.querySelectorAll(".image-container")
   );
@@ -246,7 +247,7 @@ const displayByCategoriesDOM = () => {
  * - Active state management for visual feedback
  * - Automatic category name normalization for CSS classes
  */
-const updateCategoriesDOM = () => {
+export const updateCategoriesDOM = () => {
   let categoryButtons = Array.from(
     document.querySelectorAll(".button-category")
   );
@@ -368,301 +369,6 @@ const fetchImages = async () => {
 
 /* #endregion API REQUESTS */
 
-/* ================================================================================================= */
-/* #region GEMINI AI INTEGRATION                                                                     */
-/* ================================================================================================= */
-
-/**
- * GOOGLE GEMINI AI SETUP
- * ======================
- *
- * This section handles integration with Google's Gemini AI API for generating
- * image metadata including categories, descriptions, and author names.
- *
- * Required dependencies:
- * - npm install @google/genai mime
- * - npm install -D @types/node
- */
-
-import { GoogleGenAI, Type } from "@google/genai";
-
-/**
- * Starts the animated ellipsis loading indicator with timer
- * @function
- * @description Creates a visual loading animation by cycling through
- * different numbers of dots (0-3) every 500ms. Also displays an elapsed
- * time counter to show users how long the AI processing has been running.
- *
- * Features:
- * - Animated dots cycling every 500ms
- * - Real-time elapsed time display in seconds
- * - Provides user feedback during long AI operations
- */
-const ellipsisAnimation = () => {
-  let count = 0;
-  const timerStart = Date.now();
-  let timerNow;
-  intervalId = setInterval(() => {
-    count = (count + 1) % 4;
-    dotsAI.textContent = ".".repeat(count);
-    timerNow = Math.floor((Date.now() - timerStart) / 1000);
-    timerAI.textContent = `${timerNow}s elapsed`;
-  }, 500);
-};
-
-/**
- * Stops the ellipsis animation and clears all loading indicators
- * @function
- * @description Clears the interval timer and resets both the dots display
- * and elapsed timer. Called when AI processing completes or fails.
- */
-const stopEllipsisAnimation = () => {
-  clearInterval(intervalId);
-  intervalId = null;
-  dotsAI.textContent = "";
-  timerAI.textContent = "";
-};
-
-/**
- * Updates the global imagesData array with new metadata from AI
- * @param {Array<Object>} newMetadata - Array of metadata objects from Gemini AI
- * @description Finds images without metadata and assigns the AI-generated data
- * to them in sequence. Only updates images that don't already have category data.
- */
-const updateImagesData = (newMetadata) => {
-  let i = 0;
-  for (const oneImageData of imagesData) {
-    // Skip images that already have metadata
-    if (oneImageData.category) {
-      continue;
-    } else {
-      // Assign new metadata to image without category
-      Object.assign(oneImageData, newMetadata[i]);
-      i++;
-    }
-  }
-};
-
-/**
- * Fetches and processes images for AI analysis
- * @async
- * @function
- * @returns {Promise<Array<Object>>} Array of processed image objects with base64 data
- * @description Processes images that don't have metadata yet by:
- * 1. Filtering images without categories
- * 2. Fetching each image URL
- * 3. Converting to base64 format for AI processing
- * 4. Validating MIME types
- * 5. Error handling for failed conversions
- *
- * @throws {Error} When image fetch fails or invalid content type
- */
-const fetchImagesFromUrl = async () => {
-  // Filter images that need metadata generation
-  const imagesToFetch = imagesData.filter(
-    (oneImageData) => !oneImageData.category
-  );
-  const imageUrls = imagesToFetch.map((oneImageData) => oneImageData.image_url);
-  const processedImages = [];
-
-  // Process each image URL
-  for (const url of imageUrls) {
-    try {
-      // Fetch the image from URL
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch image: Status ${response.status} ${response.statusText}`
-        );
-      }
-
-      // Validate MIME type to ensure it's an image
-      const mimeType = response.headers.get("content-type");
-      if (!mimeType || !mimeType.startsWith("image/")) {
-        throw new Error(
-          `Invalid content type: ${
-            mimeType || "none"
-          }. URL must point to an image.`
-        );
-      }
-
-      // Convert image to ArrayBuffer
-      const arrayBuffer = await response.arrayBuffer();
-
-      // Convert ArrayBuffer to Base64 string for AI processing
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let byteString = "";
-      uint8Array.forEach((byte) => {
-        byteString += String.fromCharCode(byte);
-      });
-
-      // Encode to Base64
-      const base64Data = btoa(byteString);
-
-      processedImages.push({ mimeType, base64Data });
-    } catch (error) {
-      console.error(`Error processing image ${url}:`, error);
-      // Continue processing other images even if one fails
-    }
-  }
-
-  return processedImages;
-};
-
-/* #endregion API REQUESTS */
-
-/**
- * Generates AI metadata for images using Google Gemini API
- * @async
- * @function
- * @description Main function that orchestrates the AI metadata generation process:
- * 1. Fetches and processes images that need metadata
- * 2. Configures Gemini AI with proper schema and instructions
- * 3. Sends processed images to AI for analysis
- * 4. Parses and validates the AI response
- * 5. Updates the application data and DOM with new metadata
- *
- * Features:
- * - Loading animations and user feedback
- * - Error handling and validation
- * - Prevents duplicate processing of images
- * - Structured JSON output with category, description, and author
- *
- * @throws {Error} When image processing or AI generation fails
- */
-const getImageMetadata = async () => {
-  let initialArrayLength;
-  let imageParts = [];
-
-  try {
-    // Start loading animation and user feedback
-    textAI.textContent = "Fetching multiple images from API";
-    ellipsisAnimation();
-
-    // Process images that don't have metadata yet
-    const processedImages = await fetchImagesFromUrl();
-    initialArrayLength = processedImages.length;
-
-    // Check if there are any images to process
-    if (initialArrayLength === 0) {
-      textAI.textContent = "All image metadata is already loaded.";
-      stopEllipsisAnimation();
-      return;
-    }
-
-    // Prepare image data for AI processing
-    imageParts = processedImages.map(({ mimeType, base64Data }) => ({
-      inlineData: {
-        mimeType: mimeType,
-        data: base64Data,
-      },
-    }));
-
-    // Final validation before AI request
-    if (imageParts.length === 0) {
-      throw new Error("No images were successfully processed");
-    }
-  } catch (err) {
-    console.error("Error fetching images:", err.message);
-    textAI.textContent = "🚨 Error fetching images 🚨";
-    stopEllipsisAnimation();
-    return;
-  }
-
-  stopEllipsisAnimation();
-  ellipsisAnimation();
-
-  // Initialize Google Gemini AI
-  const ai = new GoogleGenAI({
-    apiKey: GEMINI_API_KEY,
-  });
-
-  // Configure AI generation parameters
-  const config = {
-    thinkingConfig: {
-      thinkingBudget: -1, // No limit on thinking time
-    },
-    responseMimeType: "application/json",
-    responseSchema: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        required: ["category", "description", "authorName"],
-        properties: {
-          category: {
-            type: Type.STRING,
-          },
-          description: {
-            type: Type.STRING,
-          },
-          authorName: {
-            type: Type.STRING,
-          },
-        },
-      },
-    },
-    systemInstruction: [
-      {
-        text: `generate structured output based on images: for each image provide category, description of the image and a random full name (as 'authorName')`,
-      },
-    ],
-  };
-
-  // Use Gemini 2.5 Pro model (supports vision)
-  const model = "gemini-2.5-pro";
-
-  // Prepare the content for AI analysis
-  const contents = [
-    {
-      role: "user",
-      parts: [
-        {
-          text: `Analyze the attached images and provide the requested JSON fields for each image in an array format.`,
-        },
-        ...imageParts, // Spread all processed images
-      ],
-    },
-  ];
-
-  try {
-    // Update user on AI processing status
-    textAI.textContent = "Generating metadata with Gemini for multiple images";
-
-    // Send request to Gemini AI
-    const response = await ai.models.generateContent({
-      model,
-      config,
-      contents,
-    });
-
-    // Parse and validate AI response
-    const metadata = JSON.parse(response.text);
-    console.log(`Generated metadata for ${metadata.length} images`);
-
-    // Validate response matches expected count
-    if (metadata.length !== initialArrayLength) {
-      textAI.textContent = "🚨 Error: Some metadata has been lost 🚨";
-    } else {
-      // Success: update application data and UI
-      console.log(metadata);
-      updateImagesData(metadata);
-      console.log(imagesData);
-      updateImagesDOM();
-      updateCategoriesDOM();
-    }
-  } catch (err) {
-    console.error("Error generating content:", err);
-    textAI.textContent = "🚨 Error generating content 🚨";
-    stopEllipsisAnimation();
-    return;
-  }
-
-  // Success message and cleanup
-  textAI.textContent = "🎉 Metadata generation: success! 🎉";
-  stopEllipsisAnimation();
-};
-/* #endregion GEMINI AI INTEGRATION  */
 
 /* ================================================================================================= */
 /* #region DOM ELEMENT CREATION & REFERENCES                                                        */
@@ -695,6 +401,8 @@ const appContainer = document.getElementById("app");
  */
 const headerContainer = document.querySelector("header");
 
+const AIContainer = document.querySelector('.AI-container');
+
 /**
  * Button to load more images from the API
  * @type {HTMLButtonElement}
@@ -702,7 +410,7 @@ const headerContainer = document.querySelector("header");
 const buttonLoadImages = document.createElement("button");
 buttonLoadImages.classList.add("button-load-images");
 buttonLoadImages.textContent = "Load images";
-headerContainer.appendChild(buttonLoadImages);
+AIContainer.appendChild(buttonLoadImages);
 
 /**
  * Button to generate AI metadata for loaded images
@@ -711,25 +419,25 @@ headerContainer.appendChild(buttonLoadImages);
 const buttonAI = document.createElement("button");
 buttonAI.classList.add("button-AI");
 buttonAI.textContent = "Get metadata";
-headerContainer.appendChild(buttonAI);
+AIContainer.appendChild(buttonAI);
 
 /**
  * Text element for displaying status messages to the user
  * @type {HTMLParagraphElement}
  */
-const textAI = document.createElement("p");
+export const textAI = document.createElement("p");
 textAI.classList.add("text-AI");
 textAI.textContent = "";
-headerContainer.appendChild(textAI);
+AIContainer.appendChild(textAI);
 
 /**
  * Element for animated loading dots
  * @type {HTMLParagraphElement}
  */
-const dotsAI = document.createElement("p");
+export const dotsAI = document.createElement("p");
 dotsAI.classList.add("dots-AI");
 dotsAI.textContent = "";
-headerContainer.appendChild(dotsAI);
+AIContainer.appendChild(dotsAI);
 
 /**
  * Element for displaying elapsed processing time
@@ -737,18 +445,12 @@ headerContainer.appendChild(dotsAI);
  * @description Shows real-time elapsed time during AI metadata generation
  * to provide users with feedback on processing duration
  */
-const timerAI = document.createElement("p");
+export const timerAI = document.createElement("p");
 timerAI.classList.add("timer-AI");
 timerAI.textContent = "";
-headerContainer.appendChild(timerAI);
+AIContainer.appendChild(timerAI);
 
-/**
- * Interval ID for controlling the loading animation
- * @type {number|null}
- */
-let intervalId = null;
 
-/* #endregion DOM ELEMENT CREATION & REFERENCES  */
 
 /* ================================================================================================= */
 /* #region EVENT LISTENERS                                                                           */
@@ -790,6 +492,7 @@ buttonAI.addEventListener("click", async () => {
 });
 
 /* #endregion EVENT LISTENERS  */
+
 
 /* ================================================================================================= */
 /* #region APPLICATION INITIALIZATION                                                                */
