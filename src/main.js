@@ -4,34 +4,40 @@
  *
  * This application creates an interactive image gallery that fetches images from an API
  * and uses Google's Gemini AI to generate metadata (category, description, author) for each image.
+ * The AI functionality has been modularized into a separate gemeni-api.js file for better code organization.
  *
  * Features:
  * - Dynamic image loading with pagination
- * - AI-powered metadata generation using Gemini API
+ * - AI-powered metadata generation using modular Gemini API integration
  * - Interactive UI with hover overlays showing metadata
+ * - Real-time processing timer with animated loading indicators
+ * - Social media-style elements (hearts, comments)
+ * - Category-based filtering system
  * - Error handling and loading states
- * - Responsive grid layout
+ * - Responsive grid layout with CSS animations
+ * - Modular architecture with separated AI functionality
  *
  * Dependencies:
- * - @google/genai - Google Generative AI SDK
+ * - ./gemeni-api.js - Modular Gemini AI integration for metadata generation
  * - Custom CSS for styling and animations
+ 
+ * Architecture:
+ * - main.js (this file): Core application logic, UI management, and user interactions
+ * - gemeni-api.js: Separated Gemini AI functionality, API calls, and utilities
+ * - style.css: Comprehensive styling, animations, and responsive design
  *
- * @author Group 4
- * @version 1.0
+ 
  */
 
 import "./style.css";
+// Import AI functionality from modular gemeni-api.js file
+// This module handles all Gemini AI integration, API calls, timer functionality, and utilities
 import { getImageMetadata } from './gemeni-api.js'
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
 /* ================================================================================================= */
 
-/**
- * API key for Google Gemini AI service
- * @constant {string}
- */
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 /**
  * Counter to track which page of images to load next
@@ -479,11 +485,14 @@ buttonLoadImages.addEventListener("click", () => {
  * AI Metadata Button Event Listener
  * @description Triggers AI metadata generation for images that don't have metadata yet.
  * Includes button state management to prevent multiple simultaneous requests.
+ * The getImageMetadata() function is imported from the modular gemeni-api.js file.
  *
  * Features:
  * - Disables button during processing to prevent duplicate requests
+ * - Calls modular AI functionality from separated gemeni-api.js module
  * - Async handling with proper error management
  * - Re-enables button after completion (success or failure)
+ * - Integrates with timer and loading animation systems
  */
 buttonAI.addEventListener("click", async () => {
   buttonAI.disabled = true; // Disable button during processing
@@ -519,30 +528,55 @@ updateCategoriesDOM();
  * END OF FILE
  * =====================================================================================================
  *
- * This completes the image gallery application with AI-powered metadata generation.
+ * This completes the main application file for the image gallery with AI-powered metadata generation.
+ * The application now features a fully modular architecture with separated concerns.
  *
  * Key Features Implemented:
  * ✅ Dynamic image loading with pagination
- * ✅ Google Gemini AI integration for metadata generation
- * ✅ Interactive UI with hover overlays
- * ✅ Category-based filtering system
+ * ✅ Modular Google Gemini AI integration (via gemeni-api.js)
+ * ✅ Interactive UI with hover overlays and social elements
+ * ✅ Category-based filtering system with dynamic button generation
  * ✅ Error handling and loading states
  * ✅ Responsive design with CSS Grid
  * ✅ State management for images and metadata
  * ✅ Button state management during async operations
  * ✅ Animated loading indicators with elapsed time display
- * ✅ Dynamic category button generation
  * ✅ Real-time processing timer for user feedback
+ * ✅ Social media-style interaction elements (hearts, comments)
+ * ✅ Fully modular architecture with clear separation of concerns
  *
  * Usage:
  * 1. Page loads with initial set of images
  * 2. Click "Load images" to fetch more images
  * 3. Click "Get metadata" to generate AI descriptions
  * 4. Use category buttons to filter images by type
- * 5. Hover over images to see generated metadata
+ * 5. Hover over images to see generated metadata and social stats
  *
- * Dependencies:
- * - @google/genai for AI functionality
- * - Custom CSS for styling and animations
- * - Image API at https://image-feed-api.vercel.app/
+ * Module Dependencies:
+ * - ./gemeni-api.js: Handles all Gemini AI functionality, API calls, and utilities
+ * - ./style.css: Comprehensive styling for gallery, animations, and responsive design
+ * - Environment: VITE_GEMINI_API_KEY for AI functionality
+ * - External API: https://image-feed-api.vercel.app/ for image data
+ *
+ * Core Functions in this file:
+ * - createImage(): DOM creation for image containers with social elements
+ * - updateImagesDOM(): Gallery rendering and category filtering
+ * - updateCategoriesDOM(): Dynamic category button management
+ * - fetchImages(): API integration for image loading
+ * - Event listeners: User interaction handling
+ *
+ * AI Functionality (in gemeni-api.js):
+ * - getImageMetadata(): AI metadata generation using Gemini 2.5 Pro
+ * - ellipsisAnimation(): Loading animation management
+ * - stopEllipsisAnimation(): Animation cleanup
+ * - Timer functionality: Real-time processing feedback
+ * - Error handling: Comprehensive AI API error management
+ *
+ * Modular Architecture Benefits:
+ * ✅ Clear separation of concerns (UI logic vs AI logic)
+ * ✅ Improved code organization and maintainability
+ * ✅ Enhanced error handling and user feedback
+ * ✅ Reusable AI functionality across projects
+ * ✅ Easier testing and debugging
+ * ✅ Better code readability and documentation
  */
