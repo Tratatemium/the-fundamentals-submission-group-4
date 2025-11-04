@@ -32,30 +32,20 @@
 import "./style.css";
 // Import AI functionality from modular gemeni-api.js file
 // This module handles all Gemini AI integration, API calls, timer functionality, and utilities
-import { getImageMetadata } from './gemeni-api.js'
+import { getImageMetadata } from './gemeni-api.js';
+
+import { fetchImages } from './api.js';
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
 /* ================================================================================================= */
 
+export const state = {
+  pagesLoadedCounter: 1,
+  imagesData: [],
+  activeCategory: "All",
+}
 
-/**
- * Counter to track which page of images to load next
- * @type {number}
- */
-let imagesLoadedCounter = 1;
-
-/**
- * Array to store all loaded image data including metadata
- * @type {Array<Object>}
- */
-export let imagesData = [];
-
-/**
- * Currently active category filter for displaying images
- * @type {string} Can be 'All', 'Uncategorised', or any specific category name
- */
-let activeCategory = "All";
 
 /* #endregion VARIABLES DECLARATION */
 
@@ -90,7 +80,7 @@ let activeCategory = "All";
  *   comments: [{}, {}, {}] // 3 comments
  * });
  */
-const createImage = (imageData) => {
+export const createImage = (imageData) => {
   // Ensure the app container exists before proceeding
   if (!appContainer) appContainer = document.getElementById("app");
 
@@ -167,7 +157,7 @@ const createImage = (imageData) => {
 /**
  * Updates the DOM with metadata for all loaded images
  * @description Finds all category and author containers and populates them
- * with data from the imagesData array. Also adds category CSS classes for filtering.
+ * with data from the state.imagesData array. Also adds category CSS classes for filtering.
  * This is called after AI metadata generation.
  */
 export const updateImagesDOM = () => {
@@ -183,12 +173,12 @@ export const updateImagesDOM = () => {
 
   // Update each container with corresponding metadata
   for (let i = 0; i < imageCategoryContainers.length; i++) {
-    imageCategoryContainers[i].textContent = imagesData[i].category;
-    imageAuthorContainers[i].textContent = imagesData[i].authorName;
+    imageCategoryContainers[i].textContent = state.imagesData[i].category;
+    imageAuthorContainers[i].textContent = state.imagesData[i].authorName;
     // Add category class for filtering functionality
-    if (imagesData[i].category) {
+    if (state.imagesData[i].category) {
       imageContainers[i].classList.add(
-        `category-${imagesData[i].category.replaceAll(" ", "-")}`
+        `category-${state.imagesData[i].category.replaceAll(" ", "-")}`
       );
     }
   }
@@ -207,7 +197,7 @@ export const updateImagesDOM = () => {
 const displayByCategoriesDOM = () => {
   const images = Array.from(document.querySelectorAll(".image-container"));
   images.forEach((image) => {
-    switch (activeCategory) {
+    switch (state.activeCategory) {
       case "All":
         // Show all images
         image.classList.remove("hidden");
@@ -229,7 +219,7 @@ const displayByCategoriesDOM = () => {
         );
         if (imageCategory)
           imageCategory = imageCategory.slice("category-".length);
-        if (imageCategory === activeCategory) {
+        if (imageCategory === state.activeCategory) {
           image.classList.remove("hidden");
         } else {
           image.classList.add("hidden");
@@ -266,7 +256,7 @@ export const updateCategoriesDOM = () => {
   const categoriesList = [
     "All",
     "Uncategorised",
-    ...new Set(imagesData.map((element) => element.category)),
+    ...new Set(state.imagesData.map((element) => element.category)),
   ];
 
   // Generate button for each category
@@ -276,7 +266,7 @@ export const updateCategoriesDOM = () => {
     button.classList.add(category.replaceAll(" ", "-"));
     button.textContent = category;
     // Mark active category button
-    if (category.replaceAll(" ", "-") === activeCategory)
+    if (category.replaceAll(" ", "-") === state.activeCategory)
       button.classList.add("active");
     categoriesContainer.appendChild(button);
   }
@@ -301,7 +291,7 @@ export const updateCategoriesDOM = () => {
       const buttonCategory = Array.from(button.classList).find(
         (el) => el !== "button-category" && el !== "active"
       );
-      activeCategory = buttonCategory;
+      state.activeCategory = buttonCategory;
 
       // Update image display based on new category
       displayByCategoriesDOM();
@@ -320,60 +310,6 @@ export const updateCategoriesDOM = () => {
 };
 
 /* #endregion DOM MANIPULATION */
-
-/* ================================================================================================= */
-/* #region API REQUESTS                                                                              */
-/* ================================================================================================= */
-
-/**
- * Fetches images from the external API with pagination support
- * @async
- * @function
- * @description Makes an API request to retrieve images from the current page,
- * validates the response, stores the data, creates DOM elements for each image,
- * and increments the page counter for the next load.
- *
- * Features:
- * - Error handling for network failures and invalid responses
- * - Data validation to ensure proper API response format
- * - Automatic page counter increment for pagination
- * - Integration with global imagesData array
- *
- * @throws {Error} When API request fails or response format is invalid
- */
-const fetchImages = async () => {
-  try {
-    // Make API request to current page
-    const response = await fetch(
-      `https://image-feed-api.vercel.app/api/images?page=${imagesLoadedCounter}`
-    );
-
-    // Check if request was successful
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    // Parse JSON response
-    const json = await response.json();
-
-    // Validate response data structure
-    if (!json.data || !Array.isArray(json.data)) {
-      throw new Error("Invalid data format received from API");
-    }
-
-    // Store data and create DOM elements
-    imagesData.push(...json.data);
-    json.data.forEach((item) => createImage(item));
-
-    // Increment counter for next page load
-    imagesLoadedCounter++;
-  } catch (error) {
-    console.error("Failed to fetch images:", error);
-    // TODO: Show user-friendly error message in UI
-  }
-};
-
-/* #endregion API REQUESTS */
 
 
 /* ================================================================================================= */
@@ -473,7 +409,7 @@ AIContainer.appendChild(timerAI);
 /**
  * Load Images Button Event Listener
  * @description Triggers the fetchImages function to load the next page of images
- * from the API. Supports pagination through the global imagesLoadedCounter.
+ * from the API. Supports pagination through the global pagesLoadedCounter.
  * Also provides user feedback when new images are loaded.
  */
 buttonLoadImages.addEventListener("click", () => {

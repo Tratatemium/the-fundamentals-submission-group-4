@@ -11,7 +11,7 @@
  */
 
 // Import variables
-import { imagesData } from './main.js'
+import { state } from './main.js'
 // Import functions
 import { updateImagesDOM, updateCategoriesDOM } from './main.js'
 // Import DOM elements
@@ -67,14 +67,14 @@ export const stopEllipsisAnimation = () => {
 };
 
 /**
- * Updates the global imagesData array with new metadata from AI
+ * Updates the global state.imagesData array with new metadata from AI
  * @param {Array<Object>} newMetadata - Array of metadata objects from Gemini AI
  * @description Finds images without metadata and assigns the AI-generated data
  * to them in sequence. Only updates images that don't already have category data.
  */
 const updateImagesData = (newMetadata) => {
   let i = 0;
-  for (const oneImageData of imagesData) {
+  for (const oneImageData of state.imagesData) {
     // Skip images that already have metadata
     if (oneImageData.category) {
       continue;
@@ -102,7 +102,7 @@ const updateImagesData = (newMetadata) => {
  */
 const fetchImagesFromUrl = async () => {
   // Filter images that need metadata generation
-  const imagesToFetch = imagesData.filter(
+  const imagesToFetch = state.imagesData.filter(
     (oneImageData) => !oneImageData.category
   );
   const imageUrls = imagesToFetch.map((oneImageData) => oneImageData.image_url);
@@ -289,7 +289,7 @@ export const getImageMetadata = async () => {
       // Success: update application data and UI
       console.log(metadata);
       updateImagesData(metadata);
-      console.log(imagesData);
+      console.log(state.imagesData);
       updateImagesDOM();
       updateCategoriesDOM();
     }
