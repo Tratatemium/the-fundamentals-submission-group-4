@@ -17,6 +17,14 @@
   box-sizing: border-box;
 }
 
+/* ================================================================================================= */
+/* #UNIVERSAL CSS RESET                                                                                 */
+/* ================================================================================================= */
+* {
+  margin: 0;
+  padding: 0;
+}
+
 /* Prevent font size inflation */
 html {
   -moz-text-size-adjust: none;
@@ -123,17 +131,317 @@ textarea:not([rows]) {
 
 /* #endregion CSS CUSTOM PROPERTIES (VARIABLES) 
 
+/*==== TOGGLE BUTTON DARK MODE VARIABLES ====*/
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --header-bg: rgba(0, 0, 0, 0.7);
+  --nav-bg: transparent;
+  --footer-bg: #111111;
+  --footer-text: #ffffff;
+  --link-color: #756b6b;
+  --link-hover: #00aaff;
+  --dropdown-bg: #333333;
+  --dropdown-link: #ffffff;
+}
+/*========== END DARK VARIABLES =================*/
+
+/* -------------------------
+   BODY & FLEX LAYOUT
+---------------------------*/
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* Keeps footer at bottom */
+}
+
+html, body {
+  height: 100%;
+}
+
+main {
+  flex: 1; /* Main content grows, footer sticks to bottom */
+}
+
+/* -------------------------
+   END OF BODY & FLEX LAYOUT
+---------------------------*/
+
 
 /* ================================================================================================= */
 /* #region HEADER                                                                                    */
 /* ================================================================================================= */
 
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px 40px;
+  z-index: 1000;
+  background-color: var(--header-bg);
+  backdrop-filter: blur(8px);
+  color: var(--text-color);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  transform: rotate(2deg);
+  color: #fff;
+  text-shadow: 10px 10px 40px #020f81, 0 0 20px #0d0570, 0 0 40px #0713b4;
+}
+
+/*========== NAVIGATION =================*/
+nav {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--nav-bg);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+nav ul li a,
+.dropbtn {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px 10px;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+nav ul li a:hover,
+.dropbtn:hover {
+  background-color: var(--link-hover);
+  border-radius: 5px;
+}
+
+/* Dropdown menu */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--dropdown-bg);
+  min-width: 90px;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-radius: 5px;
+}
+
+.dropdown-content a {
+  color: var(--dropdown-link);
+  padding: 5px 10px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--link-hover);
+  border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Toggle buttons */
+#theme-toggle, #view-toggle {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  margin-left: 10px;
+  transition: 0.3s;
+}
+
+#theme-toggle:hover { background-color: #ccc; }
+#view-toggle:hover { background-color: #0044c9; }
+
 /* #endregion HEADER */
 
+/*========== BANNER / 3D CAROUSEL =================*/
+.banner {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.slider {
+  position: center;
+  width: 1000px;
+  height: 833px;
+  transform-style: preserve-3d;
+  perspective: 4000px;
+  transform: rotateX(-11deg);
+  --rotation: 0deg;
+  --quantity: 10;
+}
+
+.slider .item {
+  position: absolute;
+  width: 250px;
+  height: 300px;
+  top: 50%;
+  left: 40%;
+  transform-style: preserve-3d;
+  transform: 
+    rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)) + var(--rotation)))
+    translateZ(550px)
+    translate(-50%, -50%);
+  transition: transform 2s ease;
+}
+
+.slider .item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slider .item img:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  z-index: 20;
+  box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.5);
+}
+
+.banner button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+.prev { left: 20px; }
+.next { right: 20px; }
+
+/*========== END OF BANNER / 3D CAROUSEL =================*/
+
+/*========== SUBSCRIBE POPUP =================*/
+.subscribe-btn {
+  padding: 6px 14px;
+  border: none;
+  background: #005eff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.subscribe-btn:hover {
+  background: #003cb8;
+}
+
+.subscribe-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.subscribe-box {
+  width: 300px;
+  padding: 25px;
+  background: #ffffff;
+  color: #000;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+
+.subscribe-box input {
+  width: 90%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.subscribe-box button {
+  width: 100%;
+  padding: 10px;
+  background: #005eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.close-subscribe {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent !important;
+  font-size: 22px;
+  padding: 0;
+  color: #000;
+  cursor: pointer;
+}
+/*========== END OF SUBSCRIBE POPUP =================*/
 
 /* ================================================================================================= */
 /* #region FOOTER                                                                                    */
 /* ================================================================================================= */
+
+footer {
+  text-align: center;
+  padding: 30px;
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
 
 /* #endregion FOOTER */
 
@@ -230,9 +538,6 @@ main {
   justify-content: center;
 }
 
-header {
-  
-}
 
 /* ================================================================================================= */
 /* #region BUTTON STYLES                                                                             */
