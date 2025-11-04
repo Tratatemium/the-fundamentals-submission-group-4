@@ -231,13 +231,7 @@ main {
 }
 
 header {
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  justify-content:center;
-  align-items:center;
-  margin-bottom: 2em;
-  padding-top: 2em;
+  
 }
 
 /* ================================================================================================= */
@@ -346,6 +340,16 @@ header {
  * Styling for user feedback elements including status text, loading animations,
  * and elapsed time display during AI processing operations.
  */
+
+.AI-container{
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items:center;
+  margin-bottom: 2em;
+  padding-top: 2em;
+}
 
 /* Status text display for user feedback */
 .text-AI {
