@@ -42,12 +42,13 @@ import { state } from './main.js'
 
 // Import UI update functions for DOM manipulation after AI processing
 import { updateImagesDOM, updateCategoriesDOM } from './main.js'
+import { fetchImages } from './api.js';
 
 // Import DOM elements for user feedback and loading animations
-import { textAI, dotsAI, timerAI } from './main.js'
+import { } from './main.js'
 
-// Import Google Gemini AI SDK for API integration
-import { GoogleGenAI, Type } from "@google/genai";
+
+
 
 /**
  * Google Gemini AI API Key
@@ -63,6 +64,8 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
  * @type {number|null}
  */
 let intervalId = null;
+
+let GoogleGenAI, Type;
 
 /**
  * Starts the animated ellipsis loading indicator with timer
@@ -213,6 +216,18 @@ export const getImageMetadata = async () => {
   let imageParts = [];
 
   try {
+    if (!GoogleGenAI || !Type) {
+      // Import Google Gemini AI SDK for API integration
+      const module = await import("@google/genai");
+      GoogleGenAI = module.GoogleGenAI;
+      Type = module.Type;
+    }   
+  } catch (err) {
+    console.error("Error initialising google AI libraries:", err.message);
+    textAI.textContent = "🚨 Error initialising google AI libraries 🚨";
+  }
+
+  try {
     // Start loading animation and user feedback
     textAI.textContent = "Fetching multiple images from API";
     ellipsisAnimation();
@@ -339,6 +354,117 @@ export const getImageMetadata = async () => {
   textAI.textContent = "🎉 Metadata generation: success! 🎉";
   stopEllipsisAnimation();
 };
+
+/**
+ * DOM ELEMENT SETUP
+ * =================
+ *
+ * This section creates and configures all the UI elements needed for the application:
+ * - Main app container reference
+ * - Header container reference
+ * - Load images button
+ * - AI metadata generation button
+ * - Status text display
+ * - Loading animation dots
+ * - Elapsed time timer display
+ * - Interval ID for animation control
+ */
+
+
+const AIContainer = document.querySelector('.AI-container');
+
+/**
+ * Button to load more images from the API
+ * @type {HTMLButtonElement}
+ */
+const buttonLoadImages = document.createElement("button");
+buttonLoadImages.classList.add("button-load-images");
+buttonLoadImages.textContent = "Load images";
+AIContainer.appendChild(buttonLoadImages);
+
+/**
+ * Button to generate AI metadata for loaded images
+ * @type {HTMLButtonElement}
+ */
+const buttonAI = document.createElement("button");
+buttonAI.classList.add("button-AI");
+buttonAI.textContent = "Get metadata";
+AIContainer.appendChild(buttonAI);
+
+/**
+ * Text element for displaying status messages to the user
+ * @type {HTMLParagraphElement}
+ */
+export const textAI = document.createElement("p");
+textAI.classList.add("text-AI");
+textAI.textContent = "";
+AIContainer.appendChild(textAI);
+
+/**
+ * Element for animated loading dots
+ * @type {HTMLParagraphElement}
+ */
+export const dotsAI = document.createElement("p");
+dotsAI.classList.add("dots-AI");
+dotsAI.textContent = "";
+AIContainer.appendChild(dotsAI);
+
+/**
+ * Element for displaying elapsed processing time
+ * @type {HTMLParagraphElement}
+ * @description Shows real-time elapsed time during AI metadata generation
+ * to provide users with feedback on processing duration
+ */
+export const timerAI = document.createElement("p");
+timerAI.classList.add("timer-AI");
+timerAI.textContent = "";
+AIContainer.appendChild(timerAI);
+
+
+
+/* ================================================================================================= */
+/* #region EVENT LISTENERS                                                                           */
+/* ================================================================================================= */
+
+/**
+ * EVENT LISTENER SETUP
+ * ====================
+ *
+ * This section configures all user interaction event handlers for the application.
+ * Each button has specific functionality and proper state management.
+ */
+
+/**
+ * Load Images Button Event Listener
+ * @description Triggers the fetchImages function to load the next page of images
+ * from the API. Supports pagination through the global pagesLoadedCounter.
+ * Also provides user feedback when new images are loaded.
+ */
+buttonLoadImages.addEventListener("click", () => {
+  fetchImages();
+  textAI.textContent = "More images loaded 🖼️";
+});
+
+/**
+ * AI Metadata Button Event Listener
+ * @description Triggers AI metadata generation for images that don't have metadata yet.
+ * Includes button state management to prevent multiple simultaneous requests.
+ * The getImageMetadata() function is imported from the modular gemeni-api.js file.
+ *
+ * Features:
+ * - Disables button during processing to prevent duplicate requests
+ * - Calls modular AI functionality from separated gemeni-api.js module
+ * - Async handling with proper error management
+ * - Re-enables button after completion (success or failure)
+ * - Integrates with timer and loading animation systems
+ */
+buttonAI.addEventListener("click", async () => {
+  buttonAI.disabled = true; // Disable button during processing
+  await getImageMetadata(); // Generate metadata with AI
+  buttonAI.disabled = false; // Re-enable button when complete
+});
+
+/* #endregion EVENT LISTENERS  */
 
 /**
  * =====================================================================================================

@@ -44,6 +44,10 @@ import { getImageMetadata } from './gemeni-api.js';
 // This module handles image fetching, pagination, and external API integration
 import { fetchImages } from './api.js';
 
+
+// Import DOM elements for user feedback and loading animations
+import { textAI } from './gemeni-api.js'
+
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
 /* ================================================================================================= */
@@ -364,56 +368,6 @@ const appContainer = document.getElementById("app");
  */
 const headerContainer = document.querySelector("header");
 
-const AIContainer = document.querySelector('.AI-container');
-
-/**
- * Button to load more images from the API
- * @type {HTMLButtonElement}
- */
-const buttonLoadImages = document.createElement("button");
-buttonLoadImages.classList.add("button-load-images");
-buttonLoadImages.textContent = "Load images";
-AIContainer.appendChild(buttonLoadImages);
-
-/**
- * Button to generate AI metadata for loaded images
- * @type {HTMLButtonElement}
- */
-const buttonAI = document.createElement("button");
-buttonAI.classList.add("button-AI");
-buttonAI.textContent = "Get metadata";
-AIContainer.appendChild(buttonAI);
-
-/**
- * Text element for displaying status messages to the user
- * @type {HTMLParagraphElement}
- */
-export const textAI = document.createElement("p");
-textAI.classList.add("text-AI");
-textAI.textContent = "";
-AIContainer.appendChild(textAI);
-
-/**
- * Element for animated loading dots
- * @type {HTMLParagraphElement}
- */
-export const dotsAI = document.createElement("p");
-dotsAI.classList.add("dots-AI");
-dotsAI.textContent = "";
-AIContainer.appendChild(dotsAI);
-
-/**
- * Element for displaying elapsed processing time
- * @type {HTMLParagraphElement}
- * @description Shows real-time elapsed time during AI metadata generation
- * to provide users with feedback on processing duration
- */
-export const timerAI = document.createElement("p");
-timerAI.classList.add("timer-AI");
-timerAI.textContent = "";
-AIContainer.appendChild(timerAI);
-
-
 
 /* ================================================================================================= */
 /* #region EVENT LISTENERS                                                                           */
@@ -427,35 +381,7 @@ AIContainer.appendChild(timerAI);
  * Each button has specific functionality and proper state management.
  */
 
-/**
- * Load Images Button Event Listener
- * @description Triggers the fetchImages function to load the next page of images
- * from the API. Supports pagination through the global pagesLoadedCounter.
- * Also provides user feedback when new images are loaded.
- */
-buttonLoadImages.addEventListener("click", () => {
-  fetchImages();
-  textAI.textContent = "More images loaded 🖼️";
-});
 
-/**
- * AI Metadata Button Event Listener
- * @description Triggers AI metadata generation for images that don't have metadata yet.
- * Includes button state management to prevent multiple simultaneous requests.
- * The getImageMetadata() function is imported from the modular gemeni-api.js file.
- *
- * Features:
- * - Disables button during processing to prevent duplicate requests
- * - Calls modular AI functionality from separated gemeni-api.js module
- * - Async handling with proper error management
- * - Re-enables button after completion (success or failure)
- * - Integrates with timer and loading animation systems
- */
-buttonAI.addEventListener("click", async () => {
-  buttonAI.disabled = true; // Disable button during processing
-  await getImageMetadata(); // Generate metadata with AI
-  buttonAI.disabled = false; // Re-enable button when complete
-});
 
 /* #endregion EVENT LISTENERS  */
 
