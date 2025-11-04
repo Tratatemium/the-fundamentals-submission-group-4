@@ -3,8 +3,8 @@
  * =======================
  *
  * Dedicated module for Google's Gemini AI API integration and metadata generation.
- * This module is part of a three-module architecture that separates AI functionality
- * from UI logic and external API calls for better code organization and maintainability.
+ * This module is part of a four-module architecture that separates AI functionality
+ * from UI logic, external API calls, and category management for better code organization.
  *
  * Module Responsibilities:
  * - Google Gemini AI API integration and configuration
@@ -13,6 +13,7 @@
  * - AI response processing and validation
  * - Error handling for AI operations
  * - State management integration through imports
+ * - UI element creation and event handling for AI controls
  *
  * Features:
  * - Structured JSON output with schema validation
@@ -21,6 +22,8 @@
  * - Integration with centralized state management
  * - Base64 image processing for AI analysis
  * - Thinking budget configuration for enhanced AI performance
+ * - Dynamic import loading for Google AI SDK
+ * - Self-contained UI controls and event listeners
  *
  * Required dependencies:
  * - npm install @google/genai mime
@@ -28,25 +31,29 @@
  * - Environment: VITE_GEMINI_API_KEY
  *
  * Module Architecture:
- * - Imports: state, functions, and DOM elements from main.js
- * - Exports: getImageMetadata, ellipsisAnimation, stopEllipsisAnimation
- * - Integration: Works seamlessly with main.js UI logic and api.js data fetching
+ * - Imports: state from main.js, category functions, and API functions
+ * - Exports: getImageMetadata, ellipsisAnimation, stopEllipsisAnimation, textAI, dotsAI, timerAI
+ * - Integration: Works seamlessly with four-module system
  *
  * @author Group 4
- * @version 1.5.0 - Modular architecture with centralized state management
+ * @version 1.6.0 - Four-module architecture with self-contained AI controls
  */
 
 // ===== MODULE IMPORTS =====
-// Import centralized state management object
+// Import centralized state management object for AI processing and data updates
 import { state } from './main.js'
 
 // Import UI update functions for DOM manipulation after AI processing
 import { updateImagesDOM } from './main.js'
+
+// Import category management functions from specialized image-categories module
 import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
+
+// Import API functionality for additional image loading capability
 import { fetchImages } from './api.js';
 
-// Import DOM elements for user feedback and loading animations
-import { } from './main.js'
+// Dynamic imports for Google AI SDK (loaded when needed)
+// import { GoogleGenAI, Type } from "@google/genai" - loaded dynamically
 
 
 
@@ -66,6 +73,13 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
  */
 let intervalId = null;
 
+/**
+ * Dynamic Google AI SDK variables
+ * @description These are loaded dynamically when needed to optimize initial bundle size.
+ * The SDK is imported only when getImageMetadata() is first called.
+ * @type {Object|undefined} GoogleGenAI - Main Google AI SDK class
+ * @type {Object|undefined} Type - Schema type definitions for structured output
+ */
 let GoogleGenAI, Type;
 
 /**
@@ -473,27 +487,30 @@ buttonAI.addEventListener("click", async () => {
  * =====================================================================================================
  *
  * This completes the dedicated Google Gemini AI integration module for the image gallery application.
- * This module is a key component of the three-module architecture, handling all AI-related functionality.
+ * This module is a key component of the four-module architecture, handling all AI-related functionality.
  *
  * MODULE EXPORTS:
  * ✅ getImageMetadata() - Main AI metadata generation function
  * ✅ ellipsisAnimation() - Loading animation starter with timer
  * ✅ stopEllipsisAnimation() - Animation cleanup and reset
+ * ✅ textAI, dotsAI, timerAI - DOM elements for user feedback (self-contained)
  *
- * MODULE IMPORTS FROM MAIN.JS:
- * - state: Centralized application state management
- * - updateImagesDOM(): UI update function for gallery rendering
- * - updateCategoriesDOM(): UI update function for category buttons
- * - textAI, dotsAI, timerAI: DOM elements for user feedback
+ * MODULE IMPORTS:
+ * - state (main.js): Centralized application state management
+ * - updateImagesDOM() (main.js): UI update function for gallery rendering
+ * - displayByCategoriesDOM(), updateCategoriesDOM() (image-categories.js): Category management
+ * - fetchImages() (api.js): External API functionality for additional image loading
  *
  * CORE FUNCTIONALITY:
  * 🤖 AI Integration:
  *    - Google Gemini 2.5 Pro model with vision capabilities
+ *    - Dynamic SDK loading for optimized performance
  *    - Structured JSON output with schema validation
  *    - Thinking budget configuration for enhanced performance
  *    - Base64 image processing and MIME type validation
  *
  * 🎭 User Experience:
+ *    - Self-contained UI controls and event listeners
  *    - Real-time loading animations with dot cycling
  *    - Elapsed time counter for processing feedback
  *    - Comprehensive error handling with user-friendly messages
@@ -506,20 +523,23 @@ buttonAI.addEventListener("click", async () => {
  *    - Image data enrichment with AI-generated content
  *
  * 🏗️ MODULAR ARCHITECTURE BENEFITS:
- * ✅ Separation of AI logic from UI and external API concerns
+ * ✅ Separation of AI logic from UI, API, and category concerns
+ * ✅ Self-contained UI controls for complete AI functionality
  * ✅ Reusable AI functionality across different projects
  * ✅ Isolated error handling specific to AI operations
  * ✅ Independent testing and debugging of AI features
  * ✅ Clean API surface with focused exports
  * ✅ Secure API key management within dedicated module
+ * ✅ Dynamic loading for optimal performance
  *
  * INTEGRATION WITH OTHER MODULES:
- * - main.js: Provides state, UI functions, and DOM elements
+ * - main.js: Provides state management and core UI update functions
+ * - image-categories.js: Handles category filtering and button management
  * - api.js: Works in parallel for external image data fetching
  * - style.css: Styles the loading animations and feedback elements
  *
  * This module exemplifies clean architecture principles with focused responsibilities,
- * clear interfaces, and seamless integration with the broader application ecosystem.
+ * clear interfaces, and seamless integration with the broader four-module application ecosystem.
  */
 
 

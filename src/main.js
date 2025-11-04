@@ -4,7 +4,7 @@
  *
  * This application creates an interactive image gallery that fetches images from an API
  * and uses Google's Gemini AI to generate metadata (category, description, author) for each image.
- * The application features a fully modular architecture with separated concerns across multiple files.
+ * The application features a fully modular architecture with separated concerns across multiple specialized modules.
  *
  * Features:
  * - Dynamic image loading with pagination
@@ -12,7 +12,7 @@
  * - Interactive UI with hover overlays showing metadata
  * - Real-time processing timer with animated loading indicators
  * - Social media-style elements (hearts, comments)
- * - Category-based filtering system
+ * - Advanced category-based filtering system
  * - Error handling and loading states
  * - Responsive grid layout with CSS animations
  * - Fully modular architecture with separated concerns
@@ -21,17 +21,19 @@
  * Dependencies:
  * - ./gemeni-api.js - Modular Gemini AI integration for metadata generation
  * - ./api.js - External API integration for image fetching
+ * - ./image-categories.js - Category filtering and UI management
  * - Custom CSS for styling and animations
  * - Environment Variables: VITE_GEMINI_API_KEY for AI functionality
  *
- * Architecture:
+ * Four-Module Architecture:
  * - main.js (this file): Core application logic, UI management, state, and user interactions
  * - gemeni-api.js: Separated Gemini AI functionality, API calls, and utilities
  * - api.js: External image API integration with pagination support
+ * - image-categories.js: Category filtering logic and button management
  * - style.css: Comprehensive styling, animations, and responsive design
  *
  * @author Group 4
- * @version 1.5.0 - Fully modular architecture with separated API and state management
+ * @version 1.6.0 - Four-module architecture with specialized category management
  */
 
 import "./style.css";
@@ -44,10 +46,11 @@ import { getImageMetadata } from './gemeni-api.js';
 // This module handles image fetching, pagination, and external API integration
 import { fetchImages } from './api.js';
 
-
 // Import DOM elements for user feedback and loading animations
 import { textAI } from './gemeni-api.js'
 
+// Import category management functionality from modular image-categories.js file
+// This module handles category filtering, button generation, and display logic
 import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
 
 /* ================================================================================================= */
@@ -295,6 +298,7 @@ updateCategoriesDOM();
  * ✅ Dynamic image loading with pagination
  * ✅ Modular Google Gemini AI integration (via gemeni-api.js)
  * ✅ Modular external API integration (via api.js)
+ * ✅ Modular category management system (via image-categories.js)
  * ✅ Interactive UI with hover overlays and social elements
  * ✅ Category-based filtering system with dynamic button generation
  * ✅ Error handling and loading states
@@ -313,7 +317,7 @@ updateCategoriesDOM();
  * 4. Use category buttons to filter images by type
  * 5. Hover over images to see generated metadata and social stats
  *
- * Three-Module Architecture:
+ * Four-Module Architecture:
  * 
  * 1. main.js (this file): 
  *    - Core application logic and UI management
@@ -332,18 +336,24 @@ updateCategoriesDOM();
  *    - Pagination and data fetching logic
  *    - Response validation and error handling
  *    - Integration with centralized state management
+ * 
+ * 4. image-categories.js:
+ *    - Category filtering and display logic
+ *    - Dynamic category button generation
+ *    - Category-based image visibility management
+ *    - Active category state handling
  *
  * Module Dependencies:
  * - ./gemeni-api.js: Handles all Gemini AI functionality, animations, and utilities
  * - ./api.js: Handles external image API calls and pagination
+ * - ./image-categories.js: Handles category filtering and button management
  * - ./style.css: Comprehensive styling for gallery, animations, and responsive design
  * - Environment: VITE_GEMINI_API_KEY for AI functionality
  * - External API: https://image-feed-api.vercel.app/ for image data
  *
  * Core Functions in this file:
  * - createImage(): DOM creation for image containers with social elements
- * - updateImagesDOM(): Gallery rendering and category filtering
- * - updateCategoriesDOM(): Dynamic category button management
+ * - updateImagesDOM(): Gallery rendering and image display
  * - state: Centralized state management object (exported)
  * - DOM elements: UI component exports for other modules
  * - Event listeners: User interaction handling
@@ -351,10 +361,12 @@ updateCategoriesDOM();
  * External Module Functions:
  * - getImageMetadata() (gemeni-api.js): AI metadata generation using Gemini 2.5 Pro
  * - fetchImages() (api.js): External API integration for image loading
+ * - displayByCategoriesDOM() (image-categories.js): Category-based image filtering
+ * - updateCategoriesDOM() (image-categories.js): Dynamic category button management
  * - Animation utilities (gemeni-api.js): Timer and loading feedback systems
  *
  * Modular Architecture Benefits:
- * ✅ Clear separation of concerns (UI, AI, API logic)
+ * ✅ Clear separation of concerns (UI, AI, API, Category logic)
  * ✅ Improved code organization and maintainability
  * ✅ Enhanced error handling and user feedback
  * ✅ Reusable functionality across projects
@@ -362,4 +374,5 @@ updateCategoriesDOM();
  * ✅ Better code readability and documentation
  * ✅ Centralized state management
  * ✅ Scalable architecture for future features
+ * ✅ Specialized modules for focused functionality
  */

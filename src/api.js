@@ -32,7 +32,7 @@
  * - Integration: Works seamlessly with main.js UI logic and gemeni-api.js AI functionality
  *
  * @author Group 4
- * @version 1.5.0 - Modular architecture with centralized state management
+ * @version 1.6.0 - Four-module architecture with self-contained AI controls
  */
 
 /* ================================================================================================= */
