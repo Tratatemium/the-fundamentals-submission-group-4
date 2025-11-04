@@ -41,7 +41,8 @@
 import { state } from './main.js'
 
 // Import UI update functions for DOM manipulation after AI processing
-import { updateImagesDOM, updateCategoriesDOM } from './main.js'
+import { updateImagesDOM } from './main.js'
+import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
 import { fetchImages } from './api.js';
 
 // Import DOM elements for user feedback and loading animations
