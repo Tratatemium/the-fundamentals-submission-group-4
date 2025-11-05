@@ -253,6 +253,18 @@ const headerContainer = document.querySelector("header");
 /* #region EVENT LISTENERS                                                                           */
 /* ================================================================================================= */
 
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * EVENT LISTENER SETUP
  * ====================
