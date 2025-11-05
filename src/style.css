@@ -53,6 +53,8 @@ ol[role='list'] {
 body {
   min-height: 100vh;
   line-height: 1.5;
+  background-color: var(--primary-color);
+  transition: background-color 0.3s ease;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -125,19 +127,29 @@ textarea:not([rows]) {
   --font-secondary: 'Playfair', serif;
 
 }
-/*==== TOGGLE BUTTON DARK MODE VARIABLES ====*/
+/*==== DARK MODE COLOR SCHEME ====*/
 
 body.dark-mode {
-  --bg-color: #121212;
-  --text-color: #ffffff;
-  --header-bg: rgba(0, 0, 0, 0.7);
-  --nav-bg: transparent;
-  --footer-bg: #111111;
-  --footer-text: #ffffff;
-  --link-color: #756b6b;
-  --link-hover: #00aaff;
-  --dropdown-bg: #333333;
-  --dropdown-link: #ffffff;
+  /* Core dark mode palette */
+  --primary-color: #1A1A1A;        /* Dark background */
+  --secondary-color: #2D2D2D;      /* Slightly lighter dark for cards/sections */
+  --accent-color: #E74C3C;         /* Bright red accent for contrast */
+  --text-color: #F5F5F5;           /* Light text for readability */
+  
+  /* Additional dark mode variables */
+  --bg-color: #121212;             /* Deep black background */
+  --header-bg: rgba(26, 26, 26, 0.95); /* Semi-transparent dark header */
+  --nav-bg: rgba(45, 45, 45, 0.95); /* Navigation background */
+  --footer-bg: #0F0F0F;            /* Footer background */
+  --footer-text: #F5F5F5;          /* Footer text */
+  --link-color: #B0B0B0;           /* Muted link color */
+  --link-hover: #4ECDC4;           /* Teal hover accent */
+  --dropdown-bg: #2D2D2D;          /* Dropdown background */
+  --dropdown-link: #F5F5F5;        /* Dropdown text */
+  
+  /* Shadow and border adjustments for dark mode */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --border-color: #404040;
 }
 /*========== END TOGGLE BUTTON DARK MODE VARIABLES =================*/
 
@@ -159,11 +171,17 @@ header {
   flex-direction: row;
   justify-content: space-between;
   padding: 1em 2em;
-  background-color: rgba(var(--primary-color), 0.7); /* Add opacity */
+  background-color: rgba(245, 244, 241, 0.95); /* Light mode background */
   backdrop-filter: blur(8px);
   color: var(--text-color);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode header styling */
+body.dark-mode header {
+  background-color: var(--header-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Brand title */
@@ -362,10 +380,9 @@ nav a{
   display: block;
 }
 
-/* Toggle button styling */
+/* Toggle button styling - Modern Switch Design */
 #theme-toggle {
   padding: 0.75rem 1rem;
-  font-size: 18px;
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 6px;
@@ -376,8 +393,92 @@ nav a{
   text-align: left;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
+.theme-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 3.5rem;
+  height: 1.75rem;
+  background-color: var(--secondary-color);
+  border-radius: 1rem;
+  border: 2px solid var(--accent-color);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 0.125rem;
+  overflow: hidden;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  left: 0.125rem;
+}
+
+.theme-icon {
+  position: absolute;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  z-index: 2;
+}
+
+.theme-icon-light {
+  left: 0.125rem;
+  opacity: 1;
+}
+
+.theme-icon-dark {
+  right: 0.125rem;
+  opacity: 0.3;
+}
+
+.theme-toggle-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+/* Dark mode toggle styling */
+body.dark-mode .theme-toggle-track {
+  background-color: var(--accent-color);
+  border-color: var(--link-hover);
+}
+
+body.dark-mode .theme-toggle-thumb {
+  transform: translateX(1.75rem);
+  background-color: var(--link-hover);
+}
+
+body.dark-mode .theme-icon-light {
+  opacity: 0.3;
+}
+
+body.dark-mode .theme-icon-dark {
+  opacity: 1;
+}
+
+/* Hover effects */
 #theme-toggle:hover {
   background-color: var(--accent-color);
   color: var(--primary-color);
@@ -385,22 +486,54 @@ nav a{
   transform: translateX(4px);
 }
 
-/* Dark mode navigation styling */
-body.dark-mode nav {
-  background-color: rgba(18, 18, 18, 0.95);
-  border-color: var(--link-color);
+#theme-toggle:hover .theme-toggle-label {
+  color: var(--primary-color);
 }
 
-body.dark-mode .navigation-element,
+#theme-toggle:hover .theme-toggle-track {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode #theme-toggle:hover {
+  background-color: var(--);
+  color: #000000;
+  border-color: var(--link-hover);
+}
+
+body.dark-mode #theme-toggle:hover .theme-toggle-label {
+  color: #000000;
+}
+
+/* Dark mode navigation styling */
+body.dark-mode nav {
+  background-color: var(--nav-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .navigation-element {
+  color: var(--text-color);
+}
+
+body.dark-mode .navigation-element:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border-color: var(--accent-color);
+}
+
 body.dark-mode #theme-toggle {
   color: var(--text-color);
 }
 
-body.dark-mode .navigation-element:hover,
 body.dark-mode #theme-toggle:hover {
-  background-color: var(--link-hover);
-  color: #000000;
-  border-color: var(--link-hover);
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border-color: var(--accent-color);
+}
+
+body.dark-mode #theme-toggle:hover .theme-toggle-label {
+  color: var(--primary-color);
 }
 
 
@@ -433,6 +566,12 @@ main  {
   background-color: var(--primary-color);
   padding-top: 10rem;
   margin: -1em; /* Adjust margin to fill webpage background */
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode main styling */
+body.dark-mode main {
+  background-color: var(--bg-color);
 }
 
 #app {

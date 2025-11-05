@@ -1,12 +1,41 @@
 // =======================
 // THEME TOGGLE (Dark/Light mode)
 // =======================
-const themeToggleBtn = document.getElementById("theme-toggle"); // Find the button for toggling dark/light mode.
-if (themeToggleBtn) { // Check if the button exists to avoid errors on pages without it.
-  themeToggleBtn.addEventListener("click", () => { // Add click listener. When clicked, execute the following function.
-    document.body.classList.toggle("dark-mode"); // Toggle the 'dark-mode' class on the <body>. Adds it if missing, removes it if present.
-    themeToggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙"; // Change the button text based on current mode. '${...}' is template literal syntax to insert variables into strings.
+const themeToggleBtn = document.getElementById("theme-toggle");
+if (themeToggleBtn) {
+  // Check for saved theme preference or default to light mode
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
+  
+  // Update toggle text based on current theme
+  updateThemeToggleText();
+  
+  themeToggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    
+    // Save theme preference
+    const theme = document.body.classList.contains("dark-mode") ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+    
+    updateThemeToggleText();
   });
+  
+  function updateThemeToggleText() {
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    themeToggleBtn.innerHTML = `
+      <span class="theme-toggle-wrapper">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-thumb"></span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+          <span class="theme-icon theme-icon-dark">🌙</span>
+        </span>
+        <span class="theme-toggle-label">${isDarkMode ? 'Dark' : 'Light'} Mode</span>
+      </span>
+    `;
+    themeToggleBtn.setAttribute('aria-pressed', isDarkMode);
+  }
 }
 
 // =======================
