@@ -281,7 +281,7 @@ body.dark-mode header {
 nav {
   position: absolute;
   top: 100%;
-  right: 0;
+  right: 1em;
   background-color: rgba(245, 244, 241, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent-color);

@@ -28,8 +28,8 @@ if (themeToggleBtn) {
       <span class="theme-toggle-wrapper">
         <span class="theme-toggle-track">
           <span class="theme-toggle-thumb"></span>
-          <span class="theme-icon theme-icon-light">☀️</span>
-          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light"></span>
+          <span class="theme-icon theme-icon-dark"></span>
         </span>
         <span class="theme-toggle-label">${isDarkMode ? 'Dark' : 'Light'} Mode</span>
       </span>
