@@ -171,7 +171,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   padding: 1em 2em;
-  background-color: rgba(245, 244, 241, 0.95); /* Light mode background */
+  background-color: rgba(var(--primary-color), 0.7); /* Add opacity */
   backdrop-filter: blur(8px);
   color: var(--text-color);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
