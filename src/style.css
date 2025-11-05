@@ -325,6 +325,9 @@ nav:not([hidden]) {
   text-align: left;
   width: 100%;
   box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .navigation-element:hover {
@@ -339,11 +342,44 @@ nav:not([hidden]) {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Disabled button styles for loading states */
+.navigation-element:disabled {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  cursor: not-allowed;
+  opacity: 0.8;
+  transform: none;
+  box-shadow: none;
+}
+
+.navigation-element:disabled::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-color: currentColor transparent currentColor transparent;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+/* spinner keyframes */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Prevent hover effects on disabled buttons */
+.navigation-element:disabled:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 nav a{
   text-decoration: none;
 }
-
-
 
 /* Dropdown menu */
 .dropdown {
@@ -865,10 +901,7 @@ main {
  */
 
 /* Base button styles shared across all button types */
-.button-category,
-.button-AI,
-.button-load-images,
-.button {
+.button-category {
   background-color: var(--secondary-color);
   border: 2px solid var(--accent-color);
   border-radius: 1rem;
@@ -882,16 +915,9 @@ main {
   transition: all 0.2s ease; /* Smooth transitions for interactions */
 }
 
-/* Specific spacing for main action buttons */
-.button-AI,
-.button-load-images {
-  margin-left: 2rem;
-}
 
 /* Hover and active state styles for main buttons */
-.button-category.active,
-.button-AI:hover,
-.button-load-images:hover {
+.button-category.active {
   background-color: var(--accent-color);
   color: var(--primary-color);
   transform: translateY(1px);
@@ -913,35 +939,11 @@ main {
 }
 
 /* Click/active state for all buttons */
-.button-category:active,
-.button-AI:active,
-.button-load-images:active {
+.button-category:active {
   background-color: #3a0505; /* Darker accent color */
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   border-color: #3a0505;
-}
-
-/* Disabled button styles for loading states */
-.button-AI:disabled,
-.button-load-images:disabled {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  color: #999999;
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Prevent hover effects on disabled buttons */
-.button-AI:disabled:hover,
-.button-load-images:disabled:hover {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  color: #999999;
-  transform: translateY(0);
-  box-shadow: none;
 }
 
 /* #endregion BUTTON STYLES */

@@ -392,19 +392,13 @@ const AIContainer = document.querySelector('.AI-container');
  * Button to load more images from the API
  * @type {HTMLButtonElement}
  */
-const buttonLoadImages = document.createElement("button");
-buttonLoadImages.classList.add("button-load-images");
-buttonLoadImages.textContent = "Load images";
-AIContainer.appendChild(buttonLoadImages);
+const buttonLoadImages = document.querySelector(".button-load-images");
 
 /**
  * Button to generate AI metadata for loaded images
  * @type {HTMLButtonElement}
  */
-const buttonAI = document.createElement("button");
-buttonAI.classList.add("button-AI");
-buttonAI.textContent = "Get metadata";
-AIContainer.appendChild(buttonAI);
+const buttonAI = document.querySelector(".button-AI");
 
 /**
  * Text element for displaying status messages to the user
