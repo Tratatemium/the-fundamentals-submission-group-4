@@ -146,17 +146,20 @@ body.dark-mode {
 
 
 /* ================================================================================================= */
-/* #region HEADER  and NAV                                                                                  */
+/* #region HEADER  and NAV                                                                           */
 /* ================================================================================================= */
-/*========== HEADER and NAV=================*/
+
 header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  padding: 30px 40px;
-  z-index: 1000;
-  background-color: var(--header-bg);
+  width: 100vw;
+  z-index: 9;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1em 2em;
+  background-color: rgba(var(--primary-color), 0.7); /* Add opacity */
   backdrop-filter: blur(8px);
   color: var(--text-color);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
@@ -164,57 +167,112 @@ header {
 }
 
 /* Brand title */
-.header-content h1 {
+.header-content {
   font-size: 2rem;
   font-weight: 700;
-  color: #fff;                    /* Visible over background */
-  text-shadow: 10px 10px 40px #020f81, 0 0 20px #0d0570, 0 0 40px #0713b4; /* Add glow effect */
-}
+  color: var(--primary-color);                    /* Visible over background */
+  text-shadow:
+    10px 10px 40px color-mix(in srgb, var(--accent-color) 90%, white),   /* brightest glow */
+    0 0 20px color-mix(in srgb, var(--accent-color) 70%, black),        /* medium glow */
+    0 0 40px color-mix(in srgb, var(--accent-color) 100%, black);       /* deep glow */
 
-.header-content h1 {
-  font-family: 'Playfair Display', serif;
+  margin: auto 0;
+  /* font-family: 'Playfair Display', serif; */
+  font-family: var(--font-secondary);
   font-size: 2.8rem;
   transform: rotate(2deg);
 }
 
-/*========== NAVIGATION =================*/
-nav {
-  position: fixed;
-  top: 0px;
-  width: 100%;
-  padding: 10px 20px;
-  z-index: 1000;
-  display: flex;
-  justify-content: flex-end;
-  background-color: var(--nav-bg);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-nav ul li a,
-.dropbtn {
-  color: var(--link-color);
-  text-decoration: none;
-  font-weight: bold;
-  padding: 5px 5px;
-  display: block;
-  transition: background 0.3s, color 0.3s;
+.hamburger-menu-button {
+  all: unset;
+  box-sizing: border-box;
+  width: 3em;
+  height: 3em;
+  margin: auto 0;
+  border: solid 1px var(--accent-color);
+  border-radius: 8px;
+  background-color: var(--secondary-color);
+  display: inline-grid;
+  place-items: center;
   cursor: pointer;
 }
 
-nav ul li a:hover,
-.dropbtn:hover {
-  background-color: var(--link-hover);
-  border-radius: 5px;
+.hamburger-menu-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.08), 0 0 0 2px rgba(0,0,0,0.06) inset;
 }
+
+.hamburger-stripes-container {
+  position: relative;
+  width: 70%;
+  height: calc(3.5px + 1em);
+  display: block;
+}
+
+.hamburger-stripe-top,
+.hamburger-stripe-bottom {
+  width: 100%;
+  height: 3.5px;
+  border-radius: 1px;
+  background-color: var(--accent-color);
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform-origin: center;
+  transition:
+    transform 260ms cubic-bezier(.2,.9,.3,1),
+    top 260ms cubic-bezier(.2,.9,.3,1),
+    opacity 260ms cubic-bezier(.2,.9,.3,1);
+}
+
+.hamburger-stripe-top {
+  top: 0;
+}
+
+.hamburger-stripe-bottom {
+  bottom: 0;
+}
+
+/* Closed state (explicit) — set positions using gap */
+.hamburger-menu-button[aria-expanded="false"] .hamburger-stripe-top {
+  top: 0;
+}
+
+.hamburger-menu-button[aria-expanded="false"] .hamburger-stripe-bottom {
+  bottom: 0;
+}
+
+/* Open state: form an X
+    - Move stripes to center (same vertical position)
+    - Rotate top +45deg, bottom -45deg
+*/
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-top, 
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-bottom {
+  top: calc((3.5px + 1em) / 2);
+}
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-top {
+  transform: rotate(45deg) translateY(0);
+}
+
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-bottom {
+  transform: rotate(-45deg) translateY(0);
+}
+
+
+
+/*========== NAVIGATION =================*/
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+nav a{
+  text-decoration: none;
+}
+
+
 
 /* Dropdown menu */
 .dropdown {
@@ -294,6 +352,7 @@ footer {
 
 main  {
   background-color: var(--primary-color);
+  padding-top: 10rem;
   margin: -1em; /* Adjust margin to fill webpage background */
 }
 
@@ -585,9 +644,6 @@ main {
   justify-content: center;
 }
 
-header {
-  
-}
 
 /* ================================================================================================= */
 /* #region BUTTON STYLES                                                                             */
@@ -608,22 +664,25 @@ header {
 /* Base button styles shared across all button types */
 .button-category,
 .button-AI,
-.button-load-images {
+.button-load-images,
+.button {
   background-color: var(--secondary-color);
   border: 2px solid var(--accent-color);
   border-radius: 1rem;
   color: var(--text-color);
+  height: fit-content;
   padding: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   cursor: pointer;
+  margin: auto 0;
   transition: all 0.2s ease; /* Smooth transitions for interactions */
 }
 
 /* Specific spacing for main action buttons */
 .button-AI,
 .button-load-images {
-    margin-left: 2rem;
+  margin-left: 2rem;
 }
 
 /* Hover and active state styles for main buttons */

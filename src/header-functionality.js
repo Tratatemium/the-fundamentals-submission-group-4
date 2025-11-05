@@ -50,3 +50,14 @@ if (subscribePopup) {
     }
   });
 }
+
+
+const hamburgerButton = document.querySelector('.hamburger-menu-button');
+const navigation = document.getElementById(hamburgerButton.getAttribute('aria-controls'));
+
+hamburgerButton.addEventListener('click', () => {
+  const expanded = hamburgerButton.getAttribute('aria-expanded') === 'true';
+  hamburgerButton.setAttribute('aria-expanded', String(!expanded));
+
+  if (navigation) navigation.hidden = expanded;
+});

@@ -17,33 +17,28 @@
 
   <body>
 
-    <header>
-      <div class="header-content">
-        <h1>Frames & Moments</h1>
-      </div>
-    </header>
-
-    <nav id="nav">
-
-      <ul class="nav_links">
-        <li><a href="index.html#home">Home</a></li>
-        <li><a href="about.html#about-us">About us</a></li>
-
+    <header>     
+      <h1 class="header-content">Frames & Moments</h1>
+      <button class="hamburger-menu-button" aria-expanded="false" aria-controls="main-nav" title="Toggle menu">
+        <div class="hamburger-stripes-container">
+          <span class="hamburger-stripe-top"></span>
+          <span class="hamburger-stripe-bottom"></span>
+        </div>
+      </button>
+      <nav id="main-nav" hidden>
+        <a href="index.html#home" class="navigation-element">Home</a>
+        <a href="about.html#about-us" class="navigation-element">About us</a>
+        <button id="view-toggle" class="navigation-element">Switch to Grid</button>
+        <button id="subscribe-btn" class="navigation-element">Subscribe</button>
         <button id="theme-toggle">🌙</button>
-
-        <button id="view-toggle">Switch to Grid</button>
-
-        <button id="subscribe-btn" class="subscribe-btn">Subscribe</button>
-
-
-        <li class="dropdown">
-          <button class="dropbtn">Pages</button>
+        <!-- <div class="dropdown">
+          <button class="button dropbtn">Pages</button>
           <ul class="dropdown-content">
           </ul>
-        </li>
+        </div> -->
+      </nav>
+    </header>
 
-      </ul>
-    </nav>
 
       <!-- ✅ DEFAULT VIEW: 3D CAROUSEL -->
       <!---<div class="banner">
