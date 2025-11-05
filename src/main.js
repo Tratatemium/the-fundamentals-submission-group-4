@@ -40,18 +40,21 @@ import "./style.css";
 
 // Import AI functionality from modular gemeni-api.js file
 // This module handles all Gemini AI integration, API calls, timer functionality, and utilities
-import { getImageMetadata } from './gemeni-api.js';
+import { getImageMetadata } from "./gemeni-api.js";
 
 // Import external API functionality from modular api.js file
 // This module handles image fetching, pagination, and external API integration
-import { fetchImages } from './api.js';
+import { fetchImages } from "./api.js";
 
 // Import DOM elements for user feedback and loading animations
-import { textAI } from './gemeni-api.js'
+import { textAI } from "./gemeni-api.js";
 
 // Import category management functionality from modular image-categories.js file
 // This module handles category filtering, button generation, and display logic
-import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
+import {
+  displayByCategoriesDOM,
+  updateCategoriesDOM,
+} from "./image-categories.js";
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -60,11 +63,11 @@ import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.
 /**
  * CENTRALIZED STATE MANAGEMENT
  * ============================
- * 
+ *
  * Global application state object that manages all core data and UI state.
  * This centralized approach provides better organization and makes state
  * accessible to other modules through exports.
- * 
+ *
  * @type {Object}
  * @property {number} pagesLoadedCounter - Tracks which page of images to load next for pagination
  * @property {Array<Object>} imagesData - Array storing all loaded image data including metadata
@@ -74,8 +77,7 @@ export const state = {
   pagesLoadedCounter: 1,
   imagesData: [],
   activeCategory: "All",
-}
-
+};
 
 /* #endregion VARIABLES DECLARATION */
 
@@ -152,6 +154,11 @@ export const createImage = (imageData) => {
   /* Used DOMParser because direct 'innerHTML = svgContent`caused syntax error*/
   const parser = new DOMParser(); // Creates a new DOMParser
 
+  //Heart icon and like number group
+
+  const heartGroup = document.createElement("div");
+  heartGroup.classList.add("icon-group");
+
   const svgIconHeart = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -160,12 +167,17 @@ export const createImage = (imageData) => {
   const svgDocHeart = parser.parseFromString(svgIconHeart, "image/svg+xml"); //Parse the SVG string into an SVG Document object
   const heartIcon = svgDocHeart.documentElement; // Get the root SVG element from the parsed document
   heartIcon.classList.add("heart-icon");
-  iconContainer.appendChild(heartIcon); // Append the actual SVG element to  'hoverContainer'
+  heartGroup.appendChild(heartIcon); // Append the actual SVG element to  'hoverContainer'
 
   const likeNumber = document.createElement("p");
   likeNumber.classList.add("like-number"); // Add CSS class for styling in stylesheet (for Emma)
   likeNumber.textContent = imageData.likes_count;
-  iconContainer.appendChild(likeNumber);
+  heartGroup.appendChild(likeNumber);
+
+  //Comment icon and comment number group
+
+  const commentGroup = document.createElement("div");
+  commentGroup.classList.add("icon-group");
 
   const svgIconComment = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M144 208c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm112 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zM256 32C114.6 32 0 125.1 0 240c0 47.6 19.9 91.2 52.9 126.3C38 405.7 7 439.1 6.5 439.5c-6.6 7-8.4 17.2-4.6 26S14.4 480 24 480c61.5 0 110-25.7 139.1-46.3C192 442.8 223.2 448 256 448c141.4 0 256-93.1 256-208S397.4 32 256 32zm0 368c-26.7 0-53.1-4.1-78.4-12.1l-22.7-7.2-19.5 13.8c-14.3 10.1-33.9 21.4-57.5 29 7.3-12.1 14.4-25.7 19.9-40.2l10.6-28.1-20.6-21.8C69.7 314.1 48 282.2 48 240c0-88.2 93.3-160 208-160s208 71.8 208 160-93.3 160-208 160z"/></svg>`;
@@ -173,15 +185,33 @@ export const createImage = (imageData) => {
   const svgDocComment = parser.parseFromString(svgIconComment, "image/svg+xml");
   const commentIcon = svgDocComment.documentElement;
   commentIcon.classList.add("comment-icon");
-  iconContainer.appendChild(commentIcon);
+  commentGroup.appendChild(commentIcon);
 
   const commentNumber = document.createElement("p");
   commentNumber.classList.add("comment-number");
   commentNumber.textContent = imageData.comments.length;
-  iconContainer.appendChild(commentNumber);
+  commentGroup.appendChild(commentNumber);
 
+  iconContainer.appendChild(heartGroup);
+  iconContainer.appendChild(commentGroup);
   // Update category filtering after adding new image
   displayByCategoriesDOM();
+
+  // Show/hide hoverContainer dynamically on hover
+
+  hoverContainer.style.opacity = "0";
+  hoverContainer.style.transition = "opacity 0.3s";
+  hoverContainer.style.pointerEvents = "none";
+
+  imageContainer.addEventListener("mouseenter", () => {
+    hoverContainer.style.opacity = "1";
+    hoverContainer.style.pointerEvents = "auto";
+  });
+
+  imageContainer.addEventListener("mouseleave", () => {
+    hoverContainer.style.opacity = "0";
+    hoverContainer.style.pointerEvents = "none";
+  });
 };
 
 /**
@@ -216,7 +246,6 @@ export const updateImagesDOM = () => {
 
 /* #endregion DOM MANIPULATION */
 
-
 /* ================================================================================================= */
 /* #region DOM ELEMENT CREATION & REFERENCES                                                        */
 /* ================================================================================================= */
@@ -248,7 +277,6 @@ const appContainer = document.getElementById("app");
  */
 const headerContainer = document.querySelector("header");
 
-
 /* ================================================================================================= */
 /* #region EVENT LISTENERS                                                                           */
 /* ================================================================================================= */
@@ -261,10 +289,7 @@ const headerContainer = document.querySelector("header");
  * Each button has specific functionality and proper state management.
  */
 
-
-
 /* #endregion EVENT LISTENERS  */
-
 
 /* ================================================================================================= */
 /* #region APPLICATION INITIALIZATION                                                                */
@@ -318,25 +343,25 @@ updateCategoriesDOM();
  * 5. Hover over images to see generated metadata and social stats
  *
  * Four-Module Architecture:
- * 
- * 1. main.js (this file): 
+ *
+ * 1. main.js (this file):
  *    - Core application logic and UI management
  *    - Centralized state management and exports
  *    - DOM manipulation and user interactions
  *    - Event listeners and application initialization
- * 
+ *
  * 2. gemeni-api.js:
  *    - Dedicated Gemini AI functionality and API calls
  *    - Loading animations and timer management
  *    - AI response processing and error handling
  *    - Metadata generation and validation
- * 
+ *
  * 3. api.js:
  *    - External image API integration
  *    - Pagination and data fetching logic
  *    - Response validation and error handling
  *    - Integration with centralized state management
- * 
+ *
  * 4. image-categories.js:
  *    - Category filtering and display logic
  *    - Dynamic category button generation
