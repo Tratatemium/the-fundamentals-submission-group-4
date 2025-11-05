@@ -472,4 +472,11 @@ header {
   display: none;
 }
 
+.lightbox-close-button { 
+  width: 2em;
+  height: 2em;
+  position: relative; 
+  top: 0.5em;
+  left: 24.5em;
+}
 /* #endregion LIGHTBOX */
