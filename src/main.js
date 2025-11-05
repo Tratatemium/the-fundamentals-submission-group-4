@@ -123,7 +123,8 @@ export const createImage = (imageData) => {
   imageContainer.classList.add("image-container");
   appContainer.appendChild(imageContainer);
 
-  imageContainer.addEventListener('click', () => showLightbox());
+  imageContainer.addEventListener('click', () => showLightbox(imageData.image_url));
+
 
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
