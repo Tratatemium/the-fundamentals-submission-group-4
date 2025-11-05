@@ -478,6 +478,9 @@ header {
 .lightbox.hidden {
   display: none;
 }
+.overlay.hidden {
+  display: none;
+}
 
 .lightbox-close-button { 
   width: 2em;
@@ -487,5 +490,13 @@ header {
   right: 0.5em;
 }
 
+.overlay {
+  position: fixed;
+  inset: 0; /* Covers the entire viewport */
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* For Safari */
+  z-index: 5; /* over other content but under the lightbox */
+}
 
 /* #endregion LIGHTBOX */
