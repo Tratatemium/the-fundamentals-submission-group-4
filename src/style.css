@@ -462,7 +462,7 @@ header {
   width: 50vw;
   height: 50vh;
   background-color: var(--secondary-color);
-  position: absolute;
+  position: fixed;
   top: 16em;
   left: calc(50vw -50%);
   z-index: 10;
@@ -475,8 +475,8 @@ header {
 .lightbox-close-button { 
   width: 2em;
   height: 2em;
-  position: relative; 
+  position: absolute; 
   top: 0.5em;
-  left: 24.5em;
+  right: 0.5em;
 }
 /* #endregion LIGHTBOX */
