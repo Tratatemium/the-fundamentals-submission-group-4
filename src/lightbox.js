@@ -8,7 +8,7 @@ export const showLightbox = (imageUrl) => {
     lightboxImage.src = imageUrl;
 };
 
-export const closeLightbox = () => { 
+const closeLightbox = () => { 
     const lightbox = document.querySelector('.lightbox');
     lightbox.classList.add('hidden');
 };
