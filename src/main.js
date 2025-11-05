@@ -53,6 +53,8 @@ import { textAI } from './gemeni-api.js'
 // This module handles category filtering, button generation, and display logic
 import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
 
+import { showLightbox } from './lightbox.js';
+
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
 /* ================================================================================================= */
@@ -118,6 +120,8 @@ export const createImage = (imageData) => {
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("image-container");
   appContainer.appendChild(imageContainer);
+
+  imageContainer.addEventListener('click', () => showLightbox());
 
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element

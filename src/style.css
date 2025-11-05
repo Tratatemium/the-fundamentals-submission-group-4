@@ -442,3 +442,24 @@ header {
 /* #endregion CATEGORY FILTER INTERFACE */
 
 /* #endregion GEMENI API */
+
+/* ================================================================================================= */
+/* #region LIGHTBOX                                                                   */
+/* ================================================================================================= */
+
+.lightbox {
+  display: inline-block;
+  width: 50vw;
+  height: 50vh;
+  background-color: var(--secondary-color);
+  position: absolute;
+  top: 16em;
+  left: calc(50vw -50%);
+  z-index: 10;
+}
+
+.lightbox.hidden {
+  display: none;
+}
+
+/* #endregion LIGHTBOX */
