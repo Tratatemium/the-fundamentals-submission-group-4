@@ -460,12 +460,19 @@ header {
 .lightbox {
   display: inline-block;
   width: 50vw;
-  height: 50vh;
+  height: auto; /* Height adjusts based on image aspect ratio */
   background-color: var(--secondary-color);
   position: fixed;
   top: 16em;
   left: calc(50vw -50%);
   z-index: 10;
+}
+
+.lightbox-image {
+  display: block;
+ width: 50%; /* Image takes up full width of lightbox */
+ height: auto; /* Height adjusts based on image aspect ratio */
+ margin: 1.5em; 
 }
 
 .lightbox.hidden {
@@ -479,4 +486,6 @@ header {
   top: 0.5em;
   right: 0.5em;
 }
+
+
 /* #endregion LIGHTBOX */
