@@ -41,10 +41,11 @@
 
 // ===== MODULE IMPORTS =====
 // Import centralized state management object for data storage and pagination tracking
-import { state } from './main.js'
+import { state } from './main.js';
 
 // Import UI creation function for DOM manipulation after data fetching
-import { createImage } from './main.js'
+import { createImage } from './main.js';
+import { createPagesNavigation } from './pagination.js';
 
 /**
  * Fetches images from the external API with flexible pagination support
@@ -103,9 +104,13 @@ export const fetchImages = async (page) => {
       throw new Error("Invalid data format received from API");
     }
 
+    state.totalAmountOfPages = json.total_pages;
+
     // Store data and create DOM elements
     state.imagesData.push(...json.data);
     json.data.forEach((item) => createImage(item));
+
+    createPagesNavigation('carousel')
 
   } catch (error) {
     console.error("Failed to fetch images:", error);

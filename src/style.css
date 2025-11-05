@@ -605,12 +605,7 @@ main  {
   transition: background-color 0.3s ease;
 }
 
-/* Dark mode main styling */
-body.dark-mode main {
-  background-color: var(--bg-color);
-}
-
-#app {
+.gallery-grid {
   max-width: 80em; /* Sets a maximum width for the container */
   margin: 0 auto; /* Centers the container horizontally */
   padding: 1.5em; /* Adds padding around the content */
@@ -1009,13 +1004,6 @@ main {
 .image-container.hidden {
   display: none;
 }
-
-/* Overlay container that appears on hover */
-.text-container{
-
-}
-
-
 
 /* Category text styling within overlay */
 .image-category {

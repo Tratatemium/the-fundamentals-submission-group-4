@@ -74,8 +74,10 @@ import {
  * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
  */
 export const state = {
-  pagesLoadedCounter: 1,
+  totalAmountOfPages: 0,
   imagesData: [],
+  currentPage: 1,
+  pagesLoadedCounter: 1,  
   activeCategory: "All",
 };
 
@@ -114,12 +116,12 @@ export const state = {
  */
 export const createImage = (imageData) => {
   // Ensure the app container exists before proceeding
-  if (!appContainer) appContainer = document.getElementById("app");
+  if (!galleryGrid) galleryGrid = document.querySelector(".gallery-grid");
 
   // Create main container for image and text overlay
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("image-container");
-  appContainer.appendChild(imageContainer);
+  galleryGrid.appendChild(imageContainer);
 
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
@@ -269,13 +271,8 @@ export const updateImagesDOM = () => {
  * Main container for the image gallery
  * @type {HTMLElement}
  */
-const appContainer = document.getElementById("app");
+const galleryGrid = document.querySelector(".gallery-grid");;
 
-/**
- * Header container for UI controls
- * @type {HTMLElement}
- */
-const headerContainer = document.querySelector("header");
 
 /* ================================================================================================= */
 /* #region EVENT LISTENERS                                                                           */

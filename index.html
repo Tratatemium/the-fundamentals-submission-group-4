@@ -19,12 +19,14 @@
 
     <header>     
       <h1 class="header-content">Frames & Moments</h1>
+      <!-- hamburger menu button -->
       <button class="hamburger-menu-button" aria-expanded="false" aria-controls="main-nav" title="Toggle menu">
         <div class="hamburger-stripes-container">
           <span class="hamburger-stripe-top"></span>
           <span class="hamburger-stripe-bottom"></span>
         </div>
       </button>
+      <!-- hamburger menu dropdown -->
       <nav id="main-nav" hidden>
         <a href="index.html#home" class="navigation-element">Home</a>
         <a href="about.html#about-us" class="navigation-element">About</a>
@@ -35,12 +37,6 @@
         <button id="theme-toggle"></button>
       </nav>
     </header>
-
-      <!-- <div class="dropdown">
-        <button class="button dropbtn">Pages</button>
-        <ul class="dropdown-content">
-        </ul>
-      </div> -->
 
       <!-- ✅ DEFAULT VIEW: 3D CAROUSEL -->
       <!---<div class="banner">
@@ -54,9 +50,11 @@
     <div id="gallery" class="gallery"></div>
 
     <main>
-      <div class="AI-container"></div> <!--  Generate Metadata  -->
+      <div class="AI-container"></div> <!--  Now just messages -->
       <div class="categories-container"></div>      
-      <div id="app"></div>
+      <div class="gallery-grid"></div>         <!-- regular grid gallery -->
+      <div class="gallery-carousel"></div>     <!-- 3D carousel gallery -->
+      <div class="pages-navigation"></div>     <!-- pagination for both galleries -->
     </main>  
 
     <!--Subscribe-->
