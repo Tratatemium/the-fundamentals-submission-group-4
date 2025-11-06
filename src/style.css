@@ -275,6 +275,11 @@ body.dark-mode header {
   transform: rotate(-45deg) translateY(0);
 }
 
+.gallery-grid.hidden,
+.gallery-carousel.hidden {
+  display: none;
+}
+
 
 
 /*========== NAVIGATION =================*/

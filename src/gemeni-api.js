@@ -444,17 +444,6 @@ AIContainer.appendChild(timerAI);
  */
 
 /**
- * Load Images Button Event Listener
- * @description Triggers the fetchImages function to load the next page of images
- * from the API. Supports pagination through the global pagesLoadedCounter.
- * Also provides user feedback when new images are loaded.
- */
-buttonLoadImages.addEventListener("click", () => {
-  fetchImages();
-  textAI.textContent = "More images loaded 🖼️";
-});
-
-/**
  * AI Metadata Button Event Listener
  * @description Triggers AI metadata generation for images that don't have metadata yet.
  * Includes button state management to prevent multiple simultaneous requests.

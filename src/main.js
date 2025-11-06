@@ -53,7 +53,7 @@ import {
 } from "./image-categories.js";
 
 
-import { loadPages, loadGallery } from "./pagination.js";
+import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -288,18 +288,6 @@ const galleryGrid = document.querySelector(".gallery-grid");;
 /* #region EVENT LISTENERS                                                                           */
 /* ================================================================================================= */
 
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * EVENT LISTENER SETUP
  * ====================
@@ -307,6 +295,48 @@ const galleryGrid = document.querySelector(".gallery-grid");;
  * This section configures all user interaction event handlers for the application.
  * Each button has specific functionality and proper state management.
  */
+
+const viewToggleButton = document.getElementById('view-toggle');
+
+const transmuteCurrentPage = (n) => {
+  switch (state.galleryType) {
+    case 'grid':
+      return 2 * n - 1;
+    case 'carousel':
+      return Math.ceil(n / 2);
+    default:
+  }
+}
+
+viewToggleButton.addEventListener('click', async () => {
+
+  const galleryGrid = document.querySelector('.gallery-grid');
+  const galleryCarousel = document.querySelector('.gallery-carousel');
+
+  switch (state.galleryType) {
+    case 'grid':
+      viewToggleButton.textContent = 'Switch to grid';
+      state.currentPage = transmuteCurrentPage(state.currentPage);
+      state.galleryType = 'carousel';
+      await loadPages(state.currentPage);
+      loadGallery();
+      galleryGrid.classList.add('hidden');
+      galleryCarousel.classList.remove('hidden');
+      createPagesNavigation()
+      break;
+    case 'carousel':
+      viewToggleButton.textContent = 'Switch to carousel';
+      state.currentPage = transmuteCurrentPage(state.currentPage);
+      state.galleryType = 'grid';
+      await loadPages(state.currentPage);
+      loadGallery();
+      galleryCarousel.classList.add('hidden');
+      galleryGrid.classList.remove('hidden');
+      createPagesNavigation()
+      break;
+    default:
+  }
+});
 
 /* #endregion EVENT LISTENERS  */
 

@@ -4,7 +4,7 @@ import { createImage } from './main.js'
 import { loadPageFromAPI } from './api.js'
 
 
-const getPair = (n) => {
+export const getPair = (n) => {
     return [n * 2 - 1, n * 2];
 };
 
