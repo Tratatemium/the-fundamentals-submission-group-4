@@ -60,8 +60,8 @@ export const createPagesNavigation = (galleryType) => {
             state.currentPage--;
             numberedButtons.forEach((button) => button.classList.remove("active"));
             const activeButton = numberedButtons.find(
-                button => [...button.classList].includes(
-                    className => className === (`numbered_button_${currentPage}`)
+                button => [...button.classList].some(
+                    className => className === `numbered_button_${state.currentPage}`
                 )
             );
             activeButton.classList.add("active");
@@ -74,8 +74,8 @@ export const createPagesNavigation = (galleryType) => {
             state.currentPage++;
             numberedButtons.forEach((button) => button.classList.remove("active"));
             const activeButton = numberedButtons.find(
-                button => [...button.classList].includes(
-                    className => className === (`numbered_button_${currentPage}`)
+                button => [...button.classList].some(
+                    className => className === `numbered_button_${state.currentPage}`
                 )
             );
             activeButton.classList.add("active");
