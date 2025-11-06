@@ -115,9 +115,6 @@ export const loadPageFromAPI = async (page) => {
     state.imagesData.push(json);
     state.imagesData.sort((a, b) => a.page - b.page);
 
-
-    console.log(state);
-
     createPagesNavigation();
 
   } catch (error) {

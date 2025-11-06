@@ -42,7 +42,6 @@ export const loadGallery = () => {
             const pages = getPair(state.currentPage);
             pageData = state.imagesData.filter(image => pages.includes(image.page)).map(page => page.data);
             pageData = pageData.flat();
-            console.log(pageData)
             pageData.forEach(imageData => createImage(imageData));  
             break;
         case 'carousel':

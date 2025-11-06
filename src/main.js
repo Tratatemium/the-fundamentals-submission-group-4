@@ -42,10 +42,6 @@ import "./style.css";
 // This module handles all Gemini AI integration, API calls, timer functionality, and utilities
 import { getImageMetadata } from "./gemeni-api.js";
 
-// Import external API functionality from modular api.js file
-// This module handles image fetching, pagination, and external API integration
-// import { fetchImages } from "./api.js";
-
 // Import DOM elements for user feedback and loading animations
 import { textAI } from "./gemeni-api.js";
 
