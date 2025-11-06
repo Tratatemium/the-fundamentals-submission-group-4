@@ -3,10 +3,10 @@ import { state } from './main.js'
 import { loadPageFromAPI } from './api.js'
 
 
-export const loadPages = (pageClicked) => {
+export const loadPages = async (pageClicked) => {
     if (state.loadedPages.length === 0) {
-        loadPageFromAPI(1);
-        loadPageFromAPI(2);
+        await loadPageFromAPI(1);
+        await loadPageFromAPI(2);
         return;
     }
 
@@ -16,10 +16,12 @@ export const loadPages = (pageClicked) => {
                 return [n * 2 - 1, n * 2];
             };
             const pages = getPair(pageClicked);
-            pages.forEach(page => loadPageFromAPI(page));
+            for (const page of pages) {
+                await loadPageFromAPI(page);
+            }
             break;
         case 'carousel':
-            loadPageFromAPI(pageClicked);
+            await loadPageFromAPI(pageClicked);
             break;
         default:
     }
@@ -65,7 +67,7 @@ export const createPagesNavigation = () => {
     next.textContent = 'Next ⮞'
     pagesNavigationContainer.appendChild(next);    
 
-    const numberedButtonsOnClick = (button) => {
+    const numberedButtonsOnClick = async (button) => {
         if (!button.classList.contains("active")) {
           // Remove active state from all buttons
           numberedButtons.forEach((button) => button.classList.remove("active"));
@@ -76,11 +78,11 @@ export const createPagesNavigation = () => {
             .find(className => className.startsWith('numbered_button_'))
             .replace('numbered_button_', '');
           state.currentPage = Number(buttonNumber);
-          loadPages(state.currentPage);   
+          await loadPages(state.currentPage);   
         }
     };
 
-    const previousOnClick = () => {
+    const previousOnClick = async () => {
         if (state.currentPage > 1) {
             state.currentPage--;
             const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
@@ -91,12 +93,12 @@ export const createPagesNavigation = () => {
             if (activeButton) {
                 activeButton.classList.add("active");
             }
-            loadPages(state.currentPage); 
+            await loadPages(state.currentPage); 
         }
         
     };
 
-    const nextOnClick = () => {
+    const nextOnClick = async () => {
         if (state.currentPage < state.totalAmountOfPages) {
             state.currentPage++;
             const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
@@ -107,7 +109,7 @@ export const createPagesNavigation = () => {
             if (activeButton) {
                 activeButton.classList.add("active");
             }
-            loadPages(state.currentPage); 
+            await loadPages(state.currentPage); 
         }
     };
 
