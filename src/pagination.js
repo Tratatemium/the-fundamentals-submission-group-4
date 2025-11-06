@@ -1,6 +1,12 @@
 
 import { state } from './main.js'
+import { createImage } from './main.js'
 import { loadPageFromAPI } from './api.js'
+
+
+const getPair = (n) => {
+    return [n * 2 - 1, n * 2];
+};
 
 
 export const loadPages = async (pageClicked) => {
@@ -12,9 +18,6 @@ export const loadPages = async (pageClicked) => {
 
     switch (state.galleryType) {
         case 'grid':
-            const getPair = (n) => {
-                return [n * 2 - 1, n * 2];
-            };
             const pages = getPair(pageClicked);
             for (const page of pages) {
                 await loadPageFromAPI(page);
@@ -27,6 +30,29 @@ export const loadPages = async (pageClicked) => {
     }
 }
 
+export const loadGallery = () => {
+    let currentImages;
+    let pageData;
+    switch (state.galleryType) {
+        case 'grid':
+            const galleryGrid = document.querySelector('.gallery-carousel');
+            currentImages = Array.from(galleryGrid.children);
+            currentImages.forEach(image => galleryGrid.removeChild(image));
+            pages = getPair(state.currentPage);
+            pageData = state.imagesData.find(image => image.page === state.currentPage)
+                .map(page => page.data);
+            break;
+        case 'carousel':
+            const galleryCarousel = document.querySelector('.gallery-carousel');
+            currentImages = Array.from(galleryCarousel.children);
+            currentImages.forEach(image => galleryCarousel.removeChild(image));
+
+            pageData = state.imagesData.find(image => image.page === state.currentPage).data;
+            pageData.forEach(imageData => createImage(imageData));
+            break;
+        default:
+    }
+};
 
 export const createPagesNavigation = () => {
     const pagesNavigationContainer = document.querySelector('.pages-navigation');
@@ -78,7 +104,8 @@ export const createPagesNavigation = () => {
             .find(className => className.startsWith('numbered_button_'))
             .replace('numbered_button_', '');
           state.currentPage = Number(buttonNumber);
-          await loadPages(state.currentPage);   
+          await loadPages(state.currentPage);
+          loadGallery();
         }
     };
 
@@ -93,7 +120,8 @@ export const createPagesNavigation = () => {
             if (activeButton) {
                 activeButton.classList.add("active");
             }
-            await loadPages(state.currentPage); 
+            await loadPages(state.currentPage);
+            loadGallery();
         }
         
     };
@@ -109,7 +137,8 @@ export const createPagesNavigation = () => {
             if (activeButton) {
                 activeButton.classList.add("active");
             }
-            await loadPages(state.currentPage); 
+            await loadPages(state.currentPage);
+            loadGallery();
         }
     };
 

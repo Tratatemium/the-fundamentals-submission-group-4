@@ -57,7 +57,7 @@ import {
 } from "./image-categories.js";
 
 
-import { loadPages } from "./pagination.js";
+import { loadPages, loadGallery } from "./pagination.js";
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -120,13 +120,22 @@ export const state = {
  * });
  */
 export const createImage = (imageData) => {
-  // Ensure the app container exists before proceeding
-  if (!galleryGrid) galleryGrid = document.querySelector(".gallery-grid");
+
+  let gallery;
+  switch (state.galleryType) {
+    case 'grid':
+      gallery = document.querySelector(".gallery-grid")
+      break;
+    case 'carousel':
+      gallery = document.querySelector(".gallery-carousel")
+      break;
+    default:
+  }
 
   // Create main container for image and text overlay
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("image-container");
-  galleryGrid.appendChild(imageContainer);
+  gallery.appendChild(imageContainer);
 
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
@@ -319,8 +328,9 @@ const galleryGrid = document.querySelector(".gallery-grid");;
  */
 
 // Load initial set of images on application start
-const init = () => {
-  loadPages()
+const init = async () => {
+  await loadPages();
+  loadGallery();
 };
 
 init();
