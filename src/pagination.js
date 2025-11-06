@@ -58,13 +58,14 @@ export const createPagesNavigation = (galleryType) => {
     const previousOnClick = () => {
         if (state.currentPage > 1) {
             state.currentPage--;
+            const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
             numberedButtons.forEach((button) => button.classList.remove("active"));
-            const activeButton = numberedButtons.find(
-                button => [...button.classList].some(
-                    className => className === `numbered_button_${state.currentPage}`
-                )
+            const activeButton = Array.from(numberedButtons).find(
+                button => button.classList.contains(`numbered_button_${state.currentPage}`)
             );
-            activeButton.classList.add("active");
+            if (activeButton) {
+                activeButton.classList.add("active");
+            }
         }
         
     };
@@ -72,13 +73,14 @@ export const createPagesNavigation = (galleryType) => {
     const nextOnClick = () => {
         if (state.currentPage < state.totalAmountOfPages) {
             state.currentPage++;
+            const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
             numberedButtons.forEach((button) => button.classList.remove("active"));
-            const activeButton = numberedButtons.find(
-                button => [...button.classList].some(
-                    className => className === `numbered_button_${state.currentPage}`
-                )
+            const activeButton = Array.from(numberedButtons).find(
+                button => button.classList.contains(`numbered_button_${state.currentPage}`)
             );
-            activeButton.classList.add("active");
+            if (activeButton) {
+                activeButton.classList.add("active");
+            }
         }
     };
 
