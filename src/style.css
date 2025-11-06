@@ -1071,6 +1071,10 @@ main {
   font-weight: 500;
   cursor: pointer;
 }
+.pages-navigation button.active {
+  font-size: 1.5em;
+  font-weight: 700;
+}
 
 .pages-navigation button:focus {
   outline: none;
