@@ -83,7 +83,7 @@ import { createPagesNavigation } from './pagination.js';
  * // Manual page specification
  * await fetchImages(5);
  */
-export const fetchImages = async (page) => {
+export const loadPageFromAPI = async (page) => {
   const pageToLoad = page ? page : state.pagesLoadedCounter++;
   try {
     // Make API request to current page
@@ -105,12 +105,18 @@ export const fetchImages = async (page) => {
     }
 
     state.totalAmountOfPages = json.total_pages;
+    delete json.total_pages;
 
-    // Store data and create DOM elements
-    state.imagesData.push(...json.data);
-    json.data.forEach((item) => createImage(item));
+    state.loadedPages.push(json.page)
+    state.loadedPages.sort((a, b) => a - b);
 
-    createPagesNavigation('carousel')
+    state.imagesData.push(json);
+    state.imagesData.sort((a, b) => a.page - b.page);
+
+
+    console.log(state);
+
+    createPagesNavigation();
 
   } catch (error) {
     console.error("Failed to fetch images:", error);

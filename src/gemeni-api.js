@@ -50,7 +50,7 @@ import { updateImagesDOM } from './main.js'
 import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
 
 // Import API functionality for additional image loading capability
-import { fetchImages } from './api.js';
+// import { fetchImages } from './api.js';
 
 // Dynamic imports for Google AI SDK (loaded when needed)
 // import { GoogleGenAI, Type } from "@google/genai" - loaded dynamically

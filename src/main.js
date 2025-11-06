@@ -44,7 +44,7 @@ import { getImageMetadata } from "./gemeni-api.js";
 
 // Import external API functionality from modular api.js file
 // This module handles image fetching, pagination, and external API integration
-import { fetchImages } from "./api.js";
+// import { fetchImages } from "./api.js";
 
 // Import DOM elements for user feedback and loading animations
 import { textAI } from "./gemeni-api.js";
@@ -55,6 +55,9 @@ import {
   displayByCategoriesDOM,
   updateCategoriesDOM,
 } from "./image-categories.js";
+
+
+import { loadPages } from "./pagination.js";
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -74,10 +77,11 @@ import {
  * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
  */
 export const state = {
-  totalAmountOfPages: 0,
   imagesData: [],
+  totalAmountOfPages: 0,
+  galleryType: "carousel",
   currentPage: 1,
-  pagesLoadedCounter: 1,  
+  loadedPages: [],  
   activeCategory: "All",
 };
 
@@ -314,7 +318,12 @@ const galleryGrid = document.querySelector(".gallery-grid");;
  */
 
 // Load initial set of images on application start
-fetchImages();
+const init = () => {
+  loadPages()
+};
+
+init();
+
 // Initialize category filter buttons (starts with just 'All' and 'Uncategorised')
 updateCategoriesDOM();
 

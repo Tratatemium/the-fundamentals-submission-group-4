@@ -1,12 +1,13 @@
 
 import { state } from './main.js'
+import { loadPageFromAPI } from './api.js'
 
 
-export const createPagesNavigation = (galleryType) => {
+export const createPagesNavigation = () => {
     const pagesNavigationContainer = document.querySelector('.pages-navigation');
     let totalPages;
 
-    switch (galleryType) {
+    switch (state.galleryType) {
         case 'grid':
             totalPages = Math.ceil(state.totalAmountOfPages / 2);
             break;
@@ -91,3 +92,69 @@ export const createPagesNavigation = (galleryType) => {
     previous.addEventListener('click', () => previousOnClick());
     next.addEventListener('click', () => nextOnClick());
 };
+
+
+export const loadPages = (pageClicked) => {
+    if (state.loadedPages.length === 0) {
+        loadPageFromAPI(1);
+        loadPageFromAPI(2);
+    }
+
+    switch (state.galleryType) {
+        case 'grid':
+            break;
+        case 'carousel':
+            break;
+        default:
+    }
+}
+
+
+
+// state.imagesData = [
+//     {
+//         page: 1,
+//         data: [
+//             {
+//                 "id": "uuid",
+//                 "image_url": "https://picsum.photos/300?random=12",
+//                 "likes_count": 5,
+//                 "comments": [
+//                     { "commenter_name": "Alice", "comment": "Beautiful photo!" }
+//                 ]
+//             },
+//             {
+//                 "id": "uuid",
+//                 "image_url": "https://picsum.photos/300?random=12",
+//                 "likes_count": 5,
+//                 "comments": [
+//                     { "commenter_name": "Alice", "comment": "Beautiful photo!" }
+//                 ]
+//             }
+//         ]
+//     },
+//     {
+//         page: 2,
+//         data: [
+//             {
+//                 "id": "uuid",
+//                 "image_url": "https://picsum.photos/300?random=12",
+//                 "likes_count": 5,
+//                 "comments": [
+//                     { "commenter_name": "Alice", "comment": "Beautiful photo!" }
+//                 ]
+//             },
+//             {
+//                 "id": "uuid",
+//                 "image_url": "https://picsum.photos/300?random=12",
+//                 "likes_count": 5,
+//                 "comments": [
+//                     { "commenter_name": "Alice", "comment": "Beautiful photo!" }
+//                 ]
+//             }
+//         ]
+//     }
+    
+// ]
+
+// state.imagesData[state.currentPage - 1].data[1].likes_count
