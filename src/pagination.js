@@ -3,6 +3,30 @@ import { state } from './main.js'
 import { loadPageFromAPI } from './api.js'
 
 
+export const loadPages = (pageClicked) => {
+    if (state.loadedPages.length === 0) {
+        loadPageFromAPI(1);
+        loadPageFromAPI(2);
+    }
+
+    switch (state.galleryType) {
+        case 'grid':
+            const getPair = (n) => {
+                // if n is odd → [n, n+1]
+                // if n is even → [n-1, n]
+                return n % 2 === 1 ? [n, n + 1] : [n - 1, n];
+            };
+            pages = getPair(pageClicked);
+            pages.forEach(page => loadPageFromAPI(page));
+            break;
+        case 'carousel':
+            loadPageFromAPI(pageClicked);
+            break;
+        default:
+    }
+}
+
+
 export const createPagesNavigation = () => {
     const pagesNavigationContainer = document.querySelector('.pages-navigation');
     let totalPages;
@@ -52,7 +76,8 @@ export const createPagesNavigation = () => {
           const buttonNumber = [...button.classList]
             .find(className => className.startsWith('numbered_button_'))
             .replace('numbered_button_', '');
-          state.currentPage = Number(buttonNumber);    
+          state.currentPage = Number(buttonNumber);
+          loadPages(state.currentPage);   
         }
     };
 
@@ -67,6 +92,7 @@ export const createPagesNavigation = () => {
             if (activeButton) {
                 activeButton.classList.add("active");
             }
+            loadPages(state.currentPage); 
         }
         
     };
@@ -82,6 +108,7 @@ export const createPagesNavigation = () => {
             if (activeButton) {
                 activeButton.classList.add("active");
             }
+            loadPages(state.currentPage); 
         }
     };
 
@@ -94,20 +121,7 @@ export const createPagesNavigation = () => {
 };
 
 
-export const loadPages = (pageClicked) => {
-    if (state.loadedPages.length === 0) {
-        loadPageFromAPI(1);
-        loadPageFromAPI(2);
-    }
 
-    switch (state.galleryType) {
-        case 'grid':
-            break;
-        case 'carousel':
-            break;
-        default:
-    }
-}
 
 
 
