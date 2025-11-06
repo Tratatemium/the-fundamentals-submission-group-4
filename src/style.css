@@ -540,10 +540,12 @@ body.dark-mode .theme-icon-dark {
 
 /*========== FOOTER =================*/
 footer {
+  width: 100vw;
   text-align: center;
-  padding: 30px;
-  background-color: var(--footer-bg);
-  color: white;
+  padding: 1em;
+  margin-top: 1em;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
 }
 
