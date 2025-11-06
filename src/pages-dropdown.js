@@ -1,3 +1,7 @@
+// For RAHEEL: I implemented this functionality in pagination.js
+
+
+
 // =======================
 // POPULATE DROPDOWN MENU
 // =======================

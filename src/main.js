@@ -80,7 +80,8 @@ import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
  * @property {Array<number>} loadedPages - Array of page numbers that have been loaded from API
  * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
  */
-export const state = {
+// for RAHEEL : All images data stored here as it loades
+export const state = {            
   imagesData: [],                 // Page-structured image data: [{page: 1, data: [...]}, {page: 2, data: [...]}]
   totalAmountOfPages: 0,          // Total pages available from API for pagination controls
   galleryType: "grid",            // Gallery display mode: "grid" (2 pages per view) or "carousel" (1 page per view)

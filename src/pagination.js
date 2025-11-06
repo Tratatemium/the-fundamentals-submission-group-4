@@ -406,32 +406,43 @@ export const createPagesNavigation = () => {
      * 
      * Features:
      * - Boundary protection: prevents navigation beyond available pages
-     * - State management: updates centralized application state
+     * - State management: updates centralized application state    
      * - Visual synchronization: updates button active states
      * - Full workflow: triggers complete data loading and display update
      * - Error handling: gracefully handles missing button elements
      */
     const nextOnClick = async () => {
-        if (state.currentPage < state.totalAmountOfPages) {
-            // Increment current page
-            state.currentPage++;
-            
-            // Update visual state of numbered buttons
-            const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
-            numberedButtons.forEach((button) => button.classList.remove("active"));
-            
-            // Find and activate button for new current page
-            const activeButton = Array.from(numberedButtons).find(
-                button => button.classList.contains(`numbered_button_${state.currentPage}`)
-            );
-            if (activeButton) {
-                activeButton.classList.add("active");
-            }
-            
-            // Trigger data loading workflow
-            await loadPages(state.currentPage);
-            loadGallery();
+
+        switch (state.galleryType) {
+        case 'grid':
+            if (state.currentPage >= Math.ceil(state.totalAmountOfPages / 2)) return;
+            break;
+        case 'carousel':
+            if (state.currentPage >= state.totalAmountOfPages) return;
+            break;
+        default:
+            break;
         }
+
+        // Increment current page
+        state.currentPage++;
+        
+        // Update visual state of numbered buttons
+        const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
+        numberedButtons.forEach((button) => button.classList.remove("active"));
+        
+        // Find and activate button for new current page
+        const activeButton = Array.from(numberedButtons).find(
+            button => button.classList.contains(`numbered_button_${state.currentPage}`)
+        );
+        if (activeButton) {
+            activeButton.classList.add("active");
+        }
+        
+        // Trigger data loading workflow
+        await loadPages(state.currentPage);
+        loadGallery();
+
     };
 
     // Attach event listeners to all navigation elements

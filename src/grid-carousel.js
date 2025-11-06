@@ -1,3 +1,6 @@
+// For RAHEEL: I implemented view toggle in main.js - event listeners
+
+
 // =======================
 // GRID / CAROUSEL VIEW TOGGLE
 // =======================
