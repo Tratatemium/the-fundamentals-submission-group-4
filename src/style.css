@@ -170,7 +170,8 @@ main  {
   width: 16em; /* Sets a fixed width for the images */
   height: 16em; /* Sets a fixed height for the images */
   border-radius: 4px; /* Rounds the corners of the images */
-  border: var(--accent-color); /* Sets the border color using the accent color variable */
+  border: 1px var(--accent-color); /* Sets the border color using the accent color variable */
+  box-shadow: 0 4px 8px rgba(78, 7, 7, 0.3);
 }
 
 .hover-container {
@@ -493,7 +494,7 @@ header {
 .overlay {
   position: fixed;
   inset: 0; /* Covers the entire viewport */
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(29, 22, 21, 0.3);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px); /* For Safari */
   z-index: 5; /* over other content but under the lightbox */
