@@ -8,23 +8,50 @@ export const getPair = (n) => {
     return [n * 2 - 1, n * 2];
 };
 
+const showLoading = (show) => {
+    switch (state.galleryType) {
+        case 'grid':
+            const galleryGrid = document.querySelector(".gallery-grid");
+            if (show) {   
+                Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));             
+                for (let i = 0; i < 20; i++){
+                    const loadingContainer = document.createElement("div");
+                    loadingContainer.classList.add("loading-img");
+                    galleryGrid.appendChild(loadingContainer);
+                }                
+            } else {
+                Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
+            }
+            break;
+        case 'carousel':
+            break;
+        default:
+    }
+}
+
 
 export const loadPages = async (pageClicked) => {
     if (state.loadedPages.length === 0) {
+        showLoading(true);
         await loadPageFromAPI(1);
         await loadPageFromAPI(2);
+        showLoading(false);
         return;
     }
 
     switch (state.galleryType) {
         case 'grid':
             const pages = getPair(pageClicked);
+            showLoading(true);
             for (const page of pages) {
                 await loadPageFromAPI(page);
             }
+            showLoading(false);
             break;
         case 'carousel':
+            showLoading(true);
             await loadPageFromAPI(pageClicked);
+            showLoading(false);
             break;
         default:
     }

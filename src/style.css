@@ -636,6 +636,14 @@ main  {
   border: var(--accent-color); /* Sets the border color using the accent color variable */
 }
 
+.loading-img { /* VLAD: I'll need it for later */
+  display: block;
+  width: 16em;
+  height: 16em;
+  border-radius: 4px;
+  background-color: var(--secondary-color);
+}
+
 .hover-container {
   position: absolute; /* Uses image-container as its reference point*/
   bottom: 0; 

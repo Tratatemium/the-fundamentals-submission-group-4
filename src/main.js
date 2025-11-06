@@ -36,8 +36,6 @@
  * @version 1.6.0 - Four-module architecture with specialized category management
  */
 
-import "./style.css";
-
 // Import AI functionality from modular gemeni-api.js file
 // This module handles all Gemini AI integration, API calls, timer functionality, and utilities
 import { getImageMetadata } from "./gemeni-api.js";
