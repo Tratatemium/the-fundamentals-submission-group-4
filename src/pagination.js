@@ -56,15 +56,36 @@ export const createPagesNavigation = (galleryType) => {
     };
 
     const previousOnClick = () => {
-
+        if (state.currentPage > 1) {
+            state.currentPage--;
+            numberedButtons.forEach((button) => button.classList.remove("active"));
+            const activeButton = numberedButtons.find(
+                button => [...button.classList].includes(
+                    className => className === (`numbered_button_${currentPage}`)
+                )
+            );
+            activeButton.classList.add("active");
+        }
+        
     };
 
     const nextOnClick = () => {
-
+        if (state.currentPage < state.totalAmountOfPages) {
+            state.currentPage++;
+            numberedButtons.forEach((button) => button.classList.remove("active"));
+            const activeButton = numberedButtons.find(
+                button => [...button.classList].includes(
+                    className => className === (`numbered_button_${currentPage}`)
+                )
+            );
+            activeButton.classList.add("active");
+        }
     };
 
     const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
     numberedButtons.forEach(button => {
         button.addEventListener('click', event => numberedButtonsOnClick(event.target));
     });
+    previous.addEventListener('click', () => previousOnClick());
+    next.addEventListener('click', () => nextOnClick());
 };
