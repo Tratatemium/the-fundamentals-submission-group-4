@@ -126,17 +126,7 @@ textarea:not([rows]) {
   --font-primary: 'Roboto', sans-serif;
   --font-secondary: 'Playfair', serif;
 
-}
-/*==== DARK MODE COLOR SCHEME ====*/
-
-body.dark-mode {
-  /* Core dark mode palette */
-  --primary-color: #1A1A1A;        /* Dark background */
-  --secondary-color: #2D2D2D;      /* Slightly lighter dark for cards/sections */
-  --accent-color: #E74C3C;         /* Bright red accent for contrast */
-  --text-color: #F5F5F5;           /* Light text for readability */
-  
-  /* Additional dark mode variables */
+  /* Raheel colors */
   --bg-color: #121212;             /* Deep black background */
   --header-bg: rgba(26, 26, 26, 0.95); /* Semi-transparent dark header */
   --nav-bg: rgba(45, 45, 45, 0.95); /* Navigation background */
@@ -146,6 +136,16 @@ body.dark-mode {
   --link-hover: #4ECDC4;           /* Teal hover accent */
   --dropdown-bg: #2D2D2D;          /* Dropdown background */
   --dropdown-link: #F5F5F5;        /* Dropdown text */
+
+}
+/*==== DARK MODE COLOR SCHEME ====*/
+
+body.dark-mode {
+  /* Core dark mode palette */
+  --primary-color: #1A1A1A;        /* Dark background */
+  --secondary-color: #2D2D2D;      /* Slightly lighter dark for cards/sections */
+  --accent-color: #E74C3C;         /* Bright red accent for contrast */
+  --text-color: #F5F5F5;           /* Light text for readability */
   
   /* Shadow and border adjustments for dark mode */
   --shadow-color: rgba(0, 0, 0, 0.5);
@@ -287,7 +287,7 @@ nav {
   position: absolute;
   top: 100%;
   right: 1em;
-  background-color: rgba(245, 244, 241, 0.95);
+  background-color: var(--primary-color);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent-color);
   border-radius: 8px;
@@ -500,15 +500,9 @@ nav a{
   transition: color 0.3s ease;
 }
 
-/* Dark mode toggle styling */
-body.dark-mode .theme-toggle-track {
-  background-color: var(--accent-color);
-  border-color: var(--link-hover);
-}
-
+/* Toggle state animation - uses CSS custom properties that change with dark mode */
 body.dark-mode .theme-toggle-thumb {
   transform: translateX(1.75rem);
-  background-color: var(--link-hover);
 }
 
 body.dark-mode .theme-icon-light {
@@ -519,7 +513,7 @@ body.dark-mode .theme-icon-dark {
   opacity: 1;
 }
 
-/* Hover effects */
+/* Hover effects - uses CSS custom properties that adapt automatically */
 #theme-toggle:hover {
   background-color: var(--accent-color);
   color: var(--primary-color);
@@ -534,47 +528,6 @@ body.dark-mode .theme-icon-dark {
 #theme-toggle:hover .theme-toggle-track {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-body.dark-mode #theme-toggle:hover {
-  background-color: var(--);
-  color: #000000;
-  border-color: var(--link-hover);
-}
-
-body.dark-mode #theme-toggle:hover .theme-toggle-label {
-  color: #000000;
-}
-
-/* Dark mode navigation styling */
-body.dark-mode nav {
-  background-color: var(--nav-bg);
-  border-color: var(--border-color);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-body.dark-mode .navigation-element {
-  color: var(--text-color);
-}
-
-body.dark-mode .navigation-element:hover {
-  background-color: var(--accent-color);
-  color: var(--primary-color);
-  border-color: var(--accent-color);
-}
-
-body.dark-mode #theme-toggle {
-  color: var(--text-color);
-}
-
-body.dark-mode #theme-toggle:hover {
-  background-color: var(--accent-color);
-  color: var(--primary-color);
-  border-color: var(--accent-color);
-}
-
-body.dark-mode #theme-toggle:hover .theme-toggle-label {
-  color: var(--primary-color);
 }
 
 
@@ -910,9 +863,9 @@ main {
 
 /* Base button styles shared across all button types */
 .button-category {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   border: 2px solid var(--accent-color);
-  border-radius: 1rem;
+  border-radius: 6px;
   color: var(--text-color);
   height: fit-content;
   padding: 1rem;
