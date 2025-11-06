@@ -1050,3 +1050,31 @@ main {
 /* #endregion CATEGORY FILTER INTERFACE */
 
 /* #endregion GEMENI API */
+
+
+/* ================================================================================================= */
+/* #region PAGINATION                                                                                */
+/* ================================================================================================= */
+
+.pages-navigation {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  margin: 2em 0;
+}
+
+.pages-navigation button {
+  color: var(--accent-color);
+  border: none;
+  background-color: transparent;
+  font-size: 1.2em;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pages-navigation button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.08), 0 0 0 2px rgba(0,0,0,0.06) inset;
+}
+
+/* #endregion PAGINATION */

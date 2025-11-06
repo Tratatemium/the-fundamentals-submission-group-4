@@ -18,7 +18,7 @@ export const createPagesNavigation = (galleryType) => {
 
     const previous = document.createElement('button');
     previous.classList.add('button-previous')
-    previous.textContent = 'Previous'
+    previous.textContent = '⮜ Previous'
     pagesNavigation.appendChild(previous);
 
     for (let i = 1; i <= totalPages; i++) {
@@ -30,6 +30,6 @@ export const createPagesNavigation = (galleryType) => {
 
     const next = document.createElement('button');
     next.classList.add('button-next')
-    next.textContent = 'Next'
+    next.textContent = 'Next ⮞'
     pagesNavigation.appendChild(next);
 };
