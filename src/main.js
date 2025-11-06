@@ -1,39 +1,44 @@
 /**
- * IMAGE GALLERY WITH AI METADATA GENERATION
- * =========================================
+ * IMAGE GALLERY WITH AI METADATA GENERATION & PAGINATION
+ * ========================================================
  *
- * This application creates an interactive image gallery that fetches images from an API
- * and uses Google's Gemini AI to generate metadata (category, description, author) for each image.
+ * This application creates an interactive image gallery with dual-view modes (grid/carousel)
+ * that fetches images from an API using sophisticated pagination system and uses Google's Gemini AI 
+ * to generate metadata (category, description, author) for each image.
  * The application features a fully modular architecture with separated concerns across multiple specialized modules.
  *
  * Features:
- * - Dynamic image loading with pagination
- * - AI-powered metadata generation using modular Gemini API integration
- * - Interactive UI with hover overlays showing metadata
+ * - Advanced pagination system with page-based loading and navigation
+ * - Dual gallery modes: Grid view and Carousel view with seamless switching
+ * - Loading animations and skeleton placeholders during API requests
+ * - AI-powered metadata generation using modular Gemini API integration  
+ * - Interactive UI with hover overlays showing metadata and social stats
  * - Real-time processing timer with animated loading indicators
- * - Social media-style elements (hearts, comments)
- * - Advanced category-based filtering system
- * - Error handling and loading states
- * - Responsive grid layout with CSS animations
- * - Fully modular architecture with separated concerns
- * - Centralized state management
+ * - Social media-style elements (hearts, comments) with dynamic counts
+ * - Advanced category-based filtering system with dynamic button generation
+ * - Comprehensive error handling and loading states with user feedback
+ * - Responsive layouts with CSS animations and theme switching
+ * - Fully modular architecture with separated concerns across five specialized modules
+ * - Centralized state management with cross-module data sharing
  *
  * Dependencies:
  * - ./gemeni-api.js - Modular Gemini AI integration for metadata generation
- * - ./api.js - External API integration for image fetching
+ * - ./api.js - External API integration for image fetching with loading animations
  * - ./image-categories.js - Category filtering and UI management
- * - Custom CSS for styling and animations
+ * - ./pagination.js - Pagination logic, page navigation, and gallery management
+ * - Custom CSS for styling, animations, and responsive design
  * - Environment Variables: VITE_GEMINI_API_KEY for AI functionality
  *
- * Four-Module Architecture:
+ * Five-Module Architecture:
  * - main.js (this file): Core application logic, UI management, state, and user interactions
  * - gemeni-api.js: Separated Gemini AI functionality, API calls, and utilities
- * - api.js: External image API integration with pagination support
+ * - api.js: External image API integration with loading animations and error handling
  * - image-categories.js: Category filtering logic and button management
- * - style.css: Comprehensive styling, animations, and responsive design
+ * - pagination.js: Pagination system, page navigation, gallery switching, and loading states
+ * - style.css: Comprehensive styling, animations, responsive design, and theme management
  *
  * @author Group 4
- * @version 1.6.0 - Four-module architecture with specialized category management
+ * @version 2.0.0 - Five-module architecture with advanced pagination and dual gallery modes
  */
 
 // Import AI functionality from modular gemeni-api.js file
@@ -50,7 +55,8 @@ import {
   updateCategoriesDOM,
 } from "./image-categories.js";
 
-
+// Import pagination system functionality from modular pagination.js file
+// This module handles page navigation, gallery switching, loading states, and pagination UI
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 
 /* ================================================================================================= */
@@ -63,21 +69,24 @@ import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
  *
  * Global application state object that manages all core data and UI state.
  * This centralized approach provides better organization and makes state
- * accessible to other modules through exports.
+ * accessible to other modules through exports. The state handles pagination,
+ * gallery modes, and category filtering across the entire application.
  *
  * @type {Object}
- * @property {number} pagesLoadedCounter - Tracks which page of images to load next for pagination
- * @property {Array<Object>} imagesData - Array storing all loaded image data including metadata
+ * @property {Array<Object>} imagesData - Array storing all loaded image data with pagination structure
+ * @property {number} totalAmountOfPages - Total number of pages available from the API
+ * @property {string} galleryType - Current gallery display mode: "grid" (default) or "carousel"
+ * @property {number} currentPage - Currently active page number for pagination navigation
+ * @property {Array<number>} loadedPages - Array of page numbers that have been loaded from API
  * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
  */
 export const state = {
-  imagesData: [],
-  totalAmountOfPages: 0,
-  galleryType: "grid",
-  // galleryType: "carousel",
-  currentPage: 1,
-  loadedPages: [],  
-  activeCategory: "All",
+  imagesData: [],                 // Page-structured image data: [{page: 1, data: [...]}, {page: 2, data: [...]}]
+  totalAmountOfPages: 0,          // Total pages available from API for pagination controls
+  galleryType: "grid",            // Gallery display mode: "grid" (2 pages per view) or "carousel" (1 page per view)
+  currentPage: 1,                 // Current page in pagination system
+  loadedPages: [],                // Tracks which pages have been fetched to avoid duplicate API calls
+  activeCategory: "All",          // Category filter state for image display filtering
 };
 
 /* #endregion VARIABLES DECLARATION */
@@ -87,7 +96,7 @@ export const state = {
 /* ================================================================================================= */
 
 /**
- * Creates and appends a complete image container with interactive elements to the app
+ * Creates and appends a complete image container with interactive elements to the appropriate gallery
  * @param {Object} imageData - The image data object containing all image information
  * @param {string} imageData.image_url - The source URL of the image
  * @param {number} imageData.likes_count - Number of likes for the image
@@ -96,19 +105,22 @@ export const state = {
  * - Main image element with proper styling and URL
  * - Text overlay container for AI-generated metadata display (category, author)
  * - Interactive hover container with social engagement elements
- * - Heart icon with like count display
- * - Comment icon with comment count display
+ * - Heart icon with like count display using SVG parsing
+ * - Comment icon with comment count display using SVG parsing
  * - SVG icons parsed and inserted using DOMParser for proper rendering
+ * - Gallery-aware rendering (appends to grid or carousel based on current galleryType)
  *
  * The structure supports:
- * - Hover effects for metadata and social stats
- * - Category-based filtering through CSS classes
- * - Social interaction display (likes and comments)
- * - Responsive design with overlay positioning
+ * - Dual gallery modes: grid layout and carousel display
+ * - Hover effects for metadata and social stats with smooth animations
+ * - Category-based filtering through CSS classes for dynamic visibility
+ * - Social interaction display (likes and comments) with proper counts
+ * - Responsive design with overlay positioning and proper z-indexing
+ * - Theme-aware styling that adapts to light and dark modes
  *
  * @example
  * createImage({
- *   image_url: "https://example.com/image.jpg",
+ *   image_url: "https://example.com/image.jpg", 
  *   likes_count: 42,
  *   comments: [{}, {}, {}] // 3 comments
  * });
@@ -225,10 +237,18 @@ export const createImage = (imageData) => {
 };
 
 /**
- * Updates the DOM with metadata for all loaded images
+ * Updates the DOM with AI-generated metadata for all loaded images
  * @description Finds all category and author containers and populates them
- * with data from the state.imagesData array. Also adds category CSS classes for filtering.
- * This is called after AI metadata generation.
+ * with data from the state.imagesData array structure. Also adds category CSS classes 
+ * for filtering functionality. This function handles the page-based data structure
+ * and flattens it for DOM manipulation. Called after AI metadata generation completes.
+ * 
+ * Features:
+ * - Handles page-structured data from pagination system
+ * - Adds category-based CSS classes for filtering functionality
+ * - Updates both category and author text content
+ * - Processes space-separated categories for CSS class names
+ * - Works with both grid and carousel gallery modes
  */
 export const updateImagesDOM = () => {
   const imageContainers = Array.from(
@@ -261,25 +281,21 @@ export const updateImagesDOM = () => {
 /* ================================================================================================= */
 
 /**
- * DOM ELEMENT SETUP
- * =================
+ * DOM ELEMENT SETUP & GALLERY REFERENCES
+ * =======================================
  *
- * This section creates and configures all the UI elements needed for the application:
- * - Main app container reference
- * - Header container reference
- * - Load images button
- * - AI metadata generation button
- * - Status text display
- * - Loading animation dots
- * - Elapsed time timer display
- * - Interval ID for animation control
+ * This section manages DOM element references for the dual-gallery system:
+ * - Gallery containers for both grid and carousel modes
+ * - View toggle functionality for switching between gallery types
+ * - State management for gallery type transitions
+ * - UI element references for pagination and navigation controls
  */
 
 /**
- * Main container for the image gallery
+ * Main container for the grid-based image gallery
  * @type {HTMLElement}
  */
-const galleryGrid = document.querySelector(".gallery-grid");;
+const galleryGrid = document.querySelector(".gallery-grid");
 
 
 /* ================================================================================================= */
@@ -287,22 +303,31 @@ const galleryGrid = document.querySelector(".gallery-grid");;
 /* ================================================================================================= */
 
 /**
- * EVENT LISTENER SETUP
- * ====================
+ * EVENT LISTENER SETUP & GALLERY SWITCHING
+ * =========================================
  *
- * This section configures all user interaction event handlers for the application.
- * Each button has specific functionality and proper state management.
+ * This section configures user interaction event handlers for gallery mode switching.
+ * Handles the complex logic for transitioning between grid and carousel views while
+ * maintaining proper pagination state and loading appropriate content.
  */
 
 const viewToggleButton = document.getElementById('view-toggle');
 
+/**
+ * Converts page numbers between gallery modes due to different pagination systems
+ * @param {number} n - Current page number
+ * @returns {number} - Converted page number for the target gallery mode
+ * @description Grid mode shows 2 API pages per view, carousel shows 1 API page per view.
+ * This function handles the mathematical conversion between the two systems.
+ */
 const transmuteCurrentPage = (n) => {
   switch (state.galleryType) {
     case 'grid':
-      return 2 * n - 1;
+      return 2 * n - 1;  // Convert grid page to carousel: grid page 1 becomes carousel page 1
     case 'carousel':
-      return Math.ceil(n / 2);
+      return Math.ceil(n / 2);  // Convert carousel page to grid: carousel pages 1-2 become grid page 1
     default:
+      return n;
   }
 }
 
@@ -343,23 +368,29 @@ viewToggleButton.addEventListener('click', async () => {
 /* ================================================================================================= */
 
 /**
- * APPLICATION STARTUP
- * ===================
+ * APPLICATION STARTUP & INITIALIZATION
+ * ====================================
  *
- * Initialize the application by loading the first set of images and setting up
- * the category filtering system. This provides immediate content for users when
- * the page loads and establishes the filtering interface.
+ * Initialize the application by loading the first set of pages using the pagination system
+ * and setting up the category filtering interface. This provides immediate content for users
+ * when the page loads and establishes both the gallery display and filtering controls.
+ * 
+ * The initialization process:
+ * 1. Loads initial pages (1 and 2) through the pagination system
+ * 2. Renders the loaded images in the default grid gallery
+ * 3. Sets up category filter buttons (starts with 'All' and 'Uncategorised')
+ * 4. Establishes pagination controls and navigation
  */
 
-// Load initial set of images on application start
+// Load initial set of pages and render gallery on application start
 const init = async () => {
-  await loadPages();
-  loadGallery();
+  await loadPages();  // Loads pages 1 and 2 initially with loading animation
+  loadGallery();      // Renders loaded images in the active gallery mode
 };
 
 init();
 
-// Initialize category filter buttons (starts with just 'All' and 'Uncategorised')
+// Initialize category filter buttons interface (starts with default categories)
 updateCategoriesDOM();
 
 /* #endregion APPLICATION INITIALIZATION */

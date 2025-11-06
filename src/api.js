@@ -2,37 +2,39 @@
  * EXTERNAL API INTEGRATION MODULE
  * ===============================
  *
- * Dedicated module for external image API integration and data fetching.
- * This module is part of a three-module architecture that separates external API calls
- * from AI functionality and UI logic for better code organization and maintainability.
+ * Dedicated module for external image API integration and data fetching with visual feedback.
+ * This module is part of a five-module architecture that separates external API calls
+ * from AI functionality, UI logic, pagination, and category management for better code 
+ * organization and maintainability.
  *
  * Module Responsibilities:
- * - External image API integration with pagination support
- * - HTTP request handling and response validation
- * - Error handling for network failures and invalid responses
+ * - External image API integration with page-based pagination support
+ * - HTTP request handling and comprehensive response validation
+ * - Advanced error handling for network failures and invalid responses
  * - Data processing and integration with centralized state management
+ * - Duplicate request prevention through page tracking
  * - DOM element creation coordination with main.js UI functions
  *
  * Features:
- * - Pagination support with automatic counter management
- * - Flexible page loading (manual or automatic)
- * - Comprehensive error handling with logging
+ * - Page-based pagination with duplicate prevention
+ * - Visual loading feedback with main element overlay and spinner
+ * - Comprehensive error handling with logging and user feedback
  * - Data validation to ensure proper API response format
- * - Integration with centralized state management
- * - Seamless coordination with UI creation functions
+ * - Integration with centralized state management and page tracking
+ * - Seamless coordination with UI creation and pagination functions
  *
  * External API:
  * - Endpoint: https://image-feed-api.vercel.app/api/images
  * - Method: GET with page parameter
- * - Response format: JSON with data array
+ * - Response format: JSON with data array and pagination metadata
  *
  * Module Architecture:
- * - Imports: state and createImage function from main.js
- * - Exports: fetchImages function for external use
- * - Integration: Works seamlessly with main.js UI logic and gemeni-api.js AI functionality
+ * - Imports: state from main.js, createImage from main.js, createPagesNavigation from pagination.js
+ * - Exports: loadPageFromAPI function for external use
+ * - Integration: Works seamlessly with main.js UI logic, pagination.js controls, and gemeni-api.js AI functionality
  *
  * @author Group 4
- * @version 1.6.0 - Four-module architecture with self-contained AI controls
+ * @version 2.0.0 - Five-module architecture with loading animations and advanced pagination
  */
 
 /* ================================================================================================= */
@@ -50,38 +52,42 @@ import { createPagesNavigation } from './pagination.js';
 /**
  * Fetches images from the external API with flexible pagination support
  * @async
- * @function fetchImages
- * @param {number} [page] - Optional specific page number to load. If not provided, uses automatic pagination counter.
- * @description Main API integration function that handles external image data fetching.
- * Makes HTTP requests to retrieve images from the current or specified page,
- * validates responses, stores data in centralized state, creates DOM elements,
- * and manages pagination counters automatically.
+ * @function loadPageFromAPI
+ * @param {number} page - Specific page number to load from the API
+ * @description Main API integration function that handles external image data fetching with
+ * comprehensive loading feedback and state management. Makes HTTP requests to retrieve images
+ * from the specified page, validates responses, stores data in centralized state, updates
+ * pagination controls, and provides visual feedback during loading.
  *
  * Features:
- * - Flexible pagination: manual page specification or automatic counter increment
+ * - Duplicate request prevention: skips if page already loaded
  * - Comprehensive error handling for network failures and invalid responses
- * - Data validation to ensure proper API response format
+ * - Data validation to ensure proper API response format and structure
  * - Automatic integration with centralized state management (state.imagesData)
- * - Seamless DOM element creation through imported createImage function
- * - Pagination counter management (state.pagesLoadedCounter)
+ * - Page tracking system to prevent unnecessary API calls
+ * - Pagination metadata processing (total_pages, current page)
+ * - Automatic pagination control updates after successful load
+ * - Loading state cleanup in all scenarios (success, error, cancellation)
  *
  * API Integration:
  * - Endpoint: https://image-feed-api.vercel.app/api/images
  * - Method: GET request with page query parameter
- * - Expected response: JSON object with 'data' array containing image objects
+ * - Expected response: JSON object with 'data' array and pagination metadata
  *
  * State Management:
- * - Updates state.imagesData with new image data
- * - Manages state.pagesLoadedCounter for automatic pagination
- * - Integrates with centralized state management architecture
+ * - Updates state.imagesData with page-structured data
+ * - Manages state.loadedPages array for duplicate prevention
+ * - Updates state.totalAmountOfPages from API response
+ * - Maintains sorted order for both loadedPages and imagesData
+ *
  *
  * @throws {Error} When API request fails or response format is invalid
  * @example
- * // Automatic pagination (uses and increments counter)
- * await fetchImages();
+ * // Load specific page with loading animation
+ * await loadPageFromAPI(3);
  * 
- * // Manual page specification
- * await fetchImages(5);
+ * // Will skip if page already loaded
+ * await loadPageFromAPI(3); // No API call made
  */
 export const loadPageFromAPI = async (page) => {
 
