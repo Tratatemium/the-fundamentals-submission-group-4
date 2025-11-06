@@ -7,16 +7,15 @@ export const loadPages = (pageClicked) => {
     if (state.loadedPages.length === 0) {
         loadPageFromAPI(1);
         loadPageFromAPI(2);
+        return;
     }
 
     switch (state.galleryType) {
         case 'grid':
             const getPair = (n) => {
-                // if n is odd → [n, n+1]
-                // if n is even → [n-1, n]
-                return n % 2 === 1 ? [n, n + 1] : [n - 1, n];
+                return [n * 2 - 1, n * 2];
             };
-            pages = getPair(pageClicked);
+            const pages = getPair(pageClicked);
             pages.forEach(page => loadPageFromAPI(page));
             break;
         case 'carousel':

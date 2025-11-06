@@ -84,11 +84,13 @@ import { createPagesNavigation } from './pagination.js';
  * await fetchImages(5);
  */
 export const loadPageFromAPI = async (page) => {
-  const pageToLoad = page ? page : state.pagesLoadedCounter++;
+
+  if (state.loadedPages.includes(page)) return;
+  
   try {
     // Make API request to current page
     const response = await fetch(
-      `https://image-feed-api.vercel.app/api/images?page=${pageToLoad}`
+      `https://image-feed-api.vercel.app/api/images?page=${page}`
     );
 
     // Check if request was successful

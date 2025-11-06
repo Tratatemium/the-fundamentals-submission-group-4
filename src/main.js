@@ -79,7 +79,8 @@ import { loadPages } from "./pagination.js";
 export const state = {
   imagesData: [],
   totalAmountOfPages: 0,
-  galleryType: "carousel",
+  galleryType: "grid",
+  // galleryType: "carousel",
   currentPage: 1,
   loadedPages: [],  
   activeCategory: "All",
