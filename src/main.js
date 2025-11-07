@@ -373,12 +373,10 @@ viewToggleButton.addEventListener("click", async () => {
 const init = async () => {
   await loadPages(); // Loads pages 1 and 2 initially with loading animation
   loadGallery(); // Renders loaded images in the active gallery mode
+  updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
 };
 
 init();
-
-// Initialize category filter buttons interface (starts with default categories)
-updateCategoriesDOM();
 
 /* #endregion APPLICATION INITIALIZATION */
 
