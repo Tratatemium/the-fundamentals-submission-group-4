@@ -588,7 +588,8 @@ main  {
   width: 16em; /* Sets a fixed width for the images */
   height: 16em; /* Sets a fixed height for the images */
   border-radius: 4px; /* Rounds the corners of the images */
-  border: var(--accent-color); /* Sets the border color using the accent color variable */
+  border: 1px var(--accent-color); /* Sets the border color using the accent color variable */
+  box-shadow: 0 4px 8px rgba(78, 7, 7, 0.3);
 }
 
 .loading-img { /* VLAD: I'll need it for later */
@@ -1051,3 +1052,50 @@ main {
 }
 
 /* #endregion PAGINATION */
+/* ================================================================================================= */
+/* #region LIGHTBOX                                                                   */
+/* ================================================================================================= */
+
+.lightbox {
+  display: inline-block;
+  width: 50vw;
+  height: auto; /* Height adjusts based on image aspect ratio */
+  background-color: var(--secondary-color);
+  position: fixed;
+  top: 16em;
+  left: calc(50vw -50%);
+  z-index: 10;
+}
+
+.lightbox-image {
+  display: block;
+ width: 50%; /* Image takes up full width of lightbox */
+ height: auto; /* Height adjusts based on image aspect ratio */
+ margin: 1.5em; 
+}
+
+.lightbox.hidden {
+  display: none;
+}
+.overlay.hidden {
+  display: none;
+}
+
+.lightbox-close-button { 
+  width: 2em;
+  height: 2em;
+  position: absolute; 
+  top: 0.5em;
+  right: 0.5em;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0; /* Covers the entire viewport */
+  background-color: rgba(29, 22, 21, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* For Safari */
+  z-index: 5; /* over other content but under the lightbox */
+}
+
+/* #endregion LIGHTBOX */

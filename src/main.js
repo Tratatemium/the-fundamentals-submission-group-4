@@ -58,6 +58,7 @@ import {
 // Import pagination system functionality from modular pagination.js file
 // This module handles page navigation, gallery switching, loading states, and pagination UI
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
+import { showLightbox } from './lightbox.js';
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -143,6 +144,9 @@ export const createImage = (imageData) => {
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("image-container");
   gallery.appendChild(imageContainer);
+
+  imageContainer.addEventListener('click', () => showLightbox(imageData.image_url));
+
 
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
