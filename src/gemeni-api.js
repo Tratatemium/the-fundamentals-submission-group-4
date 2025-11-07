@@ -50,7 +50,7 @@ import { updateImagesDOM } from './main.js'
 import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
 
 // Import API functionality for additional image loading capability
-import { fetchImages } from './api.js';
+// import { fetchImages } from './api.js';
 
 // Dynamic imports for Google AI SDK (loaded when needed)
 // import { GoogleGenAI, Type } from "@google/genai" - loaded dynamically
@@ -392,19 +392,13 @@ const AIContainer = document.querySelector('.AI-container');
  * Button to load more images from the API
  * @type {HTMLButtonElement}
  */
-const buttonLoadImages = document.createElement("button");
-buttonLoadImages.classList.add("button-load-images");
-buttonLoadImages.textContent = "Load images";
-AIContainer.appendChild(buttonLoadImages);
+const buttonLoadImages = document.querySelector(".button-load-images");
 
 /**
  * Button to generate AI metadata for loaded images
  * @type {HTMLButtonElement}
  */
-const buttonAI = document.createElement("button");
-buttonAI.classList.add("button-AI");
-buttonAI.textContent = "Get metadata";
-AIContainer.appendChild(buttonAI);
+const buttonAI = document.querySelector(".button-AI");
 
 /**
  * Text element for displaying status messages to the user
@@ -448,17 +442,6 @@ AIContainer.appendChild(timerAI);
  * This section configures all user interaction event handlers for the application.
  * Each button has specific functionality and proper state management.
  */
-
-/**
- * Load Images Button Event Listener
- * @description Triggers the fetchImages function to load the next page of images
- * from the API. Supports pagination through the global pagesLoadedCounter.
- * Also provides user feedback when new images are loaded.
- */
-buttonLoadImages.addEventListener("click", () => {
-  fetchImages();
-  textAI.textContent = "More images loaded 🖼️";
-});
 
 /**
  * AI Metadata Button Event Listener

@@ -17,6 +17,11 @@
   box-sizing: border-box;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 /* Prevent font size inflation */
 html {
   -moz-text-size-adjust: none;
@@ -48,6 +53,8 @@ ol[role='list'] {
 body {
   min-height: 100vh;
   line-height: 1.5;
+  background-color: var(--primary-color);
+  transition: background-color 0.3s ease;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -119,21 +126,430 @@ textarea:not([rows]) {
   --font-primary: 'Roboto', sans-serif;
   --font-secondary: 'Playfair', serif;
 
+  /* Raheel colors */
+  --bg-color: #121212;             /* Deep black background */
+  --header-bg: rgba(26, 26, 26, 0.95); /* Semi-transparent dark header */
+  --nav-bg: rgba(45, 45, 45, 0.95); /* Navigation background */
+  --footer-bg: #0F0F0F;            /* Footer background */
+  --footer-text: #F5F5F5;          /* Footer text */
+  --link-color: #B0B0B0;           /* Muted link color */
+  --link-hover: #4ECDC4;           /* Teal hover accent */
+  --dropdown-bg: #2D2D2D;          /* Dropdown background */
+  --dropdown-link: #F5F5F5;        /* Dropdown text */
+
 }
+/*==== DARK MODE COLOR SCHEME ====*/
+
+body.dark-mode {
+  /* Core dark mode palette */
+  --primary-color: #1A1A1A;        /* Dark background */
+  --secondary-color: #2D2D2D;      /* Slightly lighter dark for cards/sections */
+  --accent-color: #E74C3C;         /* Bright red accent for contrast */
+  --text-color: #F5F5F5;           /* Light text for readability */
+  
+  /* Shadow and border adjustments for dark mode */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --border-color: #404040;
+}
+/*========== END TOGGLE BUTTON DARK MODE VARIABLES =================*/
+
 
 /* #endregion CSS CUSTOM PROPERTIES (VARIABLES) 
 
 
 /* ================================================================================================= */
-/* #region HEADER                                                                                    */
+/* #region HEADER  and NAV                                                                           */
 /* ================================================================================================= */
 
-/* #endregion HEADER */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 9;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1em 2em;
+  background-color: rgba(var(--primary-color), 0.7); /* Add opacity */
+  backdrop-filter: blur(8px);
+  color: var(--text-color);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode header styling */
+body.dark-mode header {
+  background-color: var(--header-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Brand title */
+.header-content {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);                    /* Visible over background */
+  text-shadow:
+    10px 10px 40px color-mix(in srgb, var(--accent-color) 90%, white),   /* brightest glow */
+    0 0 20px color-mix(in srgb, var(--accent-color) 70%, black),        /* medium glow */
+    0 0 40px color-mix(in srgb, var(--accent-color) 100%, black);       /* deep glow */
+
+  margin: auto 0;
+  /* font-family: 'Playfair Display', serif; */
+  font-family: var(--font-secondary);
+  font-size: 2.8rem;
+  transform: rotate(2deg);
+}
+
+.hamburger-menu-button {
+  all: unset;
+  box-sizing: border-box;
+  width: 3em;
+  height: 3em;
+  margin: auto 0;
+  border-radius: 8px;
+
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.hamburger-menu-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.08), 0 0 0 2px rgba(0,0,0,0.06) inset;
+}
+
+.hamburger-stripes-container {
+  position: relative;
+  width: 70%;
+  height: calc(3.5px + 1em);
+  display: block;
+}
+
+.hamburger-stripe-top,
+.hamburger-stripe-bottom {
+  width: 100%;
+  height: 3.5px;
+  border-radius: 1px;
+  background-color: var(--accent-color);
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform-origin: center;
+  transition:
+    transform 260ms cubic-bezier(.2,.9,.3,1),
+    top 260ms cubic-bezier(.2,.9,.3,1),
+    opacity 260ms cubic-bezier(.2,.9,.3,1);
+}
+
+.hamburger-stripe-top {
+  top: 0;
+}
+
+.hamburger-stripe-bottom {
+  bottom: 0;
+}
+
+/* Closed state (explicit) — set positions using gap */
+.hamburger-menu-button[aria-expanded="false"] .hamburger-stripe-top {
+  top: 0;
+}
+
+.hamburger-menu-button[aria-expanded="false"] .hamburger-stripe-bottom {
+  bottom: 0;
+}
+
+/* Open state: form an X
+    - Move stripes to center (same vertical position)
+    - Rotate top +45deg, bottom -45deg
+*/
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-top, 
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-bottom {
+  top: calc((3.5px + 1em) / 2);
+}
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-top {
+  transform: rotate(45deg) translateY(0);
+}
+
+.hamburger-menu-button[aria-expanded="true"] .hamburger-stripe-bottom {
+  transform: rotate(-45deg) translateY(0);
+}
+
+.gallery-grid.hidden,
+.gallery-carousel.hidden {
+  display: none;
+}
+
+
+
+/*========== NAVIGATION =================*/
+nav {
+  position: absolute;
+  top: 100%;
+  right: 1em;
+  background-color: var(--primary-color);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+/* Hidden state for mobile dropdown */
+nav[hidden] {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+}
+
+/* Visible state for mobile dropdown */
+nav:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Navigation links and buttons styling */
+.navigation-element {
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: var(--text-color);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navigation-element:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border-color: var(--accent-color);
+  transform: translateX(4px);
+}
+
+.navigation-element:active {
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Disabled button styles for loading states */
+.navigation-element:disabled {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  cursor: not-allowed;
+  opacity: 0.8;
+  transform: none;
+  box-shadow: none;
+}
+
+.navigation-element:disabled::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-color: currentColor transparent currentColor transparent;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+/* spinner keyframes */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Prevent hover effects on disabled buttons */
+.navigation-element:disabled:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #999999;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+nav a{
+  text-decoration: none;
+}
+
+/* Dropdown menu */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--dropdown-bg);
+  min-width: 90px;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-radius: 5px;
+}
+
+.dropdown-content a {
+  color: var(--dropdown-link);
+  padding: 5px 10px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--link-hover);
+  border-radius: 5px;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Toggle button styling - Modern Switch Design */
+#theme-toggle {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 3.5rem;
+  height: 1.75rem;
+  background-color: var(--secondary-color);
+  border-radius: 1rem;
+  border: 2px solid var(--accent-color);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 0.125rem;
+  overflow: hidden;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  left: 0.125rem;
+}
+
+.theme-icon {
+  position: absolute;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  z-index: 2;
+}
+
+.theme-icon-light {
+  left: 0.125rem;
+  opacity: 1;
+}
+
+.theme-icon-dark {
+  right: 0.125rem;
+  opacity: 0.3;
+}
+
+.theme-toggle-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+/* Toggle state animation - uses CSS custom properties that change with dark mode */
+body.dark-mode .theme-toggle-thumb {
+  transform: translateX(1.75rem);
+}
+
+body.dark-mode .theme-icon-light {
+  opacity: 0.3;
+}
+
+body.dark-mode .theme-icon-dark {
+  opacity: 1;
+}
+
+/* Hover effects - uses CSS custom properties that adapt automatically */
+#theme-toggle:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border-color: var(--accent-color);
+  transform: translateX(4px);
+}
+
+#theme-toggle:hover .theme-toggle-label {
+  color: var(--primary-color);
+}
+
+#theme-toggle:hover .theme-toggle-track {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* #endregion HEADER and NAV */
 
 
 /* ================================================================================================= */
 /* #region FOOTER                                                                                    */
 /* ================================================================================================= */
+
+/*========== FOOTER =================*/
+footer {
+  width: 100vw;
+  text-align: center;
+  padding: 1em;
+  margin-top: 1em;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
 
 /* #endregion FOOTER */
 
@@ -144,10 +560,12 @@ textarea:not([rows]) {
 
 main  {
   background-color: var(--primary-color);
+  padding-top: 10rem;
   margin: -1em; /* Adjust margin to fill webpage background */
+  transition: background-color 0.3s ease;
 }
 
-#app {
+.gallery-grid {
   max-width: 80em; /* Sets a maximum width for the container */
   margin: 0 auto; /* Centers the container horizontally */
   padding: 1.5em; /* Adds padding around the content */
@@ -172,6 +590,14 @@ main  {
   border-radius: 4px; /* Rounds the corners of the images */
   border: 1px var(--accent-color); /* Sets the border color using the accent color variable */
   box-shadow: 0 4px 8px rgba(78, 7, 7, 0.3);
+}
+
+.loading-img { /* VLAD: I'll need it for later */
+  display: block;
+  width: 16em;
+  height: 16em;
+  border-radius: 4px;
+  background-color: var(--secondary-color);
 }
 
 .hover-container {
@@ -219,6 +645,187 @@ main  {
 }
 
 /* #endregion APP (GALERY) */
+/*==========Toggel and Carousel view================*/
+
+/* ✅ CAROUSEL VIEW */
+.carousel-view {
+  display: flex;
+  overflow-x: auto;
+  gap: 80px;
+  scroll-snap-type: x mandatory;
+  padding: 120px 10px;
+}
+
+.carousel-view img {
+  min-width: 20%;
+  height: 370px;
+  object-fit: cover;
+  scroll-snap-align: center;
+  border-radius: 12px;
+  transition: transform 0.3s;
+}
+
+.carousel-view img:hover {
+  transform: scale(1.03);
+}
+
+/* ✅ Hide scrollbar (optional) */
+.carousel-view::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* -------------------------
+   MANUAL CAROUSEL CONTAINER
+---------------------------*/
+.banner {
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.slider {
+  position: center;
+  width: 1000px;
+  height: 833px;
+  transform-style: preserve-3d;
+  perspective: 4000px;
+  transform: rotateX(-11deg); /* Fix: 3D tilt */
+  --rotation: 0deg;
+  --quantity: 10; /* Will be dynamically set in JS */
+}
+
+/* -------------------------
+   CAROUSEL ITEMS
+---------------------------*/
+.slider .item {
+  position: absolute;
+  width: 250px;
+  height: 300px;
+  top: 50%;
+  left: 40%;
+  transform-style: preserve-3d;
+  transform: 
+    rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)) + var(--rotation)))
+    translateZ(550px) /* Matches slider size */
+    translate(-50%, -50%);
+  transition: transform 2s ease;
+}
+
+.slider .item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slider .item img:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  z-index: 20;
+  box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.5);
+}
+
+/* -------------------------
+   BUTTONS
+---------------------------*/
+.banner button {
+  position: absolute;
+  top: 10%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+.prev { left: 20px; }
+.next { right: 20px; }
+
+/*==========End of Toggel and Carousel view================*/
+
+/* ========================
+   SUBSCRIBE POPUP
+======================== */
+.subscribe-btn {
+  padding: 6px 14px;
+  border: none;
+  background: #005eff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.subscribe-btn:hover {
+  background: #003cb8;
+}
+
+.subscribe-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.subscribe-box {
+  width: 300px;
+  padding: 25px;
+  background: #ffffff;
+  color: #000;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+
+.subscribe-box h2 {
+  margin-bottom: 10px;
+}
+
+.subscribe-box input {
+  width: 90%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.subscribe-box button {
+  width: 100%;
+  padding: 10px;
+  background: #005eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.close-subscribe {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent !important;
+  font-size: 22px;
+  padding: 0;
+  color: #000;
+  cursor: pointer;
+}
+/*========== END OF SUBSCRIBE =================*/
 
 
 /* ================================================================================================= */
@@ -241,9 +848,6 @@ main {
   justify-content: center;
 }
 
-header {
-  
-}
 
 /* ================================================================================================= */
 /* #region BUTTON STYLES                                                                             */
@@ -262,30 +866,23 @@ header {
  */
 
 /* Base button styles shared across all button types */
-.button-category,
-.button-AI,
-.button-load-images {
-  background-color: var(--secondary-color);
+.button-category {
+  background-color: var(--primary-color);
   border: 2px solid var(--accent-color);
-  border-radius: 1rem;
+  border-radius: 6px;
   color: var(--text-color);
+  height: fit-content;
   padding: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   cursor: pointer;
+  margin: auto 0;
   transition: all 0.2s ease; /* Smooth transitions for interactions */
 }
 
-/* Specific spacing for main action buttons */
-.button-AI,
-.button-load-images {
-    margin-left: 2rem;
-}
 
 /* Hover and active state styles for main buttons */
-.button-category.active,
-.button-AI:hover,
-.button-load-images:hover {
+.button-category.active {
   background-color: var(--accent-color);
   color: var(--primary-color);
   transform: translateY(1px);
@@ -307,35 +904,11 @@ header {
 }
 
 /* Click/active state for all buttons */
-.button-category:active,
-.button-AI:active,
-.button-load-images:active {
+.button-category:active {
   background-color: #3a0505; /* Darker accent color */
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   border-color: #3a0505;
-}
-
-/* Disabled button styles for loading states */
-.button-AI:disabled,
-.button-load-images:disabled {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  color: #999999;
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Prevent hover effects on disabled buttons */
-.button-AI:disabled:hover,
-.button-load-images:disabled:hover {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  color: #999999;
-  transform: translateY(0);
-  box-shadow: none;
 }
 
 /* #endregion BUTTON STYLES */
@@ -402,11 +975,6 @@ header {
   display: none;
 }
 
-/* Overlay container that appears on hover */
-.text-container {
-
-}
-
 /* Category text styling within overlay */
 .image-category {
   color: var(--primary-color);
@@ -453,6 +1021,37 @@ header {
 
 /* #endregion GEMENI API */
 
+
+/* ================================================================================================= */
+/* #region PAGINATION                                                                                */
+/* ================================================================================================= */
+
+.pages-navigation {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  margin: 2em 0;
+}
+
+.pages-navigation button {
+  color: var(--accent-color);
+  border: none;
+  background-color: transparent;
+  font-size: 1.2em;
+  font-weight: 500;
+  cursor: pointer;
+}
+.pages-navigation button.active {
+  font-size: 1.7em;
+  font-weight: 700;
+}
+
+.pages-navigation button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.08), 0 0 0 2px rgba(0,0,0,0.06) inset;
+}
+
+/* #endregion PAGINATION */
 /* ================================================================================================= */
 /* #region LIGHTBOX                                                                   */
 /* ================================================================================================= */
