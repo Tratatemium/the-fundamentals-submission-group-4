@@ -155,64 +155,54 @@ const updateImagesData = (newMetadata) => {
  */
 const fetchImagesFromUrl = async () => {
   // Filter images that need metadata generation
-
   const imagesToFetch = state.imagesData.filter(
-    (page) => page.data.some(image => !image.category)
+    (oneImageData) => !oneImageData.category
   );
-  
-  // const imageUrls = imagesToFetch.map((oneImageData) => oneImageData.image_url);
-
-  const imageUrls = imagesToFetch.map(pageData => ({
-    ...pageData,
-    data: pageData.data.map(image => image.image_url)
-  }));
-
+  const imageUrls = imagesToFetch.map((oneImageData) => oneImageData.image_url);
   const processedImages = [];
 
-  for (const page of imageUrls) {
-    processedImages.push({page: page.page, data: []});
-    // Process each image URL
-    for (const url of page.data) {
-      try {
-        // Fetch the image from URL
-        const response = await fetch(url);
+  // Process each image URL
+  for (const url of imageUrls) {
+    try {
+      // Fetch the image from URL
+      const response = await fetch(url);
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch image: Status ${response.status} ${response.statusText}`
-          );
-        }
-
-        // Validate MIME type to ensure it's an image
-        const mimeType = response.headers.get("content-type");
-        if (!mimeType || !mimeType.startsWith("image/")) {
-          throw new Error(
-            `Invalid content type: ${
-              mimeType || "none"
-            }. URL must point to an image.`
-          );
-        }
-
-        // Convert image to ArrayBuffer
-        const arrayBuffer = await response.arrayBuffer();
-
-        // Convert ArrayBuffer to Base64 string for AI processing
-        const uint8Array = new Uint8Array(arrayBuffer);
-        let byteString = "";
-        uint8Array.forEach((byte) => {
-          byteString += String.fromCharCode(byte);
-        });
-
-        // Encode to Base64
-        const base64Data = btoa(byteString);
-
-        processedImages[processedImages.length - 1].data.push({ mimeType, base64Data });
-      } catch (error) {
-        console.error(`Error processing image ${url}:`, error);
-        // Continue processing other images even if one fails
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch image: Status ${response.status} ${response.statusText}`
+        );
       }
+
+      // Validate MIME type to ensure it's an image
+      const mimeType = response.headers.get("content-type");
+      if (!mimeType || !mimeType.startsWith("image/")) {
+        throw new Error(
+          `Invalid content type: ${
+            mimeType || "none"
+          }. URL must point to an image.`
+        );
+      }
+
+      // Convert image to ArrayBuffer
+      const arrayBuffer = await response.arrayBuffer();
+
+      // Convert ArrayBuffer to Base64 string for AI processing
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let byteString = "";
+      uint8Array.forEach((byte) => {
+        byteString += String.fromCharCode(byte);
+      });
+
+      // Encode to Base64
+      const base64Data = btoa(byteString);
+
+      processedImages.push({ mimeType, base64Data });
+    } catch (error) {
+      console.error(`Error processing image ${url}:`, error);
+      // Continue processing other images even if one fails
     }
   }
+
   return processedImages;
 };
 
@@ -237,7 +227,7 @@ const fetchImagesFromUrl = async () => {
  * @throws {Error} When image processing or AI generation fails
  */
 export const getImageMetadata = async () => {
-  let initialArraysLength = [];
+  let initialArrayLength;
   let imageParts = [];
 
   try {
@@ -259,26 +249,22 @@ export const getImageMetadata = async () => {
 
     // Process images that don't have metadata yet
     const processedImages = await fetchImagesFromUrl();
-    initialArraysLength = processedImages.map(page => page.data.length);
+    initialArrayLength = processedImages.length;
 
     // Check if there are any images to process
-    if (initialArraysLength.length === 0) {
+    if (initialArrayLength === 0) {
       textAI.textContent = "All image metadata is already loaded.";
       stopEllipsisAnimation();
       return;
     }
 
-    imageParts = processedImages.map(pageData => ({
-      ...pageData,
-      data: pageData.data.map(({ mimeType, base64Data }) => ({
-        inlineData: {
-          mimeType: mimeType,
-          data: base64Data,
-        },
-      }))
+    // Prepare image data for AI processing
+    imageParts = processedImages.map(({ mimeType, base64Data }) => ({
+      inlineData: {
+        mimeType: mimeType,
+        data: base64Data,
+      },
     }));
-
-    console.log(imageParts);
 
     // Final validation before AI request
     if (imageParts.length === 0) {
@@ -309,18 +295,22 @@ export const getImageMetadata = async () => {
       type: Type.ARRAY,
       items: {
         type: Type.OBJECT,
-        required: ["category", "description", "authorName"],
+        reqired: ["page", "data"],
         properties: {
-          category: {
-            type: Type.STRING,
+          page: {type: Type.NUMBER,},
+          data: {type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              required: ["category", "description", "authorName"],
+              properties: {
+                category: {type: Type.STRING,},
+                description: {type: Type.STRING,},
+                authorName: {type: Type.STRING,},
+              },
+            }
           },
-          description: {
-            type: Type.STRING,
-          },
-          authorName: {
-            type: Type.STRING,
-          },
-        },
+          
+        }
       },
     },
     systemInstruction: [
