@@ -401,7 +401,7 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
     console.log(`Generated metadata for ${metadata.length} pages`);
 
     // Validate response matches expected count
-    if (metadata.length !== initialArrayLength) {
+    if (metadata.map(page => page.data.length) !== initialArraysLength) {
       textAI.textContent = "🚨 Error: Some metadata has been lost 🚨";
     } else {
       // Success: update application data and UI
