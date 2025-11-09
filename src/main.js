@@ -94,7 +94,7 @@ export const state = {
 /* #endregion VARIABLES DECLARATION */
 
 /* ================================================================================================= */
-/* #region DOM MANIPULATION                                                                          */
+/* #region HELPER FUNCTIONS                                                                          */
 /* ================================================================================================= */
 
 const findImageDataByID = (ID) => {
@@ -106,6 +106,32 @@ const findImageDataByID = (ID) => {
   });
   return result;
 };
+
+/**
+ * Converts page numbers between gallery modes due to different pagination systems
+ * @param {number} n - Current page number
+ * @returns {number} - Converted page number for the target gallery mode
+ * @description Grid mode shows 2 API pages per view, carousel shows 1 API page per view.
+ * This function handles the mathematical conversion between the two systems.
+ */
+const transmuteCurrentPage = (n) => {
+  switch (state.galleryType) {
+    case "grid":
+      return 2 * n - 1; // Convert grid page to carousel: grid page 1 becomes carousel page 1
+    case "carousel":
+      return Math.ceil(n / 2); // Convert carousel page to grid: carousel pages 1-2 become grid page 1
+    default:
+      return n;
+  }
+};
+
+/* #end region HELPER FUNCTIONS */
+
+
+
+/* ================================================================================================= */
+/* #region DOM MANIPULATION                                                                          */
+/* ================================================================================================= */
 
 /**
  * Creates and appends a complete image container with interactive elements to the appropriate gallery
@@ -310,24 +336,6 @@ const galleryGrid = document.querySelector(".gallery-grid");
  */
 
 const viewToggleButton = document.getElementById("view-toggle");
-
-/**
- * Converts page numbers between gallery modes due to different pagination systems
- * @param {number} n - Current page number
- * @returns {number} - Converted page number for the target gallery mode
- * @description Grid mode shows 2 API pages per view, carousel shows 1 API page per view.
- * This function handles the mathematical conversion between the two systems.
- */
-const transmuteCurrentPage = (n) => {
-  switch (state.galleryType) {
-    case "grid":
-      return 2 * n - 1; // Convert grid page to carousel: grid page 1 becomes carousel page 1
-    case "carousel":
-      return Math.ceil(n / 2); // Convert carousel page to grid: carousel pages 1-2 become grid page 1
-    default:
-      return n;
-  }
-};
 
 viewToggleButton.addEventListener("click", async () => {
   const galleryGrid = document.querySelector(".gallery-grid");
