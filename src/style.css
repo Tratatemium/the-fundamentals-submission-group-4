@@ -597,11 +597,7 @@ main  {
   height: auto;
   border-radius: 4px;
   background: linear-gradient(to top, #1A1A1A, rgba(29, 22, 21, 0.3));
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
   padding: 0.5rem; 
-  box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
