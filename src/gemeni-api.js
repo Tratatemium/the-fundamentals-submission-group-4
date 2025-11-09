@@ -239,6 +239,7 @@ const fetchImagesFromUrl = async () => {
 export const getImageMetadata = async () => {
   let initialArraysLength = [];
   let imageParts = [];
+  let flattenedImageParts = [];
 
   try {
     if (!GoogleGenAI || !Type) {
@@ -277,6 +278,23 @@ export const getImageMetadata = async () => {
         },
       }))
     }));
+
+    for (let page of imageParts) {
+
+      if (flattenedImageParts.length === 0) {
+        flattenedImageParts.push({
+            "text": `--- IMAGES FOR PAGE ${page.page} START ---`
+          });
+      } else {
+        flattenedImageParts.push({
+            "text": `--- PAGE END ---\n\n--- IMAGES FOR PAGE ${page.page} START ---`
+          });
+      }
+      
+      for (let imageData of page.data) flattenedImageParts.push(imageData);
+    }
+
+    console.log(flattenedImageParts);
 
     // Final validation before AI request
     if (imageParts.length === 0) {
@@ -352,7 +370,7 @@ CRITICAL REQUIREMENTS:
 5. Each metadata object must have: category, description, and authorName
 
 For each image, provide:
-- category: A descriptive category that classifies the image content
+- category: A descriptive category that classifies the image content IMPORTANT: just one category, keep it simple
 - description: A detailed description of what you see in the image
 - authorName: A realistic random full name (first and last name)
 
@@ -380,7 +398,7 @@ Each metadata object should contain: category, description, and authorName.
 
 IMPORTANT: Keep the exact same page numbering and structure as provided in the input. Each page must have exactly 10 metadata objects in the data array.`,
         },
-        ...imageParts, // Spread all processed images
+        ...flattenedImageParts, // Spread all processed images
       ],
     },
   ];
@@ -401,8 +419,15 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
     console.log(`Generated metadata for ${metadata.length} pages`);
 
     // Validate response matches expected count
-    if (metadata.map(page => page.data.length) !== initialArraysLength) {
+    const currentArraysLength = metadata.map(page => page.data.length);
+
+    const arraysMatch = 
+      initialArraysLength.length === currentArraysLength.length &&
+      initialArraysLength.every((len, index) => len === currentArraysLength[index]);
+    
+    if (!arraysMatch) {
       textAI.textContent = "🚨 Error: Some metadata has been lost 🚨";
+      console.log('🚨 Error: Some metadata has been lost 🚨');
     } else {
       // Success: update application data and UI
       console.log(metadata);
