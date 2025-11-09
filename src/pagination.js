@@ -1,73 +1,21 @@
 
 /**
- * PAGINATION & GALLERY MANAGEMENT MODULE
- * ======================================
- *
- * Dedicated module for pagination logic, gallery switching, and loading state management.
- * This module is part of a five-module architecture that handles all pagination-related
- * functionality, gallery mode transitions, and visual feedback during loading operations.
- *
- * Module Responsibilities:
- * - Advanced pagination system with page pair calculations for grid mode
- * - Gallery mode switching between grid (2 pages per view) and carousel (1 page per view)
- * - Loading animation management with skeleton placeholders
- * - Page navigation controls and button state management
- * - Gallery rendering and content switching
- * - User interaction handling for pagination controls
- *
- * Features:
- * - Dual pagination modes: grid (page pairs) and carousel (single pages)
- * - Loading skeleton animations during API requests
- * - Page navigation with Previous/Next and numbered buttons
- * - Active page state management and visual feedback
- * - Gallery content rendering from page-structured data
- * - Event listeners for user interaction with pagination controls
- * - Seamless integration with API loading and state management
- *
- * @author Group 4
- * @version 2.0.0 - Five-module architecture with advanced pagination and gallery management
+ * Pagination and gallery management with dual-mode support
+ * Handles grid mode (2 pages per view) and carousel mode (1 page per view)
+ * Includes loading animations and page navigation controls
  */
 
-// Import centralized state management from main module
+// Import state management, image creation, and API functions
 import { state } from './main.js'
-
-// Import UI creation function for rendering images in galleries
 import { createImage } from './main.js'
-
-// Import API function for loading page data with visual feedback
 import { loadPageFromAPI } from './api.js'
 
-/**
- * Calculates the pair of API pages needed for grid mode display
- * @param {number} n - Grid page number (user-facing page number)
- * @returns {Array<number>} - Array containing two consecutive API page numbers
- * @description Grid mode displays content from 2 API pages simultaneously.
- * This function converts a grid page number to the corresponding API page pair.
- * @example
- * getPair(1) // Returns [1, 2] - Grid page 1 shows API pages 1 and 2
- * getPair(2) // Returns [3, 4] - Grid page 2 shows API pages 3 and 4
- */
+// Calculates the pair of API pages needed for grid mode display
 export const getPair = (n) => {
     return [n * 2 - 1, n * 2];
 };
 
-/**
- * Manages loading skeleton animation display during API requests
- * @param {boolean} show - Whether to show or hide loading skeletons
- * @description Creates visual feedback during page loading by displaying skeleton
- * placeholders that match the expected layout. For grid mode, shows 20 skeleton
- * containers that mimic the image layout. Removes all content when hiding.
- * 
- * Features:
- * - Gallery-mode aware: different loading states for grid vs carousel
- * - Skeleton containers styled with .loading-img class
- * - Proper cleanup: removes all children when hiding
- * - Immediate visual feedback during API calls
- * 
- * @example
- * showLoading(true);  // Shows 20 skeleton containers in grid
- * showLoading(false); // Clears all skeleton containers
- */
+// Shows/hides loading skeleton animation during API requests
 const showLoading = (show) => {
     switch (state.galleryType) {
         case 'grid':
@@ -94,31 +42,7 @@ const showLoading = (show) => {
 }
 
 
-/**
- * Loads the appropriate pages from API based on gallery mode and user selection
- * @async
- * @param {number} [pageClicked] - The page number clicked by user (optional for initialization)
- * @description Main page loading function that handles both initialization and user navigation.
- * Manages different loading strategies for grid mode (page pairs) and carousel mode (single pages).
- * Provides loading animation feedback and handles sequential API calls for optimal performance.
- * 
- * Loading Strategies:
- * - Initialization: Loads pages 1 and 2 regardless of gallery mode
- * - Grid mode: Loads pairs of consecutive pages (e.g., pages 3,4 for grid page 2)  
- * - Carousel mode: Loads single pages as requested
- * - Loading feedback: Shows skeleton animation during all API operations
- * 
- * Features:
- * - Initialization detection: special handling when no pages are loaded
- * - Gallery-mode aware loading: different strategies for grid vs carousel
- * - Sequential API calls: prevents overwhelming the server
- * - Loading animation: visual feedback during all operations
- * - Error handling: proper cleanup if API calls fail
- * 
- * @example
- * await loadPages();    // Initial load (pages 1 and 2)
- * await loadPages(2);   // Grid: loads pages 3,4 | Carousel: loads page 2
- */
+// Loads pages from API based on gallery mode and user selection
 export const loadPages = async (pageClicked) => {
     // Initial application load: always load first two pages
     if (state.loadedPages.length === 0) {
@@ -151,41 +75,7 @@ export const loadPages = async (pageClicked) => {
     }
 }
 
-/**
- * Renders current page images to the appropriate gallery container
- * @description Core gallery rendering function that displays images based on current page
- * and gallery mode. Handles DOM cleanup, data retrieval, and image creation for both
- * grid and carousel display modes. Uses centralized state to determine what to show.
- * 
- * Gallery Mode Behaviors:
- * - Grid mode: Shows page pairs (e.g., pages 3,4 for grid page 2) in grid container
- * - Carousel mode: Shows single page images in carousel container
- * - Container cleanup: removes existing images before adding new ones
- * - State-driven: uses state.currentPage and state.galleryType for rendering decisions
- * 
- * Data Flow:
- * 1. Clears existing images from appropriate container
- * 2. Retrieves page data from state.imagesData based on gallery mode
- * 3. Processes data (flattens arrays for grid mode)
- * 4. Creates and appends image elements using createImage()
- * 
- * Features:
- * - Mode-aware rendering: different data retrieval for grid vs carousel
- * - DOM optimization: efficient container clearing before rendering
- * - Data processing: handles array flattening for multi-page grid display
- * - State integration: fully integrated with centralized application state
- * - Error prevention: handles undefined page data gracefully
- * 
- * Dependencies:
- * - state.galleryType: current display mode from centralized state
- * - state.currentPage: current page number from centralized state
- * - state.imagesData: loaded image data from API calls
- * - createImage(): from main.js for individual image element creation
- * - getPair(): local helper for calculating page pairs in grid mode
- * 
- * @example
- * loadGallery();  // Renders current page based on state.currentPage and state.galleryType
- */
+// Renders current page images to the appropriate gallery container
 export const loadGallery = () => {
     let currentImages;
     let pageData;
