@@ -358,14 +358,17 @@ nav:not([hidden]) {
   box-shadow: none;
 }
 
-.navigation-element:disabled::after {
+.navigation-element:disabled .timer-AI::before {
   content: "";
+  display: inline-block;
   width: 16px;
   height: 16px;
   border: 2px solid currentColor;
   border-color: currentColor transparent currentColor transparent;
   border-radius: 50%;
   animation: spin .6s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.5em;
 }
 
 /* spinner keyframes */

@@ -39,7 +39,7 @@ export const ellipsisAnimation = () => {
     count = (count + 1) % 4;
     dotsAI.textContent = ".".repeat(count);
     timerNow = Math.floor((Date.now() - timerStart) / 1000);
-    timerAI.textContent = `${timerNow}s elapsed`;
+    timerAI.textContent = `${timerNow}s`;
   }, 500);
 };
 
@@ -326,9 +326,9 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
       console.log('🚨 Error: Some metadata has been lost 🚨');
     } else {
       // Success: update application data and UI
-      console.log(metadata);
+      //console.log(metadata);
       updateImagesData(metadata);
-      console.log(state.imagesData);
+      //console.log(state.imagesData);
       updateImagesDOM();
       // updateCategoriesDOM();
     }
@@ -393,10 +393,7 @@ AIContainer.appendChild(dotsAI);
  * @description Shows real-time elapsed time during AI metadata generation
  * to provide users with feedback on processing duration
  */
-export const timerAI = document.createElement("p");
-timerAI.classList.add("timer-AI");
-timerAI.textContent = "";
-AIContainer.appendChild(timerAI);
+export const timerAI = document.querySelector('.timer-AI');
 
 
 
