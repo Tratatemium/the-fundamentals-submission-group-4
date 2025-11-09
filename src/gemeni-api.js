@@ -155,54 +155,64 @@ const updateImagesData = (newMetadata) => {
  */
 const fetchImagesFromUrl = async () => {
   // Filter images that need metadata generation
+
   const imagesToFetch = state.imagesData.filter(
-    (oneImageData) => !oneImageData.category
+    (page) => page.data.some(image => !image.category)
   );
-  const imageUrls = imagesToFetch.map((oneImageData) => oneImageData.image_url);
+  
+  // const imageUrls = imagesToFetch.map((oneImageData) => oneImageData.image_url);
+
+  const imageUrls = imagesToFetch.map(pageData => ({
+    ...pageData,
+    data: pageData.data.map(image => image.image_url)
+  }));
+
   const processedImages = [];
 
-  // Process each image URL
-  for (const url of imageUrls) {
-    try {
-      // Fetch the image from URL
-      const response = await fetch(url);
+  for (const page of imageUrls) {
+    processedImages.push({page: page.page, data: []});
+    // Process each image URL
+    for (const url of page.data) {
+      try {
+        // Fetch the image from URL
+        const response = await fetch(url);
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch image: Status ${response.status} ${response.statusText}`
-        );
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch image: Status ${response.status} ${response.statusText}`
+          );
+        }
+
+        // Validate MIME type to ensure it's an image
+        const mimeType = response.headers.get("content-type");
+        if (!mimeType || !mimeType.startsWith("image/")) {
+          throw new Error(
+            `Invalid content type: ${
+              mimeType || "none"
+            }. URL must point to an image.`
+          );
+        }
+
+        // Convert image to ArrayBuffer
+        const arrayBuffer = await response.arrayBuffer();
+
+        // Convert ArrayBuffer to Base64 string for AI processing
+        const uint8Array = new Uint8Array(arrayBuffer);
+        let byteString = "";
+        uint8Array.forEach((byte) => {
+          byteString += String.fromCharCode(byte);
+        });
+
+        // Encode to Base64
+        const base64Data = btoa(byteString);
+
+        processedImages[processedImages.length - 1].data.push({ mimeType, base64Data });
+      } catch (error) {
+        console.error(`Error processing image ${url}:`, error);
+        // Continue processing other images even if one fails
       }
-
-      // Validate MIME type to ensure it's an image
-      const mimeType = response.headers.get("content-type");
-      if (!mimeType || !mimeType.startsWith("image/")) {
-        throw new Error(
-          `Invalid content type: ${
-            mimeType || "none"
-          }. URL must point to an image.`
-        );
-      }
-
-      // Convert image to ArrayBuffer
-      const arrayBuffer = await response.arrayBuffer();
-
-      // Convert ArrayBuffer to Base64 string for AI processing
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let byteString = "";
-      uint8Array.forEach((byte) => {
-        byteString += String.fromCharCode(byte);
-      });
-
-      // Encode to Base64
-      const base64Data = btoa(byteString);
-
-      processedImages.push({ mimeType, base64Data });
-    } catch (error) {
-      console.error(`Error processing image ${url}:`, error);
-      // Continue processing other images even if one fails
     }
   }
-
   return processedImages;
 };
 

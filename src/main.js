@@ -142,6 +142,7 @@ export const createImage = (imageData) => {
   // Create main container for image and text overlay
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("image-container");
+  imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
   imageContainer.addEventListener("click", () =>
@@ -373,7 +374,8 @@ viewToggleButton.addEventListener("click", async () => {
 const init = async () => {
   await loadPages(); // Loads pages 1 and 2 initially with loading animation
   loadGallery(); // Renders loaded images in the active gallery mode
-  updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
+  // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
+  console.log(state);
 };
 
 init();
