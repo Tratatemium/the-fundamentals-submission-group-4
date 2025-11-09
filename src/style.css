@@ -597,14 +597,6 @@ main  {
   box-shadow: 0 4px 8px rgba(78, 7, 7, 0.3);
 }
 
-.loading-img { /* VLAD: I'll need it for later */
-  display: block;
-  width: 16em;
-  height: 16em;
-  border-radius: 4px;
-  background-color: var(--secondary-color);
-}
-
 /* Styles for hover container, including icons and hover effect */
 .hover-container {
   position: absolute; /* Uses image-container as its reference point*/
@@ -653,6 +645,21 @@ main  {
   margin: 0;
   position: relative;
   top: 1px;
+}
+
+.loading-img { /* VLAD: I'll need it for later */
+  display: flex;
+  width: 16em;
+  height: 16em;
+  border-radius: 4px;
+  background-color: var(--secondary-color);
+}
+
+.loading-img svg {
+  color: var(--primary-color);
+  width: 9em;
+  height: 9em;
+  margin: auto;
 }
 
 /* #endregion APP (GALERY) */
