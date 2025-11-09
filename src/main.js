@@ -177,11 +177,13 @@ export const createImage = (imageData) => {
   // Create category display element
   const imageCategory = document.createElement("p");
   imageCategory.classList.add("image-category");
+  imageCategory.textContent = imageData.category;
   textContainer.appendChild(imageCategory);
 
   // Create author display element
   const imageAuthor = document.createElement("p");
   imageAuthor.classList.add("image-author");
+  imageAuthor.textContent = imageData.authorName;
   textContainer.appendChild(imageAuthor);
 
   const iconContainer = document.createElement("div");
@@ -382,7 +384,7 @@ const init = async () => {
   await loadPages(); // Loads pages 1 and 2 initially with loading animation
   loadGallery(); // Renders loaded images in the active gallery mode
   // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
-  console.log(state);
+  // console.log(state);
 };
 
 init();

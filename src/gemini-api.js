@@ -466,11 +466,6 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
 
 const AIContainer = document.querySelector('.AI-container');
 
-/**
- * Button to load more images from the API
- * @type {HTMLButtonElement}
- */
-const buttonLoadImages = document.querySelector(".button-load-images");
 
 /**
  * Button to generate AI metadata for loaded images
