@@ -22,7 +22,7 @@
  * - Centralized state management with cross-module data sharing
  *
  * Dependencies:
- * - ./gemeni-api.js - Modular Gemini AI integration for metadata generation
+ * - ./gemini-api.js - Modular Gemini AI integration for metadata generation
  * - ./api.js - External API integration for image fetching with loading animations
  * - ./image-categories.js - Category filtering and UI management
  * - ./pagination.js - Pagination logic, page navigation, and gallery management
@@ -31,7 +31,7 @@
  *
  * Five-Module Architecture:
  * - main.js (this file): Core application logic, UI management, state, and user interactions
- * - gemeni-api.js: Separated Gemini AI functionality, API calls, and utilities
+ * - gemini-api.js: Separated Gemini AI functionality, API calls, and utilities
  * - api.js: External image API integration with loading animations and error handling
  * - image-categories.js: Category filtering logic and button management
  * - pagination.js: Pagination system, page navigation, gallery switching, and loading states
@@ -41,12 +41,12 @@
  * @version 2.0.0 - Five-module architecture with advanced pagination and dual gallery modes
  */
 
-// Import AI functionality from modular gemeni-api.js file
+// Import AI functionality from modular gemini-api.js file
 // This module handles all Gemini AI integration, API calls, timer functionality, and utilities
-import { getImageMetadata } from "./gemeni-api.js";
+import { getImageMetadata } from "./gemini-api.js";
 
 // Import DOM elements for user feedback and loading animations
-import { textAI } from "./gemeni-api.js";
+import { textAI } from "./gemini-api.js";
 
 // Import category management functionality from modular image-categories.js file
 // This module handles category filtering, button generation, and display logic
@@ -399,7 +399,7 @@ init();
  *
  * Key Features Implemented:
  * ✅ Dynamic image loading with pagination
- * ✅ Modular Google Gemini AI integration (via gemeni-api.js)
+ * ✅ Modular Google Gemini AI integration (via gemini-api.js)
  * ✅ Modular external API integration (via api.js)
  * ✅ Modular category management system (via image-categories.js)
  * ✅ Interactive UI with hover overlays and social elements
@@ -428,7 +428,7 @@ init();
  *    - DOM manipulation and user interactions
  *    - Event listeners and application initialization
  *
- * 2. gemeni-api.js:
+ * 2. gemini-api.js:
  *    - Dedicated Gemini AI functionality and API calls
  *    - Loading animations and timer management
  *    - AI response processing and error handling
@@ -447,7 +447,7 @@ init();
  *    - Active category state handling
  *
  * Module Dependencies:
- * - ./gemeni-api.js: Handles all Gemini AI functionality, animations, and utilities
+ * - ./gemini-api.js: Handles all Gemini AI functionality, animations, and utilities
  * - ./api.js: Handles external image API calls and pagination
  * - ./image-categories.js: Handles category filtering and button management
  * - ./style.css: Comprehensive styling for gallery, animations, and responsive design
@@ -462,11 +462,11 @@ init();
  * - Event listeners: User interaction handling
  *
  * External Module Functions:
- * - getImageMetadata() (gemeni-api.js): AI metadata generation using Gemini 2.5 Pro
+ * - getImageMetadata() (gemini-api.js): AI metadata generation using Gemini 2.5 Pro
  * - fetchImages() (api.js): External API integration for image loading
  * - displayByCategoriesDOM() (image-categories.js): Category-based image filtering
  * - updateCategoriesDOM() (image-categories.js): Dynamic category button management
- * - Animation utilities (gemeni-api.js): Timer and loading feedback systems
+ * - Animation utilities (gemini-api.js): Timer and loading feedback systems
  *
  * Modular Architecture Benefits:
  * ✅ Clear separation of concerns (UI, AI, API, Category logic)

@@ -29,7 +29,7 @@
  * Module Architecture:
  * - Imports: state object from main.js for centralized state management
  * - Exports: displayByCategoriesDOM, updateCategoriesDOM functions
- * - Integration: Works seamlessly with main.js UI logic and gemeni-api.js AI processing
+ * - Integration: Works seamlessly with main.js UI logic and gemini-api.js AI processing
  *
  * @author Group 4
  * @version 1.6.0 - Specialized category management in four-module architecture
@@ -261,7 +261,7 @@ export const updateCategoriesDOM = () => {
  *
  * INTEGRATION WITH OTHER MODULES:
  * - main.js: Provides state management and calls updateCategoriesDOM()
- * - gemeni-api.js: Triggers category updates after AI metadata generation
+ * - gemini-api.js: Triggers category updates after AI metadata generation
  * - api.js: Works in parallel for image loading, categories update automatically
  * - style.css: Provides styling for category buttons and image transitions
  *

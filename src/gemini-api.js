@@ -525,11 +525,11 @@ AIContainer.appendChild(timerAI);
  * AI Metadata Button Event Listener
  * @description Triggers AI metadata generation for images that don't have metadata yet.
  * Includes button state management to prevent multiple simultaneous requests.
- * The getImageMetadata() function is imported from the modular gemeni-api.js file.
+ * The getImageMetadata() function is imported from the modular gemini-api.js file.
  *
  * Features:
  * - Disables button during processing to prevent duplicate requests
- * - Calls modular AI functionality from separated gemeni-api.js module
+ * - Calls modular AI functionality from separated gemini-api.js module
  * - Async handling with proper error management
  * - Re-enables button after completion (success or failure)
  * - Integrates with timer and loading animation systems

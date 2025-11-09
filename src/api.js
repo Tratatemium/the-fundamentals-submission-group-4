@@ -31,7 +31,7 @@
  * Module Architecture:
  * - Imports: state from main.js, createImage from main.js, createPagesNavigation from pagination.js
  * - Exports: loadPageFromAPI function for external use
- * - Integration: Works seamlessly with main.js UI logic, pagination.js controls, and gemeni-api.js AI functionality
+ * - Integration: Works seamlessly with main.js UI logic, pagination.js controls, and gemini-api.js AI functionality
  *
  * @author Group 4
  * @version 2.0.0 - Five-module architecture with loading animations and advanced pagination
@@ -181,7 +181,7 @@ export const loadPageFromAPI = async (page) => {
  *
  * INTEGRATION WITH OTHER MODULES:
  * - main.js: Provides state management, UI functions, and application logic
- * - gemeni-api.js: Works in parallel for AI metadata generation
+ * - gemini-api.js: Works in parallel for AI metadata generation
  * - style.css: Styles the generated DOM elements and loading states
  *
  * ERROR HANDLING STRATEGY:
