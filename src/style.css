@@ -600,6 +600,7 @@ main  {
   background-color: var(--secondary-color);
 }
 
+/* Styles for hover container, including icons and hover effect */
 .hover-container {
   position: absolute; /* Uses image-container as its reference point*/
   bottom: 0; 
@@ -613,7 +614,13 @@ main  {
   justify-content: flex-end;
   padding: 0.5rem; 
   box-sizing: border-box;
-  
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.image-container:hover .hover-container {
+    opacity: 1;
+    pointer-events: auto;
 }
 .icon-container {
   display: flex;
@@ -641,7 +648,6 @@ main  {
   margin: 0;
   position: relative;
   top: 1px;
-
 }
 
 /* #endregion APP (GALERY) */

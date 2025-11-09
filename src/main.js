@@ -3,7 +3,7 @@
  * ========================================================
  *
  * This application creates an interactive image gallery with dual-view modes (grid/carousel)
- * that fetches images from an API using sophisticated pagination system and uses Google's Gemini AI 
+ * that fetches images from an API using sophisticated pagination system and uses Google's Gemini AI
  * to generate metadata (category, description, author) for each image.
  * The application features a fully modular architecture with separated concerns across multiple specialized modules.
  *
@@ -11,7 +11,7 @@
  * - Advanced pagination system with page-based loading and navigation
  * - Dual gallery modes: Grid view and Carousel view with seamless switching
  * - Loading animations and skeleton placeholders during API requests
- * - AI-powered metadata generation using modular Gemini API integration  
+ * - AI-powered metadata generation using modular Gemini API integration
  * - Interactive UI with hover overlays showing metadata and social stats
  * - Real-time processing timer with animated loading indicators
  * - Social media-style elements (hearts, comments) with dynamic counts
@@ -58,7 +58,7 @@ import {
 // Import pagination system functionality from modular pagination.js file
 // This module handles page navigation, gallery switching, loading states, and pagination UI
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
-import { showLightbox } from './lightbox.js';
+import { showLightbox } from "./lightbox.js";
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -82,13 +82,13 @@ import { showLightbox } from './lightbox.js';
  * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
  */
 // for RAHEEL : All images data stored here as it loades
-export const state = {            
-  imagesData: [],                 // Page-structured image data: [{page: 1, data: [...]}, {page: 2, data: [...]}]
-  totalAmountOfPages: 0,          // Total pages available from API for pagination controls
-  galleryType: "grid",            // Gallery display mode: "grid" (2 pages per view) or "carousel" (1 page per view)
-  currentPage: 1,                 // Current page in pagination system
-  loadedPages: [],                // Tracks which pages have been fetched to avoid duplicate API calls
-  activeCategory: "All",          // Category filter state for image display filtering
+export const state = {
+  imagesData: [], // Page-structured image data: [{page: 1, data: [...]}, {page: 2, data: [...]}]
+  totalAmountOfPages: 0, // Total pages available from API for pagination controls
+  galleryType: "grid", // Gallery display mode: "grid" (2 pages per view) or "carousel" (1 page per view)
+  currentPage: 1, // Current page in pagination system
+  loadedPages: [], // Tracks which pages have been fetched to avoid duplicate API calls
+  activeCategory: "All", // Category filter state for image display filtering
 };
 
 /* #endregion VARIABLES DECLARATION */
@@ -122,20 +122,19 @@ export const state = {
  *
  * @example
  * createImage({
- *   image_url: "https://example.com/image.jpg", 
+ *   image_url: "https://example.com/image.jpg",
  *   likes_count: 42,
  *   comments: [{}, {}, {}] // 3 comments
  * });
  */
 export const createImage = (imageData) => {
-
   let gallery;
   switch (state.galleryType) {
-    case 'grid':
-      gallery = document.querySelector(".gallery-grid")
+    case "grid":
+      gallery = document.querySelector(".gallery-grid");
       break;
-    case 'carousel':
-      gallery = document.querySelector(".gallery-carousel")
+    case "carousel":
+      gallery = document.querySelector(".gallery-carousel");
       break;
     default:
   }
@@ -223,31 +222,15 @@ export const createImage = (imageData) => {
   iconContainer.appendChild(commentGroup);
   // Update category filtering after adding new image
   displayByCategoriesDOM();
-
-  // Show/hide hoverContainer dynamically on hover
-
-  hoverContainer.style.opacity = "0";
-  hoverContainer.style.transition = "opacity 0.3s";
-  hoverContainer.style.pointerEvents = "none";
-
-  imageContainer.addEventListener("mouseenter", () => {
-    hoverContainer.style.opacity = "1";
-    hoverContainer.style.pointerEvents = "auto";
-  });
-
-  imageContainer.addEventListener("mouseleave", () => {
-    hoverContainer.style.opacity = "0";
-    hoverContainer.style.pointerEvents = "none";
-  });
 };
 
 /**
  * Updates the DOM with AI-generated metadata for all loaded images
  * @description Finds all category and author containers and populates them
- * with data from the state.imagesData array structure. Also adds category CSS classes 
+ * with data from the state.imagesData array structure. Also adds category CSS classes
  * for filtering functionality. This function handles the page-based data structure
  * and flattens it for DOM manipulation. Called after AI metadata generation completes.
- * 
+ *
  * Features:
  * - Handles page-structured data from pagination system
  * - Adds category-based CSS classes for filtering functionality
@@ -302,7 +285,6 @@ export const updateImagesDOM = () => {
  */
 const galleryGrid = document.querySelector(".gallery-grid");
 
-
 /* ================================================================================================= */
 /* #region EVENT LISTENERS                                                                           */
 /* ================================================================================================= */
@@ -316,7 +298,7 @@ const galleryGrid = document.querySelector(".gallery-grid");
  * maintaining proper pagination state and loading appropriate content.
  */
 
-const viewToggleButton = document.getElementById('view-toggle');
+const viewToggleButton = document.getElementById("view-toggle");
 
 /**
  * Converts page numbers between gallery modes due to different pagination systems
@@ -327,40 +309,39 @@ const viewToggleButton = document.getElementById('view-toggle');
  */
 const transmuteCurrentPage = (n) => {
   switch (state.galleryType) {
-    case 'grid':
-      return 2 * n - 1;  // Convert grid page to carousel: grid page 1 becomes carousel page 1
-    case 'carousel':
-      return Math.ceil(n / 2);  // Convert carousel page to grid: carousel pages 1-2 become grid page 1
+    case "grid":
+      return 2 * n - 1; // Convert grid page to carousel: grid page 1 becomes carousel page 1
+    case "carousel":
+      return Math.ceil(n / 2); // Convert carousel page to grid: carousel pages 1-2 become grid page 1
     default:
       return n;
   }
-}
+};
 
-viewToggleButton.addEventListener('click', async () => {
-
-  const galleryGrid = document.querySelector('.gallery-grid');
-  const galleryCarousel = document.querySelector('.gallery-carousel');
+viewToggleButton.addEventListener("click", async () => {
+  const galleryGrid = document.querySelector(".gallery-grid");
+  const galleryCarousel = document.querySelector(".gallery-carousel");
 
   switch (state.galleryType) {
-    case 'grid':
-      viewToggleButton.textContent = 'Switch to grid';
+    case "grid":
+      viewToggleButton.textContent = "Switch to grid";
       state.currentPage = transmuteCurrentPage(state.currentPage);
-      state.galleryType = 'carousel';
+      state.galleryType = "carousel";
       await loadPages(state.currentPage);
       loadGallery();
-      galleryGrid.classList.add('hidden');
-      galleryCarousel.classList.remove('hidden');
-      createPagesNavigation()
+      galleryGrid.classList.add("hidden");
+      galleryCarousel.classList.remove("hidden");
+      createPagesNavigation();
       break;
-    case 'carousel':
-      viewToggleButton.textContent = 'Switch to carousel';
+    case "carousel":
+      viewToggleButton.textContent = "Switch to carousel";
       state.currentPage = transmuteCurrentPage(state.currentPage);
-      state.galleryType = 'grid';
+      state.galleryType = "grid";
       await loadPages(state.currentPage);
       loadGallery();
-      galleryCarousel.classList.add('hidden');
-      galleryGrid.classList.remove('hidden');
-      createPagesNavigation()
+      galleryCarousel.classList.add("hidden");
+      galleryGrid.classList.remove("hidden");
+      createPagesNavigation();
       break;
     default:
   }
@@ -379,7 +360,7 @@ viewToggleButton.addEventListener('click', async () => {
  * Initialize the application by loading the first set of pages using the pagination system
  * and setting up the category filtering interface. This provides immediate content for users
  * when the page loads and establishes both the gallery display and filtering controls.
- * 
+ *
  * The initialization process:
  * 1. Loads initial pages (1 and 2) through the pagination system
  * 2. Renders the loaded images in the default grid gallery
@@ -389,8 +370,8 @@ viewToggleButton.addEventListener('click', async () => {
 
 // Load initial set of pages and render gallery on application start
 const init = async () => {
-  await loadPages();  // Loads pages 1 and 2 initially with loading animation
-  loadGallery();      // Renders loaded images in the active gallery mode
+  await loadPages(); // Loads pages 1 and 2 initially with loading animation
+  loadGallery(); // Renders loaded images in the active gallery mode
 };
 
 init();
