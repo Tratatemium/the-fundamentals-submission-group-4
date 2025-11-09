@@ -145,7 +145,7 @@ export const createImage = (imageData) => {
   imageContainer.classList.add("image-container");
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener('click', () => showLightbox(imageData.image_url));
+  imageContainer.addEventListener('click', () => showLightbox(imageData)); // send all imageData to showLightbox
 
 
   // Create and configure the image element

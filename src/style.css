@@ -1057,10 +1057,14 @@ main {
 /* ================================================================================================= */
 
 .lightbox {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.5em;
   width: 50vw;
   height: auto; /* Height adjusts based on image aspect ratio */
   background-color: var(--secondary-color);
+  border-radius: 4px;
   position: fixed;
   top: 16em;
   left: calc(50vw -50%);
@@ -1069,24 +1073,44 @@ main {
 
 .lightbox-image {
   display: block;
- width: 50%; /* Image takes up full width of lightbox */
- height: auto; /* Height adjusts based on image aspect ratio */
- margin: 1.5em; 
+  width: 50%; /* Image takes up full width of lightbox */
+  height: auto; /* Height adjusts based on image aspect ratio */
+  border-radius: 4px;
+  margin: 1.5em;
+}
+
+.lightbox-comments {
+  width: 40%;
+  height: auto;
+  position: absolute;
+  top: 1.5em;
+  right: 1.5em;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+}
+
+.lightbox-user-name { 
+  color: pink;
+}
+
+.lightbox-user-comment {
+  color: green;
 }
 
 .lightbox.hidden {
   display: none;
 }
-.overlay.hidden {
-  display: none;
-}
 
-.lightbox-close-button { 
-  width: 2em;
-  height: 2em;
-  position: absolute; 
+.lightbox-close-button {
+  width: 1.5em;
+  height: 1.5em;
+  position: absolute;
   top: 0.5em;
   right: 0.5em;
+}
+
+.overlay.hidden {
+  display: none;
 }
 
 .overlay {
@@ -1097,5 +1121,6 @@ main {
   -webkit-backdrop-filter: blur(8px); /* For Safari */
   z-index: 5; /* over other content but under the lightbox */
 }
+
 
 /* #endregion LIGHTBOX */
