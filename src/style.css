@@ -1023,7 +1023,7 @@ main {
 .pages-navigation {
   display: flex;
   flex-direction: row;
-  gap: 0.5em;
+  gap: 1em;
   margin: 2em 0;
 }
 
@@ -1036,8 +1036,10 @@ main {
   cursor: pointer;
 }
 .pages-navigation button.active {
-  font-size: 1.2em;
-  font-weight: 500;
+  width: 2em;            
+  height: 2em;
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.4em;
 }
 
 .pages-navigation button:focus {
