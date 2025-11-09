@@ -370,7 +370,7 @@ CRITICAL REQUIREMENTS:
 5. Each metadata object must have: category, description, and authorName
 
 For each image, provide:
-- category: A descriptive category that classifies the image content IMPORTANT: just one category, keep it simple
+- category: A descriptive category that classifies the image content IMPORTANT: just **one** category, keep it simple
 - description: A detailed description of what you see in the image
 - authorName: A realistic random full name (first and last name)
 
