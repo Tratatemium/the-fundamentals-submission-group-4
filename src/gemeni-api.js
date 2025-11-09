@@ -237,7 +237,7 @@ const fetchImagesFromUrl = async () => {
  * @throws {Error} When image processing or AI generation fails
  */
 export const getImageMetadata = async () => {
-  let initialArrayLength;
+  let initialArraysLength = [];
   let imageParts = [];
 
   try {
@@ -259,22 +259,26 @@ export const getImageMetadata = async () => {
 
     // Process images that don't have metadata yet
     const processedImages = await fetchImagesFromUrl();
-    initialArrayLength = processedImages.length;
+    initialArraysLength = processedImages.map(page => page.data.length);
 
     // Check if there are any images to process
-    if (initialArrayLength === 0) {
+    if (initialArraysLength.length === 0) {
       textAI.textContent = "All image metadata is already loaded.";
       stopEllipsisAnimation();
       return;
     }
 
-    // Prepare image data for AI processing
-    imageParts = processedImages.map(({ mimeType, base64Data }) => ({
-      inlineData: {
-        mimeType: mimeType,
-        data: base64Data,
-      },
+    imageParts = processedImages.map(pageData => ({
+      ...pageData,
+      data: pageData.data.map(({ mimeType, base64Data }) => ({
+        inlineData: {
+          mimeType: mimeType,
+          data: base64Data,
+        },
+      }))
     }));
+
+    console.log(imageParts);
 
     // Final validation before AI request
     if (imageParts.length === 0) {
