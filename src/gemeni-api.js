@@ -121,17 +121,20 @@ export const stopEllipsisAnimation = () => {
 
 /**
  * Updates the global state.imagesData array with new metadata from AI
- * @param {Array<Object>} newMetadata - Array of metadata objects from Gemini AI
- * @description Finds images without metadata and assigns the AI-generated data
- * to them in sequence. Only updates images that don't already have category data.
+ * @param {Array<Object>} newMetadata - Array of page objects with metadata from Gemini AI
+ * @description Finds pages by page number and assigns AI-generated metadata
+ * to images in the corresponding page. Only updates images that don't already have category data.
  */
 const updateImagesData = (newMetadata) => {
   for (const page of state.imagesData) {
-    const metadataPage = newMetadata.find(metadataPage => metadataPage.page === page.page)
+    const metadataPage = newMetadata.find(metadataPage => metadataPage.page === page.page);
     if (metadataPage) {
       let i = 0;
-      for (oneImageData of page) {
-        Object.assign(oneImageData, metadataPage.data[i]);
+      for (const oneImageData of page.data) {
+        // Only update images that don't already have metadata
+        if (!oneImageData.category && i < metadataPage.data.length) {
+          Object.assign(oneImageData, metadataPage.data[i]);
+        }
         i++;
       }
     }
@@ -429,8 +432,8 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
       // Success: update application data and UI
       console.log(metadata);
       updateImagesData(metadata);
-      // console.log(state.imagesData);
-      // updateImagesDOM();
+      console.log(state.imagesData);
+      updateImagesDOM();
       // updateCategoriesDOM();
     }
   } catch (err) {

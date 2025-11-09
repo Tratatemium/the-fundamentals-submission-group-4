@@ -97,6 +97,16 @@ export const state = {
 /* #region DOM MANIPULATION                                                                          */
 /* ================================================================================================= */
 
+const findImageDataByID = (ID) => {
+  let result = null;
+  state.imagesData.forEach(page => {
+    page.data.forEach(imageData => {
+      if (imageData.id === ID) result = imageData;
+    });
+  });
+  return result;
+};
+
 /**
  * Creates and appends a complete image container with interactive elements to the appropriate gallery
  * @param {Object} imageData - The image data object containing all image information
@@ -145,7 +155,7 @@ export const createImage = (imageData) => {
   imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener("click", () =>
+  imageContainer.addEventListener("click", () => 
     showLightbox(imageData.image_url)
   );
 
@@ -252,15 +262,12 @@ export const updateImagesDOM = () => {
   );
 
   // Update each container with corresponding metadata
-  for (let i = 0; i < imageCategoryContainers.length; i++) {
-    imageCategoryContainers[i].textContent = state.imagesData[i].category;
-    imageAuthorContainers[i].textContent = state.imagesData[i].authorName;
-    // Add category class for filtering functionality
-    if (state.imagesData[i].category) {
-      imageContainers[i].classList.add(
-        `category-${state.imagesData[i].category.replaceAll(" ", "-")}`
-      );
-    }
+  for (let i = 0; i < imageContainers.length; i++) {
+    const imageData = findImageDataByID(imageContainers[i].id);
+    if (imageData) {
+      imageCategoryContainers[i].textContent = imageData.category;
+      imageAuthorContainers[i].textContent = imageData.authorName;  
+    }  
   }
 };
 
