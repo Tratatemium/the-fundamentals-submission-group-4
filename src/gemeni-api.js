@@ -126,15 +126,14 @@ export const stopEllipsisAnimation = () => {
  * to them in sequence. Only updates images that don't already have category data.
  */
 const updateImagesData = (newMetadata) => {
-  let i = 0;
-  for (const oneImageData of state.imagesData) {
-    // Skip images that already have metadata
-    if (oneImageData.category) {
-      continue;
-    } else {
-      // Assign new metadata to image without category
-      Object.assign(oneImageData, newMetadata[i]);
-      i++;
+  for (const page of state.imagesData) {
+    const metadataPage = newMetadata.find(metadataPage => metadataPage.page === page.page)
+    if (metadataPage) {
+      let i = 0;
+      for (oneImageData of page) {
+        Object.assign(oneImageData, metadataPage.data[i]);
+        i++;
+      }
     }
   }
 };
@@ -294,8 +293,6 @@ export const getImageMetadata = async () => {
       for (let imageData of page.data) flattenedImageParts.push(imageData);
     }
 
-    console.log(flattenedImageParts);
-
     // Final validation before AI request
     if (imageParts.length === 0) {
       throw new Error("No images were successfully processed");
@@ -431,7 +428,7 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
     } else {
       // Success: update application data and UI
       console.log(metadata);
-      // updateImagesData(metadata);
+      updateImagesData(metadata);
       // console.log(state.imagesData);
       // updateImagesDOM();
       // updateCategoriesDOM();
