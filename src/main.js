@@ -14,7 +14,7 @@
  */
 
 // Module imports
-import { getImageMetadata, textAI } from "./gemini-api.js";
+import { getImageMetadata } from "./gemini-api.js";
 import { displayByCategoriesDOM, updateCategoriesDOM } from "./image-categories.js";
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 import { showLightbox } from "./lightbox.js";

@@ -932,48 +932,12 @@ main {
   border-color: #3a0505;
 }
 
-/* #endregion BUTTON STYLES */
-
-/* ================================================================================================= */
-/* #region STATUS DISPLAY ELEMENTS                                                                   */
-/* ================================================================================================= */
-
-/**
- * UI STATUS COMPONENTS
- * ===================
- * 
- * Styling for user feedback elements including status text, loading animations,
- * and elapsed time display during AI processing operations.
- */
-
-.AI-container{
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  justify-content:center;
-  align-items:center;
-  margin-bottom: 2em;
-  padding-top: 2em;
-}
-
-/* Status text display for user feedback */
-.text-AI {
-  margin: auto 0 auto 3rem;
-}
-
-/* Animated loading dots with fixed width for consistent layout */
-.dots-AI {
-  margin: auto 0 auto 0;
-  width: 1rem; /* Fixed width prevents layout shift during animation */
-}
-
 /* Elapsed time timer display during AI processing */
 .timer-AI {
   margin: auto auto auto 0;
   width: fit-content; /* Adjusts to content width */
 }
 
-/* #endregion STATUS DISPLAY ELEMENTS */
 
 /* ================================================================================================= */
 /* #region IMAGE CONTAINER & OVERLAY SYSTEM                                                         */

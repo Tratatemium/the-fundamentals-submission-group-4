@@ -45,7 +45,7 @@ export const loadPageFromAPI = async (page) => {
 
   } catch (error) {
     console.error("Failed to fetch images:", error);
-    // TODO: Show user-friendly error message in UI
+    alert("🚨 Failed to fetch images:", error);
   }
 };
 

@@ -36,8 +36,8 @@ export const ellipsisAnimation = () => {
   const timerStart = Date.now();
   let timerNow;
   intervalId = setInterval(() => {
-    count = (count + 1) % 4;
-    dotsAI.textContent = ".".repeat(count);
+    // count = (count + 1) % 4;
+    // dotsAI.textContent = ".".repeat(count);
     timerNow = Math.floor((Date.now() - timerStart) / 1000);
     timerAI.textContent = `${timerNow}s`;
   }, 500);
@@ -47,7 +47,7 @@ export const ellipsisAnimation = () => {
 export const stopEllipsisAnimation = () => {
   clearInterval(intervalId);
   intervalId = null;
-  dotsAI.textContent = "";
+  // dotsAI.textContent = "";
   timerAI.textContent = "";
 };
 
@@ -148,12 +148,11 @@ export const getImageMetadata = async () => {
     }   
   } catch (err) {
     console.error("Error initialising google AI libraries:", err.message);
-    textAI.textContent = "🚨 Error initialising google AI libraries 🚨";
+    alert("🚨 Error initialising google AI libraries:", err.message);
   }
 
   try {
-    // Start loading animation and user feedback
-    textAI.textContent = "Fetching multiple images from API";
+    // Start loading animation
     ellipsisAnimation();
 
     // Process images that don't have metadata yet
@@ -162,7 +161,6 @@ export const getImageMetadata = async () => {
 
     // Check if there are any images to process
     if (initialArraysLength.length === 0) {
-      textAI.textContent = "All image metadata is already loaded.";
       stopEllipsisAnimation();
       return;
     }
@@ -198,7 +196,7 @@ export const getImageMetadata = async () => {
     }
   } catch (err) {
     console.error("Error fetching images:", err.message);
-    textAI.textContent = "🚨 Error fetching images 🚨";
+    alert("🚨 Error fetching images:", err.message);
     stopEllipsisAnimation();
     return;
   }
@@ -300,8 +298,7 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
   ];
 
   try {
-    // Update user on AI processing status
-    textAI.textContent = "Generating metadata with Gemini for multiple images";
+
 
     // Send request to Gemini AI
     const response = await ai.models.generateContent({
@@ -322,8 +319,8 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
       initialArraysLength.every((len, index) => len === currentArraysLength[index]);
     
     if (!arraysMatch) {
-      textAI.textContent = "🚨 Error: Some metadata has been lost 🚨";
-      console.log('🚨 Error: Some metadata has been lost 🚨');
+      console.log("🚨 Error: Some metadata has been lost!");
+      alert("🚨 Error: Some metadata has been lost!");
     } else {
       // Success: update application data and UI
       //console.log(metadata);
@@ -334,13 +331,13 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
     }
   } catch (err) {
     console.error("Error generating content:", err);
-    textAI.textContent = "🚨 Error generating content 🚨";
+    alert("🚨 Error generating content:", err);
     stopEllipsisAnimation();
     return;
   }
 
   // Success message and cleanup
-  textAI.textContent = "🎉 Metadata generation: success! 🎉";
+  alert("🎉 Metadata generation: success! 🎉");
   stopEllipsisAnimation();
 };
 
@@ -362,37 +359,8 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
 
 const AIContainer = document.querySelector('.AI-container');
 
-
-/**
- * Button to generate AI metadata for loaded images
- * @type {HTMLButtonElement}
- */
 const buttonAI = document.querySelector(".button-AI");
 
-/**
- * Text element for displaying status messages to the user
- * @type {HTMLParagraphElement}
- */
-export const textAI = document.createElement("p");
-textAI.classList.add("text-AI");
-textAI.textContent = "";
-AIContainer.appendChild(textAI);
-
-/**
- * Element for animated loading dots
- * @type {HTMLParagraphElement}
- */
-export const dotsAI = document.createElement("p");
-dotsAI.classList.add("dots-AI");
-dotsAI.textContent = "";
-AIContainer.appendChild(dotsAI);
-
-/**
- * Element for displaying elapsed processing time
- * @type {HTMLParagraphElement}
- * @description Shows real-time elapsed time during AI metadata generation
- * to provide users with feedback on processing duration
- */
 export const timerAI = document.querySelector('.timer-AI');
 
 
