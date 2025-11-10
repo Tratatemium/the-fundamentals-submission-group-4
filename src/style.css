@@ -625,6 +625,12 @@ main  {
   gap: 0.3rem;
 }
 
+.button-like {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+}
+
 .like-number, .comment-number {  
   font-family: var(--font-primary);
   color:#F5F4F1;

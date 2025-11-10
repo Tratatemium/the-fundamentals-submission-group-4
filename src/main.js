@@ -1,10 +1,10 @@
 /**
  * CORE APPLICATION MODULE
  * =======================
- * 
+ *
  * Central coordinator for the image gallery application with AI metadata generation.
  * Handles state management, DOM manipulation, and module coordination.
- * 
+ *
  * Features:
  * - Centralized state management for all modules
  * - Image container creation with interactive overlays
@@ -15,7 +15,10 @@
 
 // Module imports
 import { getImageMetadata } from "./gemini-api.js";
-import { displayByCategoriesDOM, updateCategoriesDOM } from "./image-categories.js";
+import {
+  displayByCategoriesDOM,
+  updateCategoriesDOM,
+} from "./image-categories.js";
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 import { showLightbox } from "./lightbox.js";
 
@@ -45,10 +48,10 @@ export const state = {
 /**
  * Find image data by unique ID across all loaded pages
  */
-const findImageDataByID = (ID) => {
+export const findImageDataByID = (ID) => {
   let result = null;
-  state.imagesData.forEach(page => {
-    page.data.forEach(imageData => {
+  state.imagesData.forEach((page) => {
+    page.data.forEach((imageData) => {
       if (imageData.id === ID) result = imageData;
     });
   });
@@ -71,8 +74,6 @@ const transmuteCurrentPage = (n) => {
 };
 
 /* #end region HELPER FUNCTIONS */
-
-
 
 /* ================================================================================================= */
 /* #region DOM MANIPULATION                                                                          */
@@ -100,7 +101,7 @@ export const createImage = (imageData) => {
   imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener("click", () => 
+  imageContainer.addEventListener("click", () =>
     showLightbox(imageData.image_url)
   );
 
@@ -141,8 +142,9 @@ export const createImage = (imageData) => {
 
   //Heart icon and like number group
 
-  const heartGroup = document.createElement("div");
+  const heartGroup = document.createElement("button");
   heartGroup.classList.add("icon-group");
+  heartGroup.classList.add("button-like");
 
   const svgIconHeart = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -203,8 +205,8 @@ export const updateImagesDOM = () => {
     const imageData = findImageDataByID(imageContainers[i].id);
     if (imageData) {
       imageCategoryContainers[i].textContent = imageData.category;
-      imageAuthorContainers[i].textContent = imageData.authorName;  
-    }  
+      imageAuthorContainers[i].textContent = imageData.authorName;
+    }
   }
 };
 
@@ -307,5 +309,3 @@ const init = async () => {
 init();
 
 /* #endregion APPLICATION INITIALIZATION */
-
-
