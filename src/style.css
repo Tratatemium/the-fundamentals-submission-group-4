@@ -120,23 +120,11 @@ textarea:not([rows]) {
 
 :root {
   --primary-color: #F5F4F1;
-  --secondary-color: #D6CEC2;
-  --accent-color: #4E0707;
+  --secondary-color: #E0DFDC;
+  --accent-color: #242424;
   --text-color: #1D1615;
   --font-primary: 'Roboto', sans-serif;
   --font-secondary: 'Playfair', serif;
-
-  /* Raheel colors */
-  --bg-color: #121212;             /* Deep black background */
-  --header-bg: rgba(26, 26, 26, 0.95); /* Semi-transparent dark header */
-  --nav-bg: rgba(45, 45, 45, 0.95); /* Navigation background */
-  --footer-bg: #0F0F0F;            /* Footer background */
-  --footer-text: #F5F5F5;          /* Footer text */
-  --link-color: #B0B0B0;           /* Muted link color */
-  --link-hover: #4ECDC4;           /* Teal hover accent */
-  --dropdown-bg: #2D2D2D;          /* Dropdown background */
-  --dropdown-link: #F5F5F5;        /* Dropdown text */
-
 }
 /*==== DARK MODE COLOR SCHEME ====*/
 
@@ -144,8 +132,8 @@ body.dark-mode {
   /* Core dark mode palette */
   --primary-color: #1A1A1A;        /* Dark background */
   --secondary-color: #2D2D2D;      /* Slightly lighter dark for cards/sections */
-  --accent-color: #E74C3C;         /* Bright red accent for contrast */
-  --text-color: #F5F5F5;           /* Light text for readability */
+  --accent-color: #E0DFDC;     /* Bright red accent for contrast */
+  --text-color: #E0DFDC;          /* Light text for readability */
   
   /* Shadow and border adjustments for dark mode */
   --shadow-color: rgba(0, 0, 0, 0.5);
@@ -162,43 +150,32 @@ body.dark-mode {
 /* ================================================================================================= */
 
 header {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
   width: 100vw;
-  z-index: 9;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 1em 2em;
-  background-color: rgba(var(--primary-color), 0.7); /* Add opacity */
-  backdrop-filter: blur(8px);
   color: var(--text-color);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, color 0.3s;
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--secondary-color);
+  z-index: 1000;
 }
 
 /* Dark mode header styling */
 body.dark-mode header {
-  background-color: var(--header-bg);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  background-color: var(--primary-color);
 }
 
 /* Brand title */
 .header-content {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary-color);                    /* Visible over background */
-  text-shadow:
-    10px 10px 40px color-mix(in srgb, var(--accent-color) 90%, white),   /* brightest glow */
-    0 0 20px color-mix(in srgb, var(--accent-color) 70%, black),        /* medium glow */
-    0 0 40px color-mix(in srgb, var(--accent-color) 100%, black);       /* deep glow */
-
+  font-weight: 500;
+  color: var(--text-color);
   margin: auto 0;
   /* font-family: 'Playfair Display', serif; */
   font-family: var(--font-secondary);
-  font-size: 2.8rem;
-  transform: rotate(2deg);
+  font-size: 2.3rem;
 }
 
 .hamburger-menu-button {
@@ -208,7 +185,6 @@ body.dark-mode header {
   height: 3em;
   margin: auto 0;
   border-radius: 8px;
-
   display: inline-grid;
   place-items: center;
   cursor: pointer;
@@ -544,9 +520,13 @@ footer {
   text-align: center;
   padding: 1em;
   margin-top: 1em;
-  background-color: var(--secondary-color);
+  background-color: color-mix(in srgb, var(--secondary-color) 60%, transparent);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
+  border-top: 1px solid var(--secondary-color);
+}
+footer p {
+  font-size: 0.8em;
 }
 
 
@@ -560,7 +540,7 @@ footer {
 
 main  {
   background-color: var(--primary-color);
-  padding-top: 10rem;
+  padding-top: 1rem;
   margin: -1em; /* Adjust margin to fill webpage background */
   transition: background-color 0.3s ease;
 }
@@ -568,8 +548,7 @@ main  {
 .gallery-grid {
   max-width: 80em; /* Sets a maximum width for the container */
   margin: 0 auto; /* Centers the container horizontally */
-  padding: 1.5em; /* Adds padding around the content */
-
+  padding: 2em; /* Adds padding around the content */
   display: flex; /* Uses Flexbox for layout */
   flex-direction: row; /* Arranges items in a row */
   flex-wrap: wrap; /* Allows items to wrap to the next line */
@@ -582,16 +561,25 @@ main  {
 .image-container {
   position: relative; /* Reference point for the container. */
   width: fit-content;
+  width: 16em; 
+  height: 16em; 
+  overflow: hidden; 
+  border-radius: 4px; 
 }
-
 .app-img {
-  width: 16em; /* Sets a fixed width for the images */
-  height: 16em; /* Sets a fixed height for the images */
-  border-radius: 4px; /* Rounds the corners of the images */
-  border: 1px var(--accent-color); /* Sets the border color using the accent color variable */
-  box-shadow: 0 4px 8px rgba(78, 7, 7, 0.3);
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  border-radius: 4px;
+  width: 16em; 
+  height: 16em; 
+  border-radius: 4px; 
+  box-shadow: 0 4px 8px rgba(78, 7, 7, 0.2);
+  transition: transform 0.5s ease;
 }
-
+.image-container:hover .app-img {
+  transform: scale(1.1);
+}
 .loading-img { /* VLAD: I'll need it for later */
   display: block;
   width: 16em;
@@ -608,12 +596,8 @@ main  {
   width: 100%;
   height: auto;
   border-radius: 4px;
-  background: linear-gradient(to top, var(--text-color), rgba(29, 22, 21, 0.3));
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  background: linear-gradient(to top, #1A1A1A, rgba(29, 22, 21, 0.3));
   padding: 0.5rem; 
-  box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -632,7 +616,7 @@ main  {
   display: block;
   width: 24px;  
   height: 24px;  
-  color: var(--primary-color);
+  color: #F5F4F1;
 }
 .icon-group {
   display: flex;
@@ -642,7 +626,7 @@ main  {
 
 .like-number, .comment-number {  
   font-family: var(--font-primary);
-  color: var(--primary-color);
+  color:#F5F4F1;
   font-size: 1rem;
   line-height: 1;
   margin: 0;
@@ -1035,21 +1019,23 @@ main {
 .pages-navigation {
   display: flex;
   flex-direction: row;
-  gap: 0.5em;
+  gap: 1em;
   margin: 2em 0;
 }
 
 .pages-navigation button {
-  color: var(--accent-color);
+  color: var(--text-color);
   border: none;
   background-color: transparent;
-  font-size: 1.2em;
-  font-weight: 500;
+  font-size: 1em;
+  font-weight: 400;
   cursor: pointer;
 }
 .pages-navigation button.active {
-  font-size: 1.7em;
-  font-weight: 700;
+  width: 2em;            
+  height: 2em;
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.4em;
 }
 
 .pages-navigation button:focus {
