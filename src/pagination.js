@@ -175,13 +175,21 @@ export const loadGallery = () => {
       currentImages = Array.from(galleryGrid.children);
       currentImages.forEach((image) => galleryGrid.removeChild(image));
 
-      // Get page pair data and flatten for display
-      const pages = getPair(state.currentPage);
-      pageData = state.imagesData
-        .filter((image) => pages.includes(image.page))
-        .map((page) => page.data);
-      pageData = pageData.flat(); // Flatten array of arrays for rendering
-      pageData.forEach((imageData) => createImage(imageData));
+      if (state.activeCategory === "All") {
+        const pages = getPair(state.currentPage); // Get page pair data and flatten for display
+        pageData = state.imagesData 
+          .filter((image) => pages.includes(image.page))
+          .map((page) => page.data);
+        pageData = pageData.flat(); // Flatten array of arrays for rendering
+        pageData.forEach((imageData) => createImage(imageData));
+      } else {
+        const start = (state.currentPage - 1) * 20;
+        let end = start + 19;
+        end = end >= state.imagesByCategory.length? state.imagesByCategory.length - 1 : end;
+        const pageToDisplay = state.imagesByCategory.slice(start, end + 1);
+        pageToDisplay.forEach((imageData) => createImage(imageData));
+      }
+
       break;
 
     case "carousel":
@@ -211,7 +219,8 @@ export const createPagesNavigation = () => {
   switch (state.galleryType) {
     case "grid":
       // Grid mode: each navigation page represents 2 API pages
-      totalPages = Math.ceil(state.totalAmountOfPages / 2);
+      if (state.activeCategory === "All") totalPages = Math.ceil(state.totalAmountOfPages / 2);
+      else totalPages = Math.ceil(state.imagesByCategory.length / 20);
       break;
     case "carousel":
       // Carousel mode: each navigation page represents 1 API page
@@ -267,7 +276,7 @@ export const createPagesNavigation = () => {
 
       // Update state and trigger data loading workflow
       state.currentPage = Number(buttonNumber);
-      await loadPages(state.currentPage);
+      if (state.activeCategory === "All") await loadPages(state.currentPage);
       loadGallery();
     }
   };
@@ -293,7 +302,7 @@ export const createPagesNavigation = () => {
       }
 
       // Trigger data loading workflow
-      await loadPages(state.currentPage);
+      if (state.activeCategory === "All") await loadPages(state.currentPage);
       loadGallery();
     }
   };
@@ -330,7 +339,7 @@ export const createPagesNavigation = () => {
     }
 
     // Trigger data loading workflow
-    await loadPages(state.currentPage);
+    if (state.activeCategory === "All") await loadPages(state.currentPage);
     loadGallery();
   };
 

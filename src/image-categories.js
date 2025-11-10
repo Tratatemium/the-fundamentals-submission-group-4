@@ -5,7 +5,7 @@
 
 // Import state management from main module
 import { state } from './main.js'
-import { loadPages, loadGallery } from './pagination.js';
+import { loadPages, loadGallery, createPagesNavigation } from './pagination.js';
 
 
 // Filters and displays images based on the currently active category
@@ -22,11 +22,17 @@ export const displayByCategoriesDOM = async () => {
       break;
     case "Uncategorised":
       filteredImages = allLoadedImages.filter(image => !image.category);
-      console.log(filteredImages);
+      state.imagesByCategory = filteredImages;
+      createPagesNavigation();
+      loadGallery();
+      console.log(state);
       break;
     default:
       filteredImages = allLoadedImages.filter(image => image.category === state.activeCategory);
-      console.log(filteredImages);
+      state.imagesByCategory = filteredImages;      
+      createPagesNavigation();
+      loadGallery();
+      console.log(state);
       break;
   }
 };
