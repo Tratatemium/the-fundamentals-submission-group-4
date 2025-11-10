@@ -38,6 +38,7 @@ export const state = {
   currentPage: 1, // Active page number
   loadedPages: [], // Cached pages to prevent duplicate API calls
   activeCategory: "All", // Current category filter
+  imagesByCategory: [],
 };
 
 /* #endregion VARIABLES DECLARATION */
@@ -190,8 +191,6 @@ export const createImage = (imageData) => {
 
   iconContainer.appendChild(heartGroup);
   iconContainer.appendChild(commentGroup);
-  // Update category filtering after adding new image
-  displayByCategoriesDOM();
 };
 
 /**
@@ -315,7 +314,6 @@ const init = async () => {
   // console.log(state);
   // console.log(state.imagesData
   //   .flatMap(page => page.data
-  //   .map(image => image.image_url)
   // ));
 };
 
