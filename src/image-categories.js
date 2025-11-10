@@ -13,10 +13,10 @@ export const displayByCategoriesDOM = async () => {
   const allLoadedImages = state.imagesData.flatMap(page => page.data);
   state.imagesByCategory = [];
   let filteredImages;
+  state.currentPage = 1;
 
   switch (state.activeCategory) {
     case "All":
-      state.currentPage = 1;
       await loadPages(state.currentPage);
       loadGallery();
       break;
