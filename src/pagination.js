@@ -1,83 +1,119 @@
-
 /**
- * PAGINATION & GALLERY MANAGEMENT MODULE
- * ======================================
- *
- * Dedicated module for pagination logic, gallery switching, and loading state management.
- * This module is part of a five-module architecture that handles all pagination-related
- * functionality, gallery mode transitions, and visual feedback during loading operations.
- *
- * Module Responsibilities:
- * - Advanced pagination system with page pair calculations for grid mode
- * - Gallery mode switching between grid (2 pages per view) and carousel (1 page per view)
- * - Loading animation management with skeleton placeholders
- * - Page navigation controls and button state management
- * - Gallery rendering and content switching
- * - User interaction handling for pagination controls
- *
- * Features:
- * - Dual pagination modes: grid (page pairs) and carousel (single pages)
- * - Loading skeleton animations during API requests
- * - Page navigation with Previous/Next and numbered buttons
- * - Active page state management and visual feedback
- * - Gallery content rendering from page-structured data
- * - Event listeners for user interaction with pagination controls
- * - Seamless integration with API loading and state management
- *
- * @author Group 4
- * @version 2.0.0 - Five-module architecture with advanced pagination and gallery management
+ * Pagination and gallery management with dual-mode support
+ * Handles grid mode (2 pages per view) and carousel mode (1 page per view)
+ * Includes loading animations and page navigation controls
  */
 
-// Import centralized state management from main module
+// Import state management, image creation, and API functions
 import { state } from './main.js'
-
-// Import UI creation function for rendering images in galleries
 import { createImage } from './main.js'
-
-// Import API function for loading page data with visual feedback
 import { loadPageFromAPI } from './api.js'
 
-/**
- * Calculates the pair of API pages needed for grid mode display
- * @param {number} n - Grid page number (user-facing page number)
- * @returns {Array<number>} - Array containing two consecutive API page numbers
- * @description Grid mode displays content from 2 API pages simultaneously.
- * This function converts a grid page number to the corresponding API page pair.
- * @example
- * getPair(1) // Returns [1, 2] - Grid page 1 shows API pages 1 and 2
- * getPair(2) // Returns [3, 4] - Grid page 2 shows API pages 3 and 4
- */
+// Calculates the pair of API pages needed for grid mode display
 export const getPair = (n) => {
-    return [n * 2 - 1, n * 2];
+  return [n * 2 - 1, n * 2];
 };
 
-/**
- * Manages loading skeleton animation display during API requests
- * @param {boolean} show - Whether to show or hide loading skeletons
- * @description Creates visual feedback during page loading by displaying skeleton
- * placeholders that match the expected layout. For grid mode, shows 20 skeleton
- * containers that mimic the image layout. Removes all content when hiding.
- * 
- * Features:
- * - Gallery-mode aware: different loading states for grid vs carousel
- * - Skeleton containers styled with .loading-img class
- * - Proper cleanup: removes all children when hiding
- * - Immediate visual feedback during API calls
- * 
- * @example
- * showLoading(true);  // Shows 20 skeleton containers in grid
- * showLoading(false); // Clears all skeleton containers
- */
+// Shows/hides loading skeleton animation during API requests
 const showLoading = (show) => {
     switch (state.galleryType) {
         case 'grid':
             const galleryGrid = document.querySelector(".gallery-grid");
             if (show) {   
                 // Clear existing content and show loading skeletons
-                Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));             
+                Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
+                
+                const gearsSVG = `
+                    <svg version="1.0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 1200 1280"
+                        preserveAspectRatio="xMidYMid meet">
+
+                    <g transform="translate(0,1280) scale(0.1,-0.1)"
+                        fill="currentColor" stroke="none">
+
+                        <path d="M8500 12793 c-203 -19 -252 -24 -264 -29 -21 -8 -67 -401 -84 -718
+                        l-7 -129 -110 -27 c-60 -15 -144 -41 -185 -58 -105 -43 -337 -154 -397 -191
+                        -28 -17 -53 -31 -55 -31 -3 0 -151 120 -329 266 -178 146 -330 268 -336 271
+                        -24 10 -229 -164 -382 -323 -147 -152 -315 -362 -303 -377 43 -57 207 -259
+                        347 -427 94 -113 175 -211 179 -218 4 -8 -9 -38 -34 -78 -67 -106 -145 -271
+                        -180 -379 -18 -55 -43 -132 -56 -172 -13 -39 -24 -78 -24 -86 0 -11 -19 -16
+                        -72 -21 -390 -36 -765 -79 -775 -90 -31 -30 -51 -432 -34 -649 12 -151 35
+                        -315 46 -325 4 -5 299 -34 757 -77 l77 -7 6 -41 c4 -23 15 -62 25 -87 10 -25
+                        34 -97 54 -161 39 -121 120 -293 187 -393 22 -33 38 -65 35 -73 -3 -7 -83
+                        -106 -179 -220 -264 -316 -348 -423 -340 -436 34 -60 195 -249 308 -363 149
+                        -150 382 -344 393 -328 4 6 99 86 212 179 113 93 250 207 305 254 55 48 107
+                        92 117 99 14 11 33 4 130 -51 134 -76 299 -144 459 -187 63 -17 121 -35 127
+                        -39 8 -5 23 -109 42 -302 30 -293 57 -524 64 -545 8 -21 310 -37 569 -31 206
+                        5 407 24 423 39 2 3 20 180 39 394 20 214 38 404 41 422 6 38 4 37 177 88 145
+                        43 338 128 455 201 47 30 90 52 96 49 6 -2 67 -52 136 -111 232 -200 522 -426
+                        537 -421 27 11 138 96 200 153 129 120 483 521 483 547 0 3 -114 141 -252 307
+                        -139 165 -263 313 -275 328 l-22 27 59 114 c79 151 156 344 189 471 l26 104
+                        185 17 c102 9 294 27 427 39 l242 23 6 26 c13 63 26 219 31 380 9 237 -17 582
+                        -44 599 -7 4 -197 24 -424 45 -227 21 -416 40 -420 42 -4 2 -12 30 -18 62 -27
+                        137 -115 364 -206 533 l-65 121 38 46 c21 26 139 171 264 323 124 152 229 281
+                        233 288 8 12 -71 113 -203 260 -146 162 -481 451 -504 434 -83 -63 -382 -305
+                        -487 -394 -75 -62 -142 -119 -151 -126 -12 -10 -54 7 -229 96 -153 76 -247
+                        116 -325 139 -60 18 -120 32 -132 32 -25 0 -25 -3 -49 255 -17 191 -64 608
+                        -68 612 -8 8 -126 23 -252 32 -130 10 -372 12 -454 4z m455 -2094 c217 -36
+                        427 -151 610 -333 179 -178 289 -374 335 -601 104 -501 -99 -998 -520 -1276
+                        -192 -127 -378 -186 -616 -196 -222 -10 -388 24 -579 117 -239 117 -419 293
+                        -546 534 -96 183 -134 343 -133 571 1 281 77 507 244 723 212 275 500 446 795
+                        471 111 9 329 4 410 -10z"/>
+                        <path d="M8500 10521 c-365 -80 -663 -359 -777 -727 -25 -83 -27 -101 -27
+                        -279 -1 -207 4 -238 65 -396 65 -169 235 -378 398 -488 90 -61 214 -117 317
+                        -143 128 -32 372 -32 490 0 140 38 241 86 354 170 320 238 473 583 430 970
+                        -27 250 -124 448 -301 617 -134 128 -274 210 -448 262 -119 35 -371 43 -501
+                        14z m382 -256 c228 -48 440 -209 537 -407 17 -35 41 -101 52 -147 18 -73 21
+                        -105 17 -235 -4 -132 -8 -161 -34 -236 -76 -227 -298 -429 -546 -496 -76 -21
+                        -290 -24 -358 -5 -147 40 -267 110 -374 217 -45 44 -96 106 -115 137 -222 373
+                        -105 862 259 1078 74 43 186 87 260 99 75 13 231 10 302 -5z"/>
+                        <path d="M4716 8448 c-75 -191 -162 -428 -251 -680 l-98 -278 -122 0 c-231 0
+                        -583 -47 -788 -106 -70 -20 -129 -35 -131 -33 -1 2 -36 51 -77 109 -140 200
+                        -570 790 -575 790 -10 0 -181 -68 -219 -88 -22 -11 -74 -36 -115 -56 -41 -19
+                        -120 -61 -175 -94 -55 -32 -148 -87 -207 -122 -105 -62 -250 -166 -342 -245
+                        l-46 -41 120 -259 c67 -143 171 -367 232 -498 l111 -238 -76 -77 c-196 -200
+                        -433 -511 -513 -675 -16 -32 -32 -57 -37 -57 -4 0 -146 24 -315 54 -329 58
+                        -773 129 -777 124 -8 -8 -103 -248 -140 -353 -51 -146 -135 -558 -170 -840
+                        l-6 -50 508 -195 508 -195 2 -95 c4 -171 23 -381 44 -489 11 -58 27 -141 35
+                        -183 8 -43 26 -116 39 -163 14 -47 25 -92 25 -100 0 -7 -93 -80 -207 -161
+                        -115 -81 -313 -224 -441 -318 -208 -152 -232 -173 -227 -193 22 -88 216 -464
+                        346 -672 74 -116 223 -330 264 -378 l30 -34 175 81 c172 81 736 339 796 365
+                        l30 14 135 -125 c169 -158 253 -221 482 -361 138 -84 182 -116 180 -130 -1
+                        -10 -22 -142 -47 -293 -44 -266 -116 -748 -116 -773 0 -7 15 -18 33 -26 225
+                        -90 426 -152 715 -220 193 -46 473 -94 483 -83 18 20 261 659 355 929 l38 113
+                        152 0 c262 0 447 26 712 102 122 34 146 38 157 27 7 -8 153 -212 325 -454 172
+                        -242 314 -442 316 -443 3 -4 91 37 361 170 112 55 243 130 345 197 145 96 331
+                        233 381 281 18 16 15 25 -81 241 -55 123 -159 350 -230 504 l-130 279 117 126
+                        c160 170 305 368 405 552 25 48 50 89 54 91 4 2 95 -11 202 -29 559 -94 883
+                        -145 894 -141 22 9 178 453 221 627 8 36 20 75 25 87 9 21 73 382 84 475 l6
+                        47 -48 21 c-62 28 -480 186 -764 290 l-228 83 0 156 c0 179 -10 281 -41 448
+                        -18 99 -67 314 -85 375 -4 12 44 51 188 154 217 155 695 511 703 525 7 11 -61
+                        171 -143 334 -116 233 -266 468 -424 667 l-77 97 -133 -58 c-184 -81 -480
+                        -217 -687 -317 l-173 -84 -134 127 c-142 134 -314 268 -429 336 -60 35 -183
+                        116 -208 137 -4 4 11 123 33 266 112 714 131 836 128 839 -2 1 -73 29 -158 62
+                        -180 70 -399 143 -431 143 -12 0 -47 9 -78 19 -80 28 -488 110 -546 111 -16 0
+                        -26 -16 -49 -72z m-181 -2623 c276 -49 564 -184 772 -363 246 -212 460 -599
+                        518 -936 22 -127 20 -347 -4 -488 -44 -255 -154 -525 -285 -698 -231 -307
+                        -631 -548 -1020 -615 -114 -19 -334 -19 -454 0 -228 37 -486 130 -646 233
+                        -356 230 -620 625 -702 1052 -24 127 -24 358 0 495 90 509 329 862 761 1126
+                        114 70 293 142 430 175 193 46 439 53 630 19z"/>
+                        <path d="M4175 5623 c-215 -25 -337 -62 -515 -154 -350 -181 -559 -444 -665
+                        -838 -50 -184 -58 -241 -59 -391 0 -142 16 -252 55 -371 24 -74 109 -259 119
+                        -259 3 0 34 -42 67 -92 148 -223 355 -389 609 -488 506 -198 1037 -94 1437
+                        280 180 168 328 436 378 682 69 343 12 664 -173 974 -199 335 -459 524 -858
+                        623 -134 33 -292 47 -395 34z m345 -374 c312 -78 532 -261 681 -565 68 -141
+                        83 -214 83 -409 0 -199 -15 -270 -90 -424 -55 -115 -112 -196 -195 -279 -290
+                        -285 -627 -368 -1024 -252 -258 75 -462 253 -595 519 -127 254 -139 573 -33
+                        816 105 236 289 424 525 535 217 102 408 119 648 59z"/>
+
+                    </g>
+                    </svg>
+                    `;
                 for (let i = 0; i < 20; i++){
                     const loadingContainer = document.createElement("div");
                     loadingContainer.classList.add("loading-img");
+                    loadingContainer.innerHTML = gearsSVG;
                     galleryGrid.appendChild(loadingContainer);
                 }                
             } else {
@@ -94,362 +130,219 @@ const showLoading = (show) => {
 }
 
 
-/**
- * Loads the appropriate pages from API based on gallery mode and user selection
- * @async
- * @param {number} [pageClicked] - The page number clicked by user (optional for initialization)
- * @description Main page loading function that handles both initialization and user navigation.
- * Manages different loading strategies for grid mode (page pairs) and carousel mode (single pages).
- * Provides loading animation feedback and handles sequential API calls for optimal performance.
- * 
- * Loading Strategies:
- * - Initialization: Loads pages 1 and 2 regardless of gallery mode
- * - Grid mode: Loads pairs of consecutive pages (e.g., pages 3,4 for grid page 2)  
- * - Carousel mode: Loads single pages as requested
- * - Loading feedback: Shows skeleton animation during all API operations
- * 
- * Features:
- * - Initialization detection: special handling when no pages are loaded
- * - Gallery-mode aware loading: different strategies for grid vs carousel
- * - Sequential API calls: prevents overwhelming the server
- * - Loading animation: visual feedback during all operations
- * - Error handling: proper cleanup if API calls fail
- * 
- * @example
- * await loadPages();    // Initial load (pages 1 and 2)
- * await loadPages(2);   // Grid: loads pages 3,4 | Carousel: loads page 2
- */
+// Loads pages from API based on gallery mode and user selection
 export const loadPages = async (pageClicked) => {
-    // Initial application load: always load first two pages
-    if (state.loadedPages.length === 0) {
-        showLoading(true);
-        await loadPageFromAPI(1);
-        await loadPageFromAPI(2);
-        showLoading(false);
-        return;
-    }
+  // Initial application load: always load first two pages
+  if (state.loadedPages.length === 0) {
+    showLoading(true);
+    await loadPageFromAPI(1);
+    await loadPageFromAPI(2);
+    showLoading(false);
+    return;
+  }
 
-    // Handle user navigation based on current gallery mode
-    switch (state.galleryType) {
-        case 'grid':
-            // Grid mode: load pairs of consecutive pages
-            const pages = getPair(pageClicked);
-            showLoading(true);
-            for (const page of pages) {
-                await loadPageFromAPI(page);  // Sequential loading for better performance
-            }
-            showLoading(false);
-            break;
-        case 'carousel':
-            // Carousel mode: load single page as requested
-            showLoading(true);
-            await loadPageFromAPI(pageClicked);
-            showLoading(false);
-            break;
-        default:
-            break;
-    }
-}
-
-/**
- * Renders current page images to the appropriate gallery container
- * @description Core gallery rendering function that displays images based on current page
- * and gallery mode. Handles DOM cleanup, data retrieval, and image creation for both
- * grid and carousel display modes. Uses centralized state to determine what to show.
- * 
- * Gallery Mode Behaviors:
- * - Grid mode: Shows page pairs (e.g., pages 3,4 for grid page 2) in grid container
- * - Carousel mode: Shows single page images in carousel container
- * - Container cleanup: removes existing images before adding new ones
- * - State-driven: uses state.currentPage and state.galleryType for rendering decisions
- * 
- * Data Flow:
- * 1. Clears existing images from appropriate container
- * 2. Retrieves page data from state.imagesData based on gallery mode
- * 3. Processes data (flattens arrays for grid mode)
- * 4. Creates and appends image elements using createImage()
- * 
- * Features:
- * - Mode-aware rendering: different data retrieval for grid vs carousel
- * - DOM optimization: efficient container clearing before rendering
- * - Data processing: handles array flattening for multi-page grid display
- * - State integration: fully integrated with centralized application state
- * - Error prevention: handles undefined page data gracefully
- * 
- * Dependencies:
- * - state.galleryType: current display mode from centralized state
- * - state.currentPage: current page number from centralized state
- * - state.imagesData: loaded image data from API calls
- * - createImage(): from main.js for individual image element creation
- * - getPair(): local helper for calculating page pairs in grid mode
- * 
- * @example
- * loadGallery();  // Renders current page based on state.currentPage and state.galleryType
- */
-export const loadGallery = () => {
-    let currentImages;
-    let pageData;
-    
-    switch (state.galleryType) {
-        case 'grid':
-            // Grid mode: display page pairs in grid container
-            const galleryGrid = document.querySelector('.gallery-grid');
-            currentImages = Array.from(galleryGrid.children);
-            currentImages.forEach(image => galleryGrid.removeChild(image));
-
-            // Get page pair data and flatten for display
-            const pages = getPair(state.currentPage);
-            pageData = state.imagesData.filter(image => pages.includes(image.page)).map(page => page.data);
-            pageData = pageData.flat();  // Flatten array of arrays for rendering
-            pageData.forEach(imageData => createImage(imageData));  
-            break;
-            
-        case 'carousel':
-            // Carousel mode: display single page in carousel container
-            const galleryCarousel = document.querySelector('.gallery-carousel');
-            currentImages = Array.from(galleryCarousel.children);
-            currentImages.forEach(image => galleryCarousel.removeChild(image));
-
-            // Get single page data for carousel display
-            pageData = state.imagesData.find(image => image.page === state.currentPage).data;
-            pageData.forEach(imageData => createImage(imageData));
-            break;
-            
-        default:
-            break;
-    }
+  // Handle user navigation based on current gallery mode
+  switch (state.galleryType) {
+    case "grid":
+      // Grid mode: load pairs of consecutive pages
+      const pages = getPair(pageClicked);
+      showLoading(true);
+      for (const page of pages) {
+        await loadPageFromAPI(page); // Sequential loading for better performance
+      }
+      showLoading(false);
+      break;
+    case "carousel":
+      // Carousel mode: load single page as requested
+      showLoading(true);
+      await loadPageFromAPI(pageClicked);
+      showLoading(false);
+      break;
+    default:
+      break;
+  }
 };
 
-/**
- * Creates and manages comprehensive pagination navigation controls
- * @description Generates interactive pagination interface with Previous/Next buttons and numbered
- * page buttons. Handles different pagination calculations for grid vs carousel modes and provides
- * complete navigation functionality with visual feedback and state management.
- * 
- * Navigation Components:
- * - Previous button: navigates to previous page with boundary checking
- * - Numbered buttons: direct page navigation with active state highlighting
- * - Next button: navigates to next page with boundary checking
- * - Dynamic generation: adapts to total page count and gallery mode
- * 
- * Pagination Logic:
- * - Grid mode: totalPages = Math.ceil(state.totalAmountOfPages / 2) (page pairs)
- * - Carousel mode: totalPages = state.totalAmountOfPages (individual pages)
- * - Active states: visual feedback for current page
- * - Boundary handling: prevents navigation beyond available pages
- * 
- * Event Handling Architecture:
- * - numberedButtonsOnClick(): handles direct page selection
- * - previousOnClick(): handles previous page navigation
- * - nextOnClick(): handles next page navigation
- * - State synchronization: updates state.currentPage and visual indicators
- * - Full workflow: each interaction triggers load → display → update cycle
- * 
- * Features:
- * - Complete navigation: Previous, numbered pages, Next buttons
- * - Mode-aware pagination: different calculations for grid vs carousel
- * - Visual feedback: active class highlighting for current page
- * - Boundary protection: prevents invalid page navigation
- * - State management: centralized state updates and synchronization
- * - Event delegation: efficient event handling for dynamic buttons
- * - DOM optimization: efficient button cleanup and recreation
- * 
- * Dependencies:
- * - state.galleryType: determines pagination calculation method
- * - state.totalAmountOfPages: total API pages available
- * - state.currentPage: current page for highlighting and navigation
- * - loadPages(): async function to load required API data
- * - loadGallery(): function to render images to DOM
- * - DOM: '.pages-navigation' container element
- * 
- * @example
- * createPagesNavigation();  // Creates full pagination interface based on current state
- */
+// Renders current page images to the appropriate gallery container
+export const loadGallery = () => {
+  let currentImages;
+  let pageData;
+
+  switch (state.galleryType) {
+    case "grid":
+      // Grid mode: display page pairs in grid container
+      const galleryGrid = document.querySelector(".gallery-grid");
+      currentImages = Array.from(galleryGrid.children);
+      currentImages.forEach((image) => galleryGrid.removeChild(image));
+
+      // Get page pair data and flatten for display
+      const pages = getPair(state.currentPage);
+      pageData = state.imagesData
+        .filter((image) => pages.includes(image.page))
+        .map((page) => page.data);
+      pageData = pageData.flat(); // Flatten array of arrays for rendering
+      pageData.forEach((imageData) => createImage(imageData));
+      break;
+
+    case "carousel":
+      // Carousel mode: display single page in carousel container
+      const galleryCarousel = document.querySelector(".gallery-carousel");
+      currentImages = Array.from(galleryCarousel.children);
+      currentImages.forEach((image) => galleryCarousel.removeChild(image));
+
+      // Get single page data for carousel display
+      pageData = state.imagesData.find(
+        (image) => image.page === state.currentPage
+      ).data;
+      pageData.forEach((imageData) => createImage(imageData));
+      break;
+
+    default:
+      break;
+  }
+};
+
+// Creates pagination navigation with Previous/Next and numbered page buttons
 export const createPagesNavigation = () => {
-    const pagesNavigationContainer = document.querySelector('.pages-navigation');
-    let totalPages;
+  const pagesNavigationContainer = document.querySelector(".pages-navigation");
+  let totalPages;
 
-    // Calculate total navigation pages based on gallery mode
+  // Calculate total navigation pages based on gallery mode
+  switch (state.galleryType) {
+    case "grid":
+      // Grid mode: each navigation page represents 2 API pages
+      totalPages = Math.ceil(state.totalAmountOfPages / 2);
+      break;
+    case "carousel":
+      // Carousel mode: each navigation page represents 1 API page
+      totalPages = state.totalAmountOfPages;
+      break;
+    default:
+      totalPages = state.totalAmountOfPages;
+  }
+
+  // Clear existing navigation buttons for fresh rendering
+  let navigationButtons = Array.from(
+    document.querySelectorAll(".pages-navigation button")
+  );
+  navigationButtons.forEach((button) =>
+    pagesNavigationContainer.removeChild(button)
+  );
+
+  // Create Previous navigation button
+  const previous = document.createElement("button");
+  previous.classList.add("button-previous");
+  previous.textContent = "< Previous";
+  pagesNavigationContainer.appendChild(previous);
+
+  // Generate numbered page buttons
+  for (let i = 1; i <= totalPages; i++) {
+    const pageNumber = document.createElement("button");
+    pageNumber.classList.add(`numbered_button_${i}`);
+    pageNumber.textContent = `${i}`;
+    pagesNavigationContainer.appendChild(pageNumber);
+
+    // Highlight current page button
+    if (i === state.currentPage) pageNumber.classList.add(`active`);
+  }
+
+  // Create Next navigation button
+  const next = document.createElement("button");
+  next.classList.add("button-next");
+  next.textContent = "Next >";
+  pagesNavigationContainer.appendChild(next);
+
+  // Handles numbered page button clicks for direct navigation
+  const numberedButtonsOnClick = async (button) => {
+    if (!button.classList.contains("active")) {
+      // Remove active state from all numbered buttons
+      numberedButtons.forEach((button) => button.classList.remove("active"));
+      // Set clicked button as active
+      button.classList.add("active");
+
+      // Extract page number from button class name
+      const buttonNumber = [...button.classList]
+        .find((className) => className.startsWith("numbered_button_"))
+        .replace("numbered_button_", "");
+
+      // Update state and trigger data loading workflow
+      state.currentPage = Number(buttonNumber);
+      await loadPages(state.currentPage);
+      loadGallery();
+    }
+  };
+
+  // Handles Previous button click with boundary checking
+  const previousOnClick = async () => {
+    if (state.currentPage > 1) {
+      // Decrement current page
+      state.currentPage--;
+
+      // Update visual state of numbered buttons
+      const numberedButtons = document.querySelectorAll(
+        '[class^="numbered_button_"]'
+      );
+      numberedButtons.forEach((button) => button.classList.remove("active"));
+
+      // Find and activate button for new current page
+      const activeButton = Array.from(numberedButtons).find((button) =>
+        button.classList.contains(`numbered_button_${state.currentPage}`)
+      );
+      if (activeButton) {
+        activeButton.classList.add("active");
+      }
+
+      // Trigger data loading workflow
+      await loadPages(state.currentPage);
+      loadGallery();
+    }
+  };
+
+  // Handles Next button click with boundary checking
+  const nextOnClick = async () => {
     switch (state.galleryType) {
-        case 'grid':
-            // Grid mode: each navigation page represents 2 API pages
-            totalPages = Math.ceil(state.totalAmountOfPages / 2);
-            break;
-        case 'carousel':
-            // Carousel mode: each navigation page represents 1 API page
-            totalPages = state.totalAmountOfPages;
-            break;
-        default:
-            totalPages = state.totalAmountOfPages;
+      case "grid":
+        if (state.currentPage >= Math.ceil(state.totalAmountOfPages / 2))
+          return;
+        break;
+      case "carousel":
+        if (state.currentPage >= state.totalAmountOfPages) return;
+        break;
+      default:
+        break;
     }
 
-    // Clear existing navigation buttons for fresh rendering
-    let navigationButtons = Array.from(
-        document.querySelectorAll('.pages-navigation button')
+    // Increment current page
+    state.currentPage++;
+
+    // Update visual state of numbered buttons
+    const numberedButtons = document.querySelectorAll(
+      '[class^="numbered_button_"]'
     );
-    navigationButtons.forEach(button => pagesNavigationContainer.removeChild(button));
+    numberedButtons.forEach((button) => button.classList.remove("active"));
 
-    // Create Previous navigation button
-    const previous = document.createElement('button');
-    previous.classList.add('button-previous')
-    previous.textContent = '⮜ Previous'
-    pagesNavigationContainer.appendChild(previous);
-
-    // Generate numbered page buttons
-    for (let i = 1; i <= totalPages; i++) {
-        const pageNumber = document.createElement('button');
-        pageNumber.classList.add(`numbered_button_${i}`)
-        pageNumber.textContent = `${i}`;
-        pagesNavigationContainer.appendChild(pageNumber);
-
-        // Highlight current page button
-        if (i === state.currentPage) pageNumber.classList.add(`active`)
+    // Find and activate button for new current page
+    const activeButton = Array.from(numberedButtons).find((button) =>
+      button.classList.contains(`numbered_button_${state.currentPage}`)
+    );
+    if (activeButton) {
+      activeButton.classList.add("active");
     }
 
-    // Create Next navigation button
-    const next = document.createElement('button');
-    next.classList.add('button-next')
-    next.textContent = 'Next ⮞'
-    pagesNavigationContainer.appendChild(next);    
+    // Trigger data loading workflow
+    await loadPages(state.currentPage);
+    loadGallery();
+  };
 
-    /**
-     * Handles numbered page button clicks for direct navigation
-     * @param {HTMLElement} button - The clicked numbered button element
-     * @description Processes direct page navigation when user clicks numbered buttons.
-     * Prevents redundant navigation, updates visual states, and triggers data loading.
-     * 
-     * Click Processing:
-     * 1. Checks if button is already active (prevents redundant navigation)
-     * 2. Removes active class from all numbered buttons
-     * 3. Adds active class to clicked button
-     * 4. Extracts page number from button class name
-     * 5. Updates state.currentPage and triggers data loading workflow
-     * 
-     * Features:
-     * - Redundancy prevention: ignores clicks on already active buttons
-     * - State synchronization: updates both visual and application state
-     * - Class name parsing: extracts page number from CSS class
-     * - Full workflow: triggers loadPages() and loadGallery() for complete update
-     */
-    const numberedButtonsOnClick = async (button) => {
-        if (!button.classList.contains("active")) {
-          // Remove active state from all numbered buttons
-          numberedButtons.forEach((button) => button.classList.remove("active"));
-          // Set clicked button as active
-          button.classList.add("active");
-    
-          // Extract page number from button class name
-          const buttonNumber = [...button.classList]
-            .find(className => className.startsWith('numbered_button_'))
-            .replace('numbered_button_', '');
-          
-          // Update state and trigger data loading workflow
-          state.currentPage = Number(buttonNumber);
-          await loadPages(state.currentPage);
-          loadGallery();
-        }
-    };
-
-    /**
-     * Handles Previous button click for backward navigation
-     * @description Navigates to the previous page with boundary checking and state management.
-     * Updates visual indicators and triggers data loading for seamless user experience.
-     * 
-     * Navigation Logic:
-     * 1. Checks boundary condition (prevents going below page 1)
-     * 2. Decrements state.currentPage
-     * 3. Updates visual state by removing all active classes
-     * 4. Finds and activates button for new current page
-     * 5. Triggers data loading workflow
-     * 
-     * Features:
-     * - Boundary protection: prevents navigation below page 1
-     * - State management: updates centralized application state
-     * - Visual synchronization: updates button active states
-     * - Full workflow: triggers complete data loading and display update
-     * - Error handling: gracefully handles missing button elements
-     */
-    const previousOnClick = async () => {
-        if (state.currentPage > 1) {
-            // Decrement current page
-            state.currentPage--;
-            
-            // Update visual state of numbered buttons
-            const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
-            numberedButtons.forEach((button) => button.classList.remove("active"));
-            
-            // Find and activate button for new current page
-            const activeButton = Array.from(numberedButtons).find(
-                button => button.classList.contains(`numbered_button_${state.currentPage}`)
-            );
-            if (activeButton) {
-                activeButton.classList.add("active");
-            }
-            
-            // Trigger data loading workflow
-            await loadPages(state.currentPage);
-            loadGallery();
-        }
-    };
-
-    /**
-     * Handles Next button click for forward navigation
-     * @description Navigates to the next page with boundary checking and state management.
-     * Updates visual indicators and triggers data loading for seamless user experience.
-     * 
-     * Navigation Logic:
-     * 1. Checks boundary condition (prevents exceeding total pages)
-     * 2. Increments state.currentPage
-     * 3. Updates visual state by removing all active classes
-     * 4. Finds and activates button for new current page
-     * 5. Triggers data loading workflow
-     * 
-     * Features:
-     * - Boundary protection: prevents navigation beyond available pages
-     * - State management: updates centralized application state    
-     * - Visual synchronization: updates button active states
-     * - Full workflow: triggers complete data loading and display update
-     * - Error handling: gracefully handles missing button elements
-     */
-    const nextOnClick = async () => {
-
-        switch (state.galleryType) {
-        case 'grid':
-            if (state.currentPage >= Math.ceil(state.totalAmountOfPages / 2)) return;
-            break;
-        case 'carousel':
-            if (state.currentPage >= state.totalAmountOfPages) return;
-            break;
-        default:
-            break;
-        }
-
-        // Increment current page
-        state.currentPage++;
-        
-        // Update visual state of numbered buttons
-        const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
-        numberedButtons.forEach((button) => button.classList.remove("active"));
-        
-        // Find and activate button for new current page
-        const activeButton = Array.from(numberedButtons).find(
-            button => button.classList.contains(`numbered_button_${state.currentPage}`)
-        );
-        if (activeButton) {
-            activeButton.classList.add("active");
-        }
-        
-        // Trigger data loading workflow
-        await loadPages(state.currentPage);
-        loadGallery();
-
-    };
-
-    // Attach event listeners to all navigation elements
-    const numberedButtons = document.querySelectorAll('[class^="numbered_button_"]');
-    numberedButtons.forEach(button => {
-        button.addEventListener('click', event => numberedButtonsOnClick(event.target));
-    });
-    previous.addEventListener('click', () => previousOnClick());
-    next.addEventListener('click', () => nextOnClick());
+  // Attach event listeners to all navigation elements
+  const numberedButtons = document.querySelectorAll(
+    '[class^="numbered_button_"]'
+  );
+  numberedButtons.forEach((button) => {
+    button.addEventListener("click", (event) =>
+      numberedButtonsOnClick(event.target)
+    );
+  });
+  previous.addEventListener("click", () => previousOnClick());
+  next.addEventListener("click", () => nextOnClick());
 };

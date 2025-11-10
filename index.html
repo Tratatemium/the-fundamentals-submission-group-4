@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/style.css" />
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
 
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -17,11 +23,15 @@
   </head>
 
   <body>
-
-    <header>     
+    <header>
       <h1 class="header-content">Frames & Moments</h1>
       <!-- hamburger menu button -->
-      <button class="hamburger-menu-button" aria-expanded="false" aria-controls="main-nav" title="Toggle menu">
+      <button
+        class="hamburger-menu-button"
+        aria-expanded="false"
+        aria-controls="main-nav"
+        title="Toggle menu"
+      >
         <div class="hamburger-stripes-container">
           <span class="hamburger-stripe-top"></span>
           <span class="hamburger-stripe-bottom"></span>
@@ -30,9 +40,12 @@
 
       <!-- hamburger menu dropdown -->
       <nav id="main-nav" hidden> 
-        <a href="index.html#home" class="navigation-element">Home</a>
+        <a href="#home" class="navigation-element">Home</a>
         <a href="about.html#about-us" class="navigation-element">About</a>
-        <button class="navigation-element button-AI">Get Metadata</button>
+        <button class="navigation-element button-AI">
+          <span>Get Metadata</span>
+          <span class="timer-AI"></span>
+        </button>
         <button id="view-toggle" class="navigation-element">Switch to carousel</button>
         <button id="subscribe-btn" class="navigation-element">Subscribe</button>
         <button id="theme-toggle"></button>
@@ -40,7 +53,7 @@
     </header>
 
     <main>
-      <div class="AI-container"></div>         <!--  Now just messages -->
+      <div id="home"></div>
       <div class="categories-container"></div>      
       <div class="gallery-grid"></div>         <!-- regular grid gallery -->
       <div class="gallery-carousel"></div>     <!-- RAHEEL: 3D carousel gallery container (don't remove class)-->
@@ -51,14 +64,18 @@
         <img class="lightbox-image">
         <div class="lightbox-comments"></div>
       </div>
-    </main>  
+    </main>
 
     <!--Subscribe-->
     <div id="subscribe-popup" class="subscribe-popup">
       <div class="subscribe-box">
         <h2>Subscribe</h2>
         <p>Get updates and curated photos!</p>
-        <input type="email" id="subscribe-email" placeholder="Your email address" />
+        <input
+          type="email"
+          id="subscribe-email"
+          placeholder="Your email address"
+        />
         <button id="subscribe-submit">Subscribe</button>
         <button id="subscribe-close" class="close-subscribe">&times;</button>
       </div>
@@ -67,12 +84,12 @@
     <!-- Footer -->
     <footer>
       <div class="footer-content">
-        <p>&copy; 2025 All rights reserved.</p>
+        <p>&copy; 2025</p>
       </div>
     </footer>
 
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/gemeni-api.js"></script>
+    <script type="module" src="/src/gemini-api.js"></script>
     <script type="module" src="/src/header-functionality.js"></script>
     <script type="module" src="src/lightbox.js"></script>
   </body>
