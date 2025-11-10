@@ -1037,37 +1037,84 @@ main {
 /* #region LIGHTBOX                                                                   */
 /* ================================================================================================= */
 
+
+body.lightbox-open {
+  overflow: hidden;         /* prevent background scrolling */
+}
+
 .lightbox {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.5em;
   width: 50vw;
   height: auto; /* Height adjusts based on image aspect ratio */
   background-color: var(--secondary-color);
+  border-radius: 4px;
   position: fixed;
   top: 16em;
   left: calc(50vw -50%);
   z-index: 10;
+  overflow: hidden;
+
 }
 
 .lightbox-image {
   display: block;
- width: 50%; /* Image takes up full width of lightbox */
- height: auto; /* Height adjusts based on image aspect ratio */
- margin: 1.5em; 
+  width: 100%; /* Image takes up full width of lightbox */
+  height: 100%; /* Height adjusts based on image aspect ratio */
+  border-radius: 4px;
+  margin: 1.5em;
+}
+
+.lightbox-comments-container {
+    width: 42%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: absolute;
+  top: 1.5em;
+  right: 1.5em;
+  bottom: 1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lightbox-comments {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1em;
+  border-bottom: 1px solid var(--accent-color);
+}
+
+
+
+.lightbox-user-name { 
+  font-family: var(--font-primary);
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.lightbox-user-comment {
+  font-family: var(--font-primary);
+  color: var(--text-color);
+  padding-bottom: 0.5em;
 }
 
 .lightbox.hidden {
   display: none;
 }
-.overlay.hidden {
-  display: none;
+
+.lightbox-close-button {
+  width: 1.5em;
+  height: 1.5em;
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
 }
 
-.lightbox-close-button { 
-  width: 2em;
-  height: 2em;
-  position: absolute; 
-  top: 0.5em;
-  right: 0.5em;
+.overlay.hidden {
+  display: none;
 }
 
 .overlay {
@@ -1078,5 +1125,6 @@ main {
   -webkit-backdrop-filter: blur(8px); /* For Safari */
   z-index: 5; /* over other content but under the lightbox */
 }
+
 
 /* #endregion LIGHTBOX */
