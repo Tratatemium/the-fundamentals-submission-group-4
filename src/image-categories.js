@@ -22,13 +22,13 @@ export const displayByCategoriesDOM = async () => {
       break;
     case "Uncategorised":
       filteredImages = allLoadedImages.filter(image => !image.category);
-      state.imagesByCategory = filteredImages.sort((a, b) => a.localeCompare(b));
+      state.imagesByCategory = filteredImages;
       createPagesNavigation();
       loadGallery();
       break;
     default:
       filteredImages = allLoadedImages.filter(image => image.category === state.activeCategory.replaceAll("-", " "));
-      state.imagesByCategory = filteredImages.sort((a, b) => a.localeCompare(b));      
+      state.imagesByCategory = filteredImages;      
       createPagesNavigation();
       loadGallery();
       break;
@@ -49,10 +49,11 @@ export const updateCategoriesDOM = () => {
   const categoriesList = [
     "All",
     "Uncategorised",
-    ...new Set(state.imagesData        // Get only unique categories
-      .flatMap(page => page.data       // Unwrap pages
-      .map(image => image.category)    // Get category from ieach image data
-    )),
+    ...[...new Set(state.imagesData         // Get only unique categories
+      .flatMap(page => page.data            // Unwrap pages
+      .map(image => image.category)))       // Get category from ieach image data
+    ].sort((a, b) => a.localeCompare(b))    // Sort categories alphabeticly
+    
   ];
 
   // Generate button for each category
