@@ -22,13 +22,13 @@ export const displayByCategoriesDOM = async () => {
       break;
     case "Uncategorised":
       filteredImages = allLoadedImages.filter(image => !image.category);
-      state.imagesByCategory = filteredImages;
+      state.imagesByCategory = filteredImages.sort((a, b) => a.localeCompare(b));
       createPagesNavigation();
       loadGallery();
       break;
     default:
       filteredImages = allLoadedImages.filter(image => image.category === state.activeCategory.replaceAll("-", " "));
-      state.imagesByCategory = filteredImages;      
+      state.imagesByCategory = filteredImages.sort((a, b) => a.localeCompare(b));      
       createPagesNavigation();
       loadGallery();
       break;
