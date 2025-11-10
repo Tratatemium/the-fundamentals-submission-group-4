@@ -309,17 +309,7 @@ export const createPagesNavigation = () => {
 
   // Handles Next button click with boundary checking
   const nextOnClick = async () => {
-    switch (state.galleryType) {
-      case "grid":
-        if (state.currentPage >= Math.ceil(state.totalAmountOfPages / 2))
-          return;
-        break;
-      case "carousel":
-        if (state.currentPage >= state.totalAmountOfPages) return;
-        break;
-      default:
-        break;
-    }
+    if (state.currentPage >= totalPages) return;
 
     // Increment current page
     state.currentPage++;

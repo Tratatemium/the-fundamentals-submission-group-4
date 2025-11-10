@@ -25,14 +25,12 @@ export const displayByCategoriesDOM = async () => {
       state.imagesByCategory = filteredImages;
       createPagesNavigation();
       loadGallery();
-      console.log(state);
       break;
     default:
-      filteredImages = allLoadedImages.filter(image => image.category === state.activeCategory);
+      filteredImages = allLoadedImages.filter(image => image.category === state.activeCategory.replaceAll("-", " "));
       state.imagesByCategory = filteredImages;      
       createPagesNavigation();
       loadGallery();
-      console.log(state);
       break;
   }
 };
