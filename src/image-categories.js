@@ -56,7 +56,10 @@ export const updateCategoriesDOM = () => {
   const categoriesList = [
     "All",
     "Uncategorised",
-    ...new Set(state.imagesData.map((element) => element.category)),
+    ...new Set(state.imagesData        // Get only unique categories
+      .flatMap(page => page.data       // Unwrap pages
+      .map(image => image.category)    // Get category from ieach image data
+    )),
   ];
 
   // Generate button for each category

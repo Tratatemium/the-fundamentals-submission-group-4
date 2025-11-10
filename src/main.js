@@ -313,6 +313,10 @@ const init = async () => {
   loadGallery(); // Renders loaded images in the active gallery mode
   // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
   // console.log(state);
+  // console.log(state.imagesData
+  //   .flatMap(page => page.data
+  //   .map(image => image.image_url)
+  // ));
 };
 
 init();
