@@ -630,7 +630,10 @@ main  {
   cursor: pointer;
   border: none;
 }
+.button-like.active svg {
+  fill : white;
 
+}
 .like-number, .comment-number {  
   font-family: var(--font-primary);
   color:#F5F4F1;

@@ -21,6 +21,7 @@ import {
 } from "./image-categories.js";
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 import { showLightbox } from "./lightbox.js";
+import { likeButtonOnClick } from "./likes-function.js";
 
 /* ================================================================================================= */
 /* #region VARIABLES DECLARATION                                                                     */
@@ -101,9 +102,9 @@ export const createImage = (imageData) => {
   imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener("click", () =>
-    showLightbox(imageData.image_url)
-  );
+  //imageContainer.addEventListener("click", () =>
+  //showLightbox(imageData.image_url)
+  //);
 
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
@@ -145,6 +146,10 @@ export const createImage = (imageData) => {
   const heartGroup = document.createElement("button");
   heartGroup.classList.add("icon-group");
   heartGroup.classList.add("button-like");
+  heartGroup.addEventListener("click", () => {
+    likeButtonOnClick(heartGroup);
+    //heartGroup.classList.add("active");
+  });
 
   const svgIconHeart = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
