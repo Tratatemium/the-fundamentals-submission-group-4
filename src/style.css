@@ -334,14 +334,17 @@ nav:not([hidden]) {
   box-shadow: none;
 }
 
-.navigation-element:disabled::after {
+.navigation-element:disabled .timer-AI::before {
   content: "";
+  display: inline-block;
   width: 16px;
   height: 16px;
   border: 2px solid currentColor;
   border-color: currentColor transparent currentColor transparent;
   border-radius: 50%;
   animation: spin .6s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.5em;
 }
 
 /* spinner keyframes */
@@ -506,6 +509,11 @@ body.dark-mode .theme-icon-dark {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+#home{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 /* #endregion HEADER and NAV */
 
@@ -580,13 +588,6 @@ main  {
 .image-container:hover .app-img {
   transform: scale(1.1);
 }
-.loading-img { /* VLAD: I'll need it for later */
-  display: block;
-  width: 16em;
-  height: 16em;
-  border-radius: 4px;
-  background-color: var(--secondary-color);
-}
 
 /* Styles for hover container, including icons and hover effect */
 .hover-container {
@@ -632,6 +633,21 @@ main  {
   margin: 0;
   position: relative;
   top: 1px;
+}
+
+.loading-img { /* VLAD: I'll need it for later */
+  display: flex;
+  width: 16em;
+  height: 16em;
+  border-radius: 4px;
+  background-color: var(--secondary-color);
+}
+
+.loading-img svg {
+  color: var(--primary-color);
+  width: 9em;
+  height: 9em;
+  margin: auto;
 }
 
 /* #endregion APP (GALERY) */
@@ -901,48 +917,12 @@ main {
   border-color: #3a0505;
 }
 
-/* #endregion BUTTON STYLES */
-
-/* ================================================================================================= */
-/* #region STATUS DISPLAY ELEMENTS                                                                   */
-/* ================================================================================================= */
-
-/**
- * UI STATUS COMPONENTS
- * ===================
- * 
- * Styling for user feedback elements including status text, loading animations,
- * and elapsed time display during AI processing operations.
- */
-
-.AI-container{
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  justify-content:center;
-  align-items:center;
-  margin-bottom: 2em;
-  padding-top: 2em;
-}
-
-/* Status text display for user feedback */
-.text-AI {
-  margin: auto 0 auto 3rem;
-}
-
-/* Animated loading dots with fixed width for consistent layout */
-.dots-AI {
-  margin: auto 0 auto 0;
-  width: 1rem; /* Fixed width prevents layout shift during animation */
-}
-
 /* Elapsed time timer display during AI processing */
 .timer-AI {
   margin: auto auto auto 0;
   width: fit-content; /* Adjusts to content width */
 }
 
-/* #endregion STATUS DISPLAY ELEMENTS */
 
 /* ================================================================================================= */
 /* #region IMAGE CONTAINER & OVERLAY SYSTEM                                                         */

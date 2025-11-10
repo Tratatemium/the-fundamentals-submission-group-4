@@ -1,62 +1,21 @@
 /**
- * IMAGE GALLERY WITH AI METADATA GENERATION & PAGINATION
- * ========================================================
- *
- * This application creates an interactive image gallery with dual-view modes (grid/carousel)
- * that fetches images from an API using sophisticated pagination system and uses Google's Gemini AI
- * to generate metadata (category, description, author) for each image.
- * The application features a fully modular architecture with separated concerns across multiple specialized modules.
- *
+ * CORE APPLICATION MODULE
+ * =======================
+ * 
+ * Central coordinator for the image gallery application with AI metadata generation.
+ * Handles state management, DOM manipulation, and module coordination.
+ * 
  * Features:
- * - Advanced pagination system with page-based loading and navigation
- * - Dual gallery modes: Grid view and Carousel view with seamless switching
- * - Loading animations and skeleton placeholders during API requests
- * - AI-powered metadata generation using modular Gemini API integration
- * - Interactive UI with hover overlays showing metadata and social stats
- * - Real-time processing timer with animated loading indicators
- * - Social media-style elements (hearts, comments) with dynamic counts
- * - Advanced category-based filtering system with dynamic button generation
- * - Comprehensive error handling and loading states with user feedback
- * - Responsive layouts with CSS animations and theme switching
- * - Fully modular architecture with separated concerns across five specialized modules
- * - Centralized state management with cross-module data sharing
- *
- * Dependencies:
- * - ./gemeni-api.js - Modular Gemini AI integration for metadata generation
- * - ./api.js - External API integration for image fetching with loading animations
- * - ./image-categories.js - Category filtering and UI management
- * - ./pagination.js - Pagination logic, page navigation, and gallery management
- * - Custom CSS for styling, animations, and responsive design
- * - Environment Variables: VITE_GEMINI_API_KEY for AI functionality
- *
- * Five-Module Architecture:
- * - main.js (this file): Core application logic, UI management, state, and user interactions
- * - gemeni-api.js: Separated Gemini AI functionality, API calls, and utilities
- * - api.js: External image API integration with loading animations and error handling
- * - image-categories.js: Category filtering logic and button management
- * - pagination.js: Pagination system, page navigation, gallery switching, and loading states
- * - style.css: Comprehensive styling, animations, responsive design, and theme management
- *
- * @author Group 4
- * @version 2.0.0 - Five-module architecture with advanced pagination and dual gallery modes
+ * - Centralized state management for all modules
+ * - Image container creation with interactive overlays
+ * - Gallery mode switching (grid/carousel)
+ * - Social media-style elements with SVG icons
+ * - Cross-module communication and data sharing
  */
 
-// Import AI functionality from modular gemeni-api.js file
-// This module handles all Gemini AI integration, API calls, timer functionality, and utilities
-import { getImageMetadata } from "./gemeni-api.js";
-
-// Import DOM elements for user feedback and loading animations
-import { textAI } from "./gemeni-api.js";
-
-// Import category management functionality from modular image-categories.js file
-// This module handles category filtering, button generation, and display logic
-import {
-  displayByCategoriesDOM,
-  updateCategoriesDOM,
-} from "./image-categories.js";
-
-// Import pagination system functionality from modular pagination.js file
-// This module handles page navigation, gallery switching, loading states, and pagination UI
+// Module imports
+import { getImageMetadata } from "./gemini-api.js";
+import { displayByCategoriesDOM, updateCategoriesDOM } from "./image-categories.js";
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 import { showLightbox } from "./lightbox.js";
 
@@ -65,67 +24,63 @@ import { showLightbox } from "./lightbox.js";
 /* ================================================================================================= */
 
 /**
- * CENTRALIZED STATE MANAGEMENT
- * ============================
- *
- * Global application state object that manages all core data and UI state.
- * This centralized approach provides better organization and makes state
- * accessible to other modules through exports. The state handles pagination,
- * gallery modes, and category filtering across the entire application.
- *
- * @type {Object}
- * @property {Array<Object>} imagesData - Array storing all loaded image data with pagination structure
- * @property {number} totalAmountOfPages - Total number of pages available from the API
- * @property {string} galleryType - Current gallery display mode: "grid" (default) or "carousel"
- * @property {number} currentPage - Currently active page number for pagination navigation
- * @property {Array<number>} loadedPages - Array of page numbers that have been loaded from API
- * @property {string} activeCategory - Currently active category filter ('All', 'Uncategorised', or specific category)
+ * Centralized application state
+ * Shared across all modules for consistent data management
  */
-// for RAHEEL : All images data stored here as it loades
 export const state = {
-  imagesData: [], // Page-structured image data: [{page: 1, data: [...]}, {page: 2, data: [...]}]
-  totalAmountOfPages: 0, // Total pages available from API for pagination controls
-  galleryType: "grid", // Gallery display mode: "grid" (2 pages per view) or "carousel" (1 page per view)
-  currentPage: 1, // Current page in pagination system
-  loadedPages: [], // Tracks which pages have been fetched to avoid duplicate API calls
-  activeCategory: "All", // Category filter state for image display filtering
+  imagesData: [], // Page-structured image data from API
+  totalAmountOfPages: 0, // Total pages available for pagination
+  galleryType: "grid", // Current view mode: "grid" or "carousel"
+  currentPage: 1, // Active page number
+  loadedPages: [], // Cached pages to prevent duplicate API calls
+  activeCategory: "All", // Current category filter
 };
 
 /* #endregion VARIABLES DECLARATION */
+
+/* ================================================================================================= */
+/* #region HELPER FUNCTIONS                                                                          */
+/* ================================================================================================= */
+
+/**
+ * Find image data by unique ID across all loaded pages
+ */
+const findImageDataByID = (ID) => {
+  let result = null;
+  state.imagesData.forEach(page => {
+    page.data.forEach(imageData => {
+      if (imageData.id === ID) result = imageData;
+    });
+  });
+  return result;
+};
+
+/**
+ * Convert page numbers between gallery modes
+ * Grid mode shows 2 API pages per view, carousel shows 1 page per view
+ */
+const transmuteCurrentPage = (n) => {
+  switch (state.galleryType) {
+    case "grid":
+      return 2 * n - 1; // Convert grid page to carousel: grid page 1→carousel page 1, grid page 2→carousel page 3
+    case "carousel":
+      return Math.ceil(n / 2); // Convert carousel page to grid: carousel pages 1-2→grid page 1, pages 3-4→grid page 2
+    default:
+      return n; // Fallback for unknown gallery types
+  }
+};
+
+/* #end region HELPER FUNCTIONS */
+
+
 
 /* ================================================================================================= */
 /* #region DOM MANIPULATION                                                                          */
 /* ================================================================================================= */
 
 /**
- * Creates and appends a complete image container with interactive elements to the appropriate gallery
- * @param {Object} imageData - The image data object containing all image information
- * @param {string} imageData.image_url - The source URL of the image
- * @param {number} imageData.likes_count - Number of likes for the image
- * @param {Array} imageData.comments - Array of comments for the image
- * @description This function dynamically creates a comprehensive image container with:
- * - Main image element with proper styling and URL
- * - Text overlay container for AI-generated metadata display (category, author)
- * - Interactive hover container with social engagement elements
- * - Heart icon with like count display using SVG parsing
- * - Comment icon with comment count display using SVG parsing
- * - SVG icons parsed and inserted using DOMParser for proper rendering
- * - Gallery-aware rendering (appends to grid or carousel based on current galleryType)
- *
- * The structure supports:
- * - Dual gallery modes: grid layout and carousel display
- * - Hover effects for metadata and social stats with smooth animations
- * - Category-based filtering through CSS classes for dynamic visibility
- * - Social interaction display (likes and comments) with proper counts
- * - Responsive design with overlay positioning and proper z-indexing
- * - Theme-aware styling that adapts to light and dark modes
- *
- * @example
- * createImage({
- *   image_url: "https://example.com/image.jpg",
- *   likes_count: 42,
- *   comments: [{}, {}, {}] // 3 comments
- * });
+ * Creates image containers with interactive overlays and social elements
+ * Adapts to current gallery mode and includes AI metadata display
  */
 export const createImage = (imageData) => {
   let gallery;
@@ -142,9 +97,10 @@ export const createImage = (imageData) => {
   // Create main container for image and text overlay
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("image-container");
+  imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener("click", () =>
+  imageContainer.addEventListener("click", () => 
     showLightbox(imageData.image_url)
   );
 
@@ -166,11 +122,13 @@ export const createImage = (imageData) => {
   // Create category display element
   const imageCategory = document.createElement("p");
   imageCategory.classList.add("image-category");
+  imageCategory.textContent = imageData.category;
   textContainer.appendChild(imageCategory);
 
   // Create author display element
   const imageAuthor = document.createElement("p");
   imageAuthor.classList.add("image-author");
+  imageAuthor.textContent = imageData.authorName;
   textContainer.appendChild(imageAuthor);
 
   const iconContainer = document.createElement("div");
@@ -226,18 +184,8 @@ export const createImage = (imageData) => {
 };
 
 /**
- * Updates the DOM with AI-generated metadata for all loaded images
- * @description Finds all category and author containers and populates them
- * with data from the state.imagesData array structure. Also adds category CSS classes
- * for filtering functionality. This function handles the page-based data structure
- * and flattens it for DOM manipulation. Called after AI metadata generation completes.
- *
- * Features:
- * - Handles page-structured data from pagination system
- * - Adds category-based CSS classes for filtering functionality
- * - Updates both category and author text content
- * - Processes space-separated categories for CSS class names
- * - Works with both grid and carousel gallery modes
+ * Updates DOM with AI-generated metadata
+ * Syncs category and author text content with state data
  */
 export const updateImagesDOM = () => {
   const imageContainers = Array.from(
@@ -251,15 +199,12 @@ export const updateImagesDOM = () => {
   );
 
   // Update each container with corresponding metadata
-  for (let i = 0; i < imageCategoryContainers.length; i++) {
-    imageCategoryContainers[i].textContent = state.imagesData[i].category;
-    imageAuthorContainers[i].textContent = state.imagesData[i].authorName;
-    // Add category class for filtering functionality
-    if (state.imagesData[i].category) {
-      imageContainers[i].classList.add(
-        `category-${state.imagesData[i].category.replaceAll(" ", "-")}`
-      );
-    }
+  for (let i = 0; i < imageContainers.length; i++) {
+    const imageData = findImageDataByID(imageContainers[i].id);
+    if (imageData) {
+      imageCategoryContainers[i].textContent = imageData.category;
+      imageAuthorContainers[i].textContent = imageData.authorName;  
+    }  
   }
 };
 
@@ -300,24 +245,6 @@ const galleryGrid = document.querySelector(".gallery-grid");
  */
 
 const viewToggleButton = document.getElementById("view-toggle");
-
-/**
- * Converts page numbers between gallery modes due to different pagination systems
- * @param {number} n - Current page number
- * @returns {number} - Converted page number for the target gallery mode
- * @description Grid mode shows 2 API pages per view, carousel shows 1 API page per view.
- * This function handles the mathematical conversion between the two systems.
- */
-const transmuteCurrentPage = (n) => {
-  switch (state.galleryType) {
-    case "grid":
-      return 2 * n - 1; // Convert grid page to carousel: grid page 1 becomes carousel page 1
-    case "carousel":
-      return Math.ceil(n / 2); // Convert carousel page to grid: carousel pages 1-2 become grid page 1
-    default:
-      return n;
-  }
-};
 
 viewToggleButton.addEventListener("click", async () => {
   const galleryGrid = document.querySelector(".gallery-grid");
@@ -373,102 +300,12 @@ viewToggleButton.addEventListener("click", async () => {
 const init = async () => {
   await loadPages(); // Loads pages 1 and 2 initially with loading animation
   loadGallery(); // Renders loaded images in the active gallery mode
+  // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
+  // console.log(state);
 };
 
 init();
 
-// Initialize category filter buttons interface (starts with default categories)
-updateCategoriesDOM();
-
 /* #endregion APPLICATION INITIALIZATION */
 
-/**
- * =====================================================================================================
- * END OF FILE
- * =====================================================================================================
- *
- * This completes the main application file for the image gallery with AI-powered metadata generation.
- * The application now features a fully modular architecture with three-module separation of concerns.
- *
- * Key Features Implemented:
- * ✅ Dynamic image loading with pagination
- * ✅ Modular Google Gemini AI integration (via gemeni-api.js)
- * ✅ Modular external API integration (via api.js)
- * ✅ Modular category management system (via image-categories.js)
- * ✅ Interactive UI with hover overlays and social elements
- * ✅ Category-based filtering system with dynamic button generation
- * ✅ Error handling and loading states
- * ✅ Responsive design with CSS Grid
- * ✅ Centralized state management with exports
- * ✅ Button state management during async operations
- * ✅ Animated loading indicators with elapsed time display
- * ✅ Real-time processing timer for user feedback
- * ✅ Social media-style interaction elements (hearts, comments)
- * ✅ Fully modular architecture with clear separation of concerns
- *
- * Usage:
- * 1. Page loads with initial set of images
- * 2. Click "Load images" to fetch more images
- * 3. Click "Get metadata" to generate AI descriptions
- * 4. Use category buttons to filter images by type
- * 5. Hover over images to see generated metadata and social stats
- *
- * Four-Module Architecture:
- *
- * 1. main.js (this file):
- *    - Core application logic and UI management
- *    - Centralized state management and exports
- *    - DOM manipulation and user interactions
- *    - Event listeners and application initialization
- *
- * 2. gemeni-api.js:
- *    - Dedicated Gemini AI functionality and API calls
- *    - Loading animations and timer management
- *    - AI response processing and error handling
- *    - Metadata generation and validation
- *
- * 3. api.js:
- *    - External image API integration
- *    - Pagination and data fetching logic
- *    - Response validation and error handling
- *    - Integration with centralized state management
- *
- * 4. image-categories.js:
- *    - Category filtering and display logic
- *    - Dynamic category button generation
- *    - Category-based image visibility management
- *    - Active category state handling
- *
- * Module Dependencies:
- * - ./gemeni-api.js: Handles all Gemini AI functionality, animations, and utilities
- * - ./api.js: Handles external image API calls and pagination
- * - ./image-categories.js: Handles category filtering and button management
- * - ./style.css: Comprehensive styling for gallery, animations, and responsive design
- * - Environment: VITE_GEMINI_API_KEY for AI functionality
- * - External API: https://image-feed-api.vercel.app/ for image data
- *
- * Core Functions in this file:
- * - createImage(): DOM creation for image containers with social elements
- * - updateImagesDOM(): Gallery rendering and image display
- * - state: Centralized state management object (exported)
- * - DOM elements: UI component exports for other modules
- * - Event listeners: User interaction handling
- *
- * External Module Functions:
- * - getImageMetadata() (gemeni-api.js): AI metadata generation using Gemini 2.5 Pro
- * - fetchImages() (api.js): External API integration for image loading
- * - displayByCategoriesDOM() (image-categories.js): Category-based image filtering
- * - updateCategoriesDOM() (image-categories.js): Dynamic category button management
- * - Animation utilities (gemeni-api.js): Timer and loading feedback systems
- *
- * Modular Architecture Benefits:
- * ✅ Clear separation of concerns (UI, AI, API, Category logic)
- * ✅ Improved code organization and maintainability
- * ✅ Enhanced error handling and user feedback
- * ✅ Reusable functionality across projects
- * ✅ Easier testing and debugging
- * ✅ Better code readability and documentation
- * ✅ Centralized state management
- * ✅ Scalable architecture for future features
- * ✅ Specialized modules for focused functionality
- */
+
