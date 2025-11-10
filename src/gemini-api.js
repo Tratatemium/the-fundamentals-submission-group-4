@@ -331,7 +331,7 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
     }
   } catch (err) {
     console.error("Error generating content:", err);
-    alert("🚨 Error generating content:", err);
+    alert("🚨 Error generating content:", err.message);
     stopEllipsisAnimation();
     return;
   }

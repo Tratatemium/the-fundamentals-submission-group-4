@@ -202,51 +202,7 @@ export const loadGallery = () => {
   }
 };
 
-/**
- * Creates and manages comprehensive pagination navigation controls
- * @description Generates interactive pagination interface with Previous/Next buttons and numbered
- * page buttons. Handles different pagination calculations for grid vs carousel modes and provides
- * complete navigation functionality with visual feedback and state management.
- *
- * Navigation Components:
- * - Previous button: navigates to previous page with boundary checking
- * - Numbered buttons: direct page navigation with active state highlighting
- * - Next button: navigates to next page with boundary checking
- * - Dynamic generation: adapts to total page count and gallery mode
- *
- * Pagination Logic:
- * - Grid mode: totalPages = Math.ceil(state.totalAmountOfPages / 2) (page pairs)
- * - Carousel mode: totalPages = state.totalAmountOfPages (individual pages)
- * - Active states: visual feedback for current page
- * - Boundary handling: prevents navigation beyond available pages
- *
- * Event Handling Architecture:
- * - numberedButtonsOnClick(): handles direct page selection
- * - previousOnClick(): handles previous page navigation
- * - nextOnClick(): handles next page navigation
- * - State synchronization: updates state.currentPage and visual indicators
- * - Full workflow: each interaction triggers load → display → update cycle
- *
- * Features:
- * - Complete navigation: Previous, numbered pages, Next buttons
- * - Mode-aware pagination: different calculations for grid vs carousel
- * - Visual feedback: active class highlighting for current page
- * - Boundary protection: prevents invalid page navigation
- * - State management: centralized state updates and synchronization
- * - Event delegation: efficient event handling for dynamic buttons
- * - DOM optimization: efficient button cleanup and recreation
- *
- * Dependencies:
- * - state.galleryType: determines pagination calculation method
- * - state.totalAmountOfPages: total API pages available
- * - state.currentPage: current page for highlighting and navigation
- * - loadPages(): async function to load required API data
- * - loadGallery(): function to render images to DOM
- * - DOM: '.pages-navigation' container element
- *
- * @example
- * createPagesNavigation();  // Creates full pagination interface based on current state
- */
+// Creates pagination navigation with Previous/Next and numbered page buttons
 export const createPagesNavigation = () => {
   const pagesNavigationContainer = document.querySelector(".pages-navigation");
   let totalPages;
@@ -296,25 +252,7 @@ export const createPagesNavigation = () => {
   next.textContent = "Next >";
   pagesNavigationContainer.appendChild(next);
 
-  /**
-   * Handles numbered page button clicks for direct navigation
-   * @param {HTMLElement} button - The clicked numbered button element
-   * @description Processes direct page navigation when user clicks numbered buttons.
-   * Prevents redundant navigation, updates visual states, and triggers data loading.
-   *
-   * Click Processing:
-   * 1. Checks if button is already active (prevents redundant navigation)
-   * 2. Removes active class from all numbered buttons
-   * 3. Adds active class to clicked button
-   * 4. Extracts page number from button class name
-   * 5. Updates state.currentPage and triggers data loading workflow
-   *
-   * Features:
-   * - Redundancy prevention: ignores clicks on already active buttons
-   * - State synchronization: updates both visual and application state
-   * - Class name parsing: extracts page number from CSS class
-   * - Full workflow: triggers loadPages() and loadGallery() for complete update
-   */
+  // Handles numbered page button clicks for direct navigation
   const numberedButtonsOnClick = async (button) => {
     if (!button.classList.contains("active")) {
       // Remove active state from all numbered buttons
@@ -334,25 +272,7 @@ export const createPagesNavigation = () => {
     }
   };
 
-  /**
-   * Handles Previous button click for backward navigation
-   * @description Navigates to the previous page with boundary checking and state management.
-   * Updates visual indicators and triggers data loading for seamless user experience.
-   *
-   * Navigation Logic:
-   * 1. Checks boundary condition (prevents going below page 1)
-   * 2. Decrements state.currentPage
-   * 3. Updates visual state by removing all active classes
-   * 4. Finds and activates button for new current page
-   * 5. Triggers data loading workflow
-   *
-   * Features:
-   * - Boundary protection: prevents navigation below page 1
-   * - State management: updates centralized application state
-   * - Visual synchronization: updates button active states
-   * - Full workflow: triggers complete data loading and display update
-   * - Error handling: gracefully handles missing button elements
-   */
+  // Handles Previous button click with boundary checking
   const previousOnClick = async () => {
     if (state.currentPage > 1) {
       // Decrement current page
@@ -378,25 +298,7 @@ export const createPagesNavigation = () => {
     }
   };
 
-  /**
-   * Handles Next button click for forward navigation
-   * @description Navigates to the next page with boundary checking and state management.
-   * Updates visual indicators and triggers data loading for seamless user experience.
-   *
-   * Navigation Logic:
-   * 1. Checks boundary condition (prevents exceeding total pages)
-   * 2. Increments state.currentPage
-   * 3. Updates visual state by removing all active classes
-   * 4. Finds and activates button for new current page
-   * 5. Triggers data loading workflow
-   *
-   * Features:
-   * - Boundary protection: prevents navigation beyond available pages
-   * - State management: updates centralized application state
-   * - Visual synchronization: updates button active states
-   * - Full workflow: triggers complete data loading and display update
-   * - Error handling: gracefully handles missing button elements
-   */
+  // Handles Next button click with boundary checking
   const nextOnClick = async () => {
     switch (state.galleryType) {
       case "grid":
