@@ -2,6 +2,7 @@
 import { state } from "./main";
 
 export const showLightbox = (imageData) => {
+    document.body.classList.add('lightbox-open');
     const lightbox = document.querySelector('.lightbox');
     lightbox.classList.remove('hidden');
 
@@ -26,10 +27,34 @@ export const showLightbox = (imageData) => {
         lightboxComments.appendChild(userCommentParagraph);
 
     });
- 
+    const lightboxCloseButton = document.querySelector('.lightbox-close-button'); 
+    lightboxCloseButton.addEventListener('click', () => closeLightbox());
+
+    const commentForm = document.querySelector('.lightbox-comment-form');
+    const userNameInput = document.querySelector('.lightbox-user-name');
+    const commentInput = document.querySelector('.lightbox-comment-input');
+
+    commentForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent reloading the page
+
+        const userNameParagraph = document.createElement('p');
+        userNameParagraph.classList.add('lightbox-user-name');
+        userNameParagraph.textContent = userNameInput.value + ':';
+        lightboxComments.appendChild(userNameParagraph);
+
+        const userCommentParagraph = document.createElement('p');
+        userCommentParagraph.classList.add('lightbox-user-comment');
+        userCommentParagraph.textContent = commentInput.value;
+        lightboxComments.appendChild(userCommentParagraph);
+
+        commentInput.value = '';
+    });
+    
+
 };
 
 const closeLightbox = () => { 
+    document.body.classList.remove('lightbox-open');
     const lightbox = document.querySelector('.lightbox');
     lightbox.classList.add('hidden');
 
@@ -37,8 +62,8 @@ const closeLightbox = () => {
     overlay.classList.add('hidden');
 };
 
-const lightboxCloseButton = document.querySelector('.lightbox-close-button'); 
-lightboxCloseButton.addEventListener('click', () => closeLightbox());
+
+
 
 
 

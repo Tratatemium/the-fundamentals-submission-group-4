@@ -60,9 +60,18 @@
       <div class="pages-navigation"></div>     <!-- pagination for both galleries -->
       <div class="overlay hidden"></div>
       <div class="lightbox hidden">
-        <button class="lightbox-close-button"></button>
-        <img class="lightbox-image">
+      <div>
+          <button class="lightbox-close-button"><p>X</p></button>
+          <img class="lightbox-image">
+      </div>
+      <div class="lightbox-comments-container">
         <div class="lightbox-comments"></div>
+          <form class="lightbox-comment-form">
+            <input type="text" class="lightbox-user-name" placeholder="Your name" required />
+            <input type="text" class="lightbox-comment-input" placeholder="Add a comment..." required />
+            <button type="submit" class="comment-submit">Send</button>
+          </form>
+        </div>
       </div>
     </main>
 
