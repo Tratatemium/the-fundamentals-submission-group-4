@@ -315,7 +315,7 @@ export const createPagesNavigation = () => {
 
       // Extract page number from button class name
       const buttonNumber = [...button.classList]
-        .find((className) => className.startsWith("numbered_button_"))
+        .find((className) => className.startsWith("numbered_button_"))    
         .replace("numbered_button_", "");
 
       // Update state and trigger data loading workflow
