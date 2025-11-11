@@ -98,14 +98,13 @@ export const createImage = (imageData) => {
   imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener('click', () => showLightbox(imageData)); // send all imageData to showLightbox
-
-
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
   appImg.classList.add("app-img"); // Add CSS class for styling
   appImg.src = imageData.image_url; // Set the image source URL
   imageContainer.appendChild(appImg); // Append the image to the app container
+
+  appImg.addEventListener('click', () => showLightbox(imageData)); // send all imageData to showLightbox
 
   const hoverContainer = document.createElement("div");
   hoverContainer.classList.add("hover-container");
