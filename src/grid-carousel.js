@@ -282,7 +282,7 @@ hoverContainer.appendChild(textContainer);
     slider.appendChild(item); // Append complete item to slider
 
     // === lightbox click ===
-    appImg.addEventListener("click", () => showLightbox(appImg.src)); // Open lightbox on click
+    appImg.addEventListener("click", () => showLightbox(img)); // Open lightbox on click
   });
 }
 
