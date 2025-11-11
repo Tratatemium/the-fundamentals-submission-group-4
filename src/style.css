@@ -1200,3 +1200,13 @@ body.lightbox-open {
 
 
 /* #endregion LIGHTBOX */
+
+RAHEEL
+.loading-img-carousel{
+  display: flex;
+  width: 16em;
+  height: 16em;
+  border-radius: 4px;
+  margin: 2em;
+  background-color: red;
+}

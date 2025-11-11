@@ -129,14 +129,14 @@ const showLoading = (show) => {
           Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
       }
       break;
-    case 'carousel': { // If gallery type is carousel
+    case 'carousel': { // If gallery type is carousel RAHEEL
       const slider = document.querySelector('#slider'); // Select carousel container
       if (!slider) return; // Null check
       if (show) { // Show skeleton placeholders
         slider.innerHTML = ''; // Clear existing content
         for (let i = 0; i < 10; i++) { // Loop to create 10 skeleton divs
           const loadingContainer = document.createElement('div'); // Create div element
-          loadingContainer.classList.add('loading-img'); // Add skeleton class
+          loadingContainer.classList.add('loading-img-carousel'); // Add skeleton class RAHEEL
           slider.appendChild(loadingContainer); // Append to carousel container
         }
       } else { // Hide skeletons
