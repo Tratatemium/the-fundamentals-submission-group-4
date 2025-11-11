@@ -291,15 +291,24 @@ const aboutDialog = document.querySelector('.about-dialog');
 const showAboutButton = document.querySelector('.button-show-about');
 
 showAboutButton?.addEventListener('click', () => {
-  if (!aboutDialog.open) aboutDialog.showModal();
+  if (!aboutDialog.open) {
+    aboutDialog.showModal();
+    document.body.classList.add('lightbox-open');
+  }
 });
 
 const closeAboutButton = document.querySelector('.close-about-button');
 closeAboutButton?.addEventListener('click', () => {
-  if (aboutDialog.open) aboutDialog.close();
+  if (aboutDialog.open) {
+    aboutDialog.close();
+    document.body.classList.remove('lightbox-open');
+  }
 })
 document.addEventListener('keydown', event => {
-  if (aboutDialog.open && event.key === 'Escape') aboutDialog.close();
+  if (aboutDialog.open && event.key === 'Escape') {
+    aboutDialog.close();
+    document.body.classList.remove('lightbox-open');
+  }
 });
 
 /* ================================================================================================= */
