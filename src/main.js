@@ -14,11 +14,6 @@
  */
 
 // Module imports
-import { getImageMetadata } from "./gemini-api.js";
-import {
-  displayByCategoriesDOM,
-  updateCategoriesDOM,
-} from "./image-categories.js";
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 import { showLightbox } from "./lightbox.js";
 import { likeButtonOnClick } from "./likes-function.js";
@@ -311,9 +306,7 @@ const init = async () => {
   loadGallery(); // Renders loaded images in the active gallery mode
   // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
   // console.log(state);
-  // console.log(state.imagesData
-  //   .flatMap(page => page.data
-  // ));
+
 };
 
 init();

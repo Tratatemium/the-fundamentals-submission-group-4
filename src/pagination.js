@@ -9,12 +9,19 @@ import { state } from './main.js'
 import { createImage } from './main.js'
 import { loadPageFromAPI } from './api.js'
 
-// Calculates the pair of API pages needed for grid mode display
+/**
+ * Calculates the pair of API pages needed for grid mode display
+ * @param {number} n - Grid page number
+ * @returns {number[]} Array of two consecutive API page numbers
+ */
 export const getPair = (n) => {
   return [n * 2 - 1, n * 2];
 };
 
-// Shows/hides loading skeleton animation during API requests
+/**
+ * Shows/hides loading skeleton animation during API requests
+ * @param {boolean} show - Whether to show or hide loading skeletons
+ */
 const showLoading = (show) => {
     switch (state.galleryType) {
         case 'grid':
@@ -130,7 +137,11 @@ const showLoading = (show) => {
 }
 
 
-// Loads pages from API based on gallery mode and user selection
+/**
+ * Loads pages from API based on gallery mode and user selection
+ * @param {number} [pageClicked] - The page number clicked by user (optional for initialization)
+ * @returns {Promise<void>} Promise that resolves when pages are loaded
+ */
 export const loadPages = async (pageClicked) => {
   // Initial application load: always load first two pages
   if (state.loadedPages.length === 0) {
@@ -163,7 +174,9 @@ export const loadPages = async (pageClicked) => {
   }
 };
 
-// Renders current page images to the appropriate gallery container
+/**
+ * Renders current page images to the appropriate gallery container
+ */
 export const loadGallery = () => {
   let currentImages;
   let pageData;
@@ -210,7 +223,9 @@ export const loadGallery = () => {
   }
 };
 
-// Creates pagination navigation with Previous/Next and numbered page buttons
+/**
+ * Creates pagination navigation with Previous/Next and numbered page buttons
+ */
 export const createPagesNavigation = () => {
   const pagesNavigationContainer = document.querySelector(".pages-navigation");
   let totalPages;
@@ -261,7 +276,10 @@ export const createPagesNavigation = () => {
   next.textContent = "Next >";
   pagesNavigationContainer.appendChild(next);
 
-  // Handles numbered page button clicks for direct navigation
+  /**
+   * Handles numbered page button clicks for direct navigation
+   * @param {HTMLElement} button - The clicked numbered button element
+   */
   const numberedButtonsOnClick = async (button) => {
     if (!button.classList.contains("active")) {
       // Remove active state from all numbered buttons
@@ -281,7 +299,9 @@ export const createPagesNavigation = () => {
     }
   };
 
-  // Handles Previous button click with boundary checking
+  /**
+   * Handles Previous button click with boundary checking
+   */
   const previousOnClick = async () => {
     if (state.currentPage > 1) {
       // Decrement current page
@@ -307,7 +327,9 @@ export const createPagesNavigation = () => {
     }
   };
 
-  // Handles Next button click with boundary checking
+  /**
+   * Handles Next button click with boundary checking
+   */
   const nextOnClick = async () => {
     if (state.currentPage >= totalPages) return;
 
