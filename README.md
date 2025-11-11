@@ -1,6 +1,6 @@
 # Frames & Moments - AI-Powered Image Gallery
 
-A sophisticated image gallery application with AI-powered metadata generation, dual viewing modes, and advanced pagination system.
+An image gallery application with AI-powered metadata generation, dual viewing modes, and advanced pagination system.
 
 ## Features
 
@@ -10,7 +10,7 @@ A sophisticated image gallery application with AI-powered metadata generation, d
 - **Advanced Pagination**: Seamless navigation with Previous/Next and numbered page controls
 - **Category Filtering**: Dynamic filtering based on AI-generated categories
 - **Loading Animations**: Skeleton placeholders and real-time processing feedback
-- **Lightbox Display**: Full-screen image viewing with detailed metadata
+- **Lightbox Display**: Full-screen image viewing with possibility to coment
 - **Theme Switching**: Light/dark mode support with CSS custom properties
 - **Responsive Design**: Mobile-first design with CSS Grid and Flexbox
 

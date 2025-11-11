@@ -286,6 +286,31 @@ viewToggleButton.addEventListener("click", async () => {
   }
 });
 
+const aboutDialog = document.querySelector('.about-dialog');
+
+const showAboutButton = document.querySelector('.button-show-about');
+
+showAboutButton?.addEventListener('click', () => {
+  if (!aboutDialog.open) {
+    aboutDialog.showModal();
+    document.body.classList.add('lightbox-open');
+  }
+});
+
+const closeAboutButton = document.querySelector('.close-about-button');
+closeAboutButton?.addEventListener('click', () => {
+  if (aboutDialog.open) {
+    aboutDialog.close();
+    document.body.classList.remove('lightbox-open');
+  }
+})
+document.addEventListener('keydown', event => {
+  if (aboutDialog.open && event.key === 'Escape') {
+    aboutDialog.close();
+    document.body.classList.remove('lightbox-open');
+  }
+});
+
 /* ================================================================================================= */
 /* #region FINAL HOME BUTTON RESET FIX — ALWAYS SWITCH TO GRID                                       */
 /* ================================================================================================= */
@@ -306,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => { // Wait for full DOM to lo
       // Hide carousel and show grid
       document.body.classList.remove("carousel-active"); // Remove body class for carousel mode
       document.querySelector("#gallery-carousel")?.classList.add("hidden"); // Hide carousel container; ?. ensures this only runs if the element exists, preventing runtime errors if null
-document.querySelector(".gallery-grid")?.classList.remove("hidden"); // Show grid container; ?. safely calls classList.remove only if the element exists
+      document.querySelector(".gallery-grid")?.classList.remove("hidden"); // Show grid container; ?. safely calls classList.remove only if the element exists
 
 
       // Reload first grid view
