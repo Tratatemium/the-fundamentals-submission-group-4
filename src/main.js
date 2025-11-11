@@ -87,7 +87,7 @@ export const createImage = (imageData) => {
       gallery = document.querySelector(".gallery-grid");
       break;
     case "carousel":
-      gallery = document.querySelector(".gallery-carousel");
+      gallery = document.querySelector("#gallery-carousel");
       break;
     default:
   }
