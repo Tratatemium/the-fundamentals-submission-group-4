@@ -286,6 +286,41 @@ viewToggleButton.addEventListener("click", async () => {
   }
 });
 
+/* ================================================================================================= */
+/* #region FINAL HOME BUTTON RESET FIX — ALWAYS SWITCH TO GRID                                       */
+/* ================================================================================================= */
+
+document.addEventListener("DOMContentLoaded", () => { // Wait for full DOM to load before running the code
+  const homeLink = Array.from(document.querySelectorAll("nav a")).find(a => // Select all <a> links in <nav>, convert NodeList to array, then find the one matching "home"
+    a.textContent.trim().toLowerCase() === "home" // Check text content of each link, trim whitespace, convert to lowercase, match "home"
+  );
+
+  if (homeLink) { // If a "Home" link was found
+    homeLink.addEventListener("click", async (e) => { // Attach click event listener; async because we will use await inside
+      e.preventDefault(); // Prevent default link navigation
+
+      //  Reset view to GRID mode
+      state.galleryType = "grid"; // Set global gallery mode to "grid"
+      state.currentPage = 1; // Reset current page to 1
+
+      // Hide carousel and show grid
+      document.body.classList.remove("carousel-active"); // Remove body class for carousel mode
+      document.querySelector("#gallery-carousel")?.classList.add("hidden"); // Hide carousel container; ?. ensures this only runs if the element exists, preventing runtime errors if null
+document.querySelector(".gallery-grid")?.classList.remove("hidden"); // Show grid container; ?. safely calls classList.remove only if the element exists
+
+
+      // Reload first grid view
+      await loadPages(1); // Load first page via API (await ensures it completes before continuing)
+      loadGallery(); // Render images for current page in grid
+      createPagesNavigation(); // Rebuild pagination controls
+
+      // Reset toggle button text
+      const viewToggleButton = document.getElementById("view-toggle"); // Select the toggle button
+      if (viewToggleButton) viewToggleButton.textContent = "Switch to carousel"; // Change button text if it exists
+    });
+  }
+});
+
 /* #endregion EVENT LISTENERS  */
 
 /* ================================================================================================= */
