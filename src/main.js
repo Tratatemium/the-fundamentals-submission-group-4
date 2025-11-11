@@ -290,12 +290,12 @@ const aboutDialog = document.querySelector('.about-dialog');
 
 const showAboutButton = document.querySelector('.button-show-about');
 
-showAboutButton.addEventListener('click', () => {
+showAboutButton?.addEventListener('click', () => {
   if (!aboutDialog.open) aboutDialog.showModal();
 });
 
 const closeAboutButton = document.querySelector('.close-about-button');
-closeAboutButton.addEventListener('click', () => {
+closeAboutButton?.addEventListener('click', () => {
   if (aboutDialog.open) aboutDialog.close();
 })
 document.addEventListener('keydown', event => {

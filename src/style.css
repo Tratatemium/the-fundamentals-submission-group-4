@@ -1051,8 +1051,9 @@ main {
 }
 
 /* #endregion PAGINATION */
+
 /* ================================================================================================= */
-/* #region LIGHTBOX                                                                   */
+/* #region LIGHTBOX                                                                                  */
 /* ================================================================================================= */
 
 
@@ -1199,8 +1200,43 @@ body.lightbox-open {
   z-index: 5; /* over other content but under the lightbox */
 }
 
-
 /* #endregion LIGHTBOX */
+
+/* ================================================================================================= */
+/* #region ABOUT-DIALOG                                                                              */
+/* ================================================================================================= */
+
+.about-dialog {
+  display: none;                             /* Hidden by default */
+}
+
+.about-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  width: 50vw;
+  height: auto; /* Height adjusts based on image aspect ratio */
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  position: fixed;
+  top: 30vh; /* Adjusted to be below header */
+  left: calc(50vw -50%);
+  z-index: 10;
+}
+
+.about-dialog::backdrop {
+  background-color: rgba(29, 22, 21, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* For Safari */ /* Blur background */
+}
+
+.about-dialog{
+
+}
+
+/* #endregion ABOUT-DIALOG */
 
 RAHEEL
 .loading-img-carousel{
