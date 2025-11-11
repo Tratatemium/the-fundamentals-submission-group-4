@@ -5,16 +5,10 @@
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
     <meta charset="UTF-8" />
 
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -23,15 +17,11 @@
   </head>
 
   <body>
+    
     <header>
       <h1 class="header-content">Frames & Moments</h1>
       <!-- hamburger menu button -->
-      <button
-        class="hamburger-menu-button"
-        aria-expanded="false"
-        aria-controls="main-nav"
-        title="Toggle menu"
-      >
+      <button class="hamburger-menu-button" aria-expanded="false" aria-controls="main-nav" title="Toggle menu">
         <div class="hamburger-stripes-container">
           <span class="hamburger-stripe-top"></span>
           <span class="hamburger-stripe-bottom"></span>
@@ -41,7 +31,7 @@
       <!-- hamburger menu dropdown -->
       <nav id="main-nav" hidden> 
         <a href="#home" class="navigation-element">Home</a>
-        <a href="about.html#about-us" class="navigation-element">About</a>
+        <button class="navigation-element button-show-about">About</button>
         <button class="navigation-element button-AI">
           <span>Get Metadata</span>
           <span class="timer-AI"></span>
@@ -55,23 +45,22 @@
     <main>
       <div id="home"></div>
       <div class="categories-container"></div>      
-      <div class="gallery-grid"></div>         <!-- regular grid gallery -->
-       <div id="gallery-carousel">           <!-- RAHEEL: 3D carousel gallery container (don't remove class)--> 
-         <!-- Navigation buttons -->
-          <button id="carousel-prev" class="carousel-button prev">⟨</button>
-
-          <!-- 3D Rotating Slider -->
-            <div id="slider"></div>
-
-          <!-- Navigation buttons -->
-          <button id="carousel-next" class="carousel-button next">⟩</button>
+      <div class="gallery-grid"></div>
+      <div id="gallery-carousel">
+        <!-- Navigation buttons -->
+        <button id="carousel-prev" class="carousel-button prev">⟨</button>
+        <!-- 3D Rotating Slider -->
+          <div id="slider"></div>
+        <!-- Navigation buttons -->
+        <button id="carousel-next" class="carousel-button next">⟩</button>
       </div>  
       <div class="pages-navigation"></div>     <!-- pagination for both galleries -->
+
       <div class="overlay hidden"></div>
       <div class="lightbox hidden">
       <div>
-          <button class="lightbox-close-button">X</button>
-          <img class="lightbox-image">
+        <button class="lightbox-close-button">X</button>
+        <img class="lightbox-image">
       </div>
       <div class="lightbox-comments-container">
         <div class="lightbox-comments"></div>
@@ -84,18 +73,37 @@
           </form>
         </div>
       </div>
+
+
     </main>
+
+    <dialog class="about-dialog">
+      <button class="close-about-button">x</button>
+      <h3>About Frames & Moments</h3>
+      <p>
+        An AI-powered image gallery featuring Google Gemini 2.5 Pro integration for automatic metadata generation. 
+        Experience dual viewing modes (grid and carousel), advanced pagination, and dynamic category filtering with 
+        real-time processing feedback.
+      </p>
+      <p>
+        Built with a modular architecture, this gallery combines modern web technologies with artificial intelligence 
+        to deliver an interactive and responsive image browsing experience.
+      </p>
+      <h4>Development Team - The DOMinators</h4>
+      <ul class="team-links">
+        <li><a href="https://github.com/placeholder-emma" target="_blank">Emma Wikström</a></li>
+        <li><a href="https://github.com/placeholder-irem" target="_blank">Irem Stalbrand</a></li>
+        <li><a href="https://github.com/placeholder-vladislav" target="_blank">Vladislav Zhuravskii</a></li>
+        <li><a href="https://github.com/placeholder-raheel" target="_blank">Raheel Shan</a></li>
+      </ul>
+    </dialog>
 
     <!--Subscribe-->
     <div id="subscribe-popup" class="subscribe-popup">
       <div class="subscribe-box">
         <h2>Subscribe</h2>
         <p>Get updates and curated photos!</p>
-        <input
-          type="email"
-          id="subscribe-email"
-          placeholder="Your email address"
-        />
+        <input type="email" id="subscribe-email" placeholder="Your email address" />
         <button id="subscribe-submit">Subscribe</button>
         <button id="subscribe-close" class="close-subscribe">&times;</button>
       </div>
