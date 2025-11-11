@@ -71,4 +71,7 @@ commentForm.addEventListener('submit', (e) => {
 
 });
 
-
+// Possibility to close the lightbox by pressing "Esc"
+document.addEventListener('keydown', (event) => {
+    if (document.body.classList.contains('lightbox-open') && event.key === 'Escape') closeLightbox();
+});

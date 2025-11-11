@@ -1051,8 +1051,9 @@ main {
 }
 
 /* #endregion PAGINATION */
+
 /* ================================================================================================= */
-/* #region LIGHTBOX                                                                   */
+/* #region LIGHTBOX                                                                                  */
 /* ================================================================================================= */
 
 
@@ -1070,7 +1071,7 @@ body.lightbox-open {
   background-color: var(--secondary-color);
   border-radius: 4px;
   position: fixed;
-  top: 16em;
+  top: 30vh; /* Adjusted to be below header */
   left: calc(50vw -50%);
   z-index: 10;
   overflow: hidden;
@@ -1083,10 +1084,11 @@ body.lightbox-open {
   height: 100%; /* Height adjusts based on image aspect ratio */
   border-radius: 4px;
   margin: 1.5em;
+
 }
 
 .lightbox-comments-container {
-    width: 42%;
+  width: 42%;
   max-height: 85vh;
   overflow-y: auto;
   position: absolute;
@@ -1198,5 +1200,118 @@ body.lightbox-open {
   z-index: 5; /* over other content but under the lightbox */
 }
 
-
 /* #endregion LIGHTBOX */
+
+/* ================================================================================================= */
+/* #region ABOUT-DIALOG                                                                              */
+/* ================================================================================================= */
+
+
+.about-dialog {
+  display: none;                             /* Hidden by default */
+}
+
+.about-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 60vw;
+  max-width: 600px;
+  height: auto;
+  background-color: var(--secondary-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.about-dialog::backdrop {
+  background-color: rgba(29, 22, 21, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* For Safari */
+}
+
+.about-dialog h3 {
+  color: var(--text-color);
+  font-family: var(--font-secondary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.about-dialog h4 {
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-dialog p {
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.team-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.team-links li a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.team-links li a:hover {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+.close-about-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.close-about-button:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+/* #endregion ABOUT-DIALOG */
+
+RAHEEL
+.loading-img-carousel{
+  display: flex;
+  width: 16em;
+  height: 16em;
+  border-radius: 4px;
+  margin: 2em;
+  background-color: red;
+}
