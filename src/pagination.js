@@ -23,15 +23,7 @@ export const getPair = (n) => {
  * Shows/hides loading skeleton animation during API requests
  * @param {boolean} show - Whether to show or hide loading skeletons
  */
-const showLoading = (show) => {
-  switch (state.galleryType) {
-    case 'grid':
-      const galleryGrid = document.querySelector(".gallery-grid");
-      if (show) {   
-          // Clear existing content and show loading skeletons
-          Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
-          
-          const gearsSVG = `
+const gearsSVG = `
               <svg version="1.0"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 1200 1280"
@@ -118,6 +110,15 @@ const showLoading = (show) => {
               </g>
               </svg>
               `;
+const showLoading = (show) => {
+  switch (state.galleryType) {
+    case 'grid':
+      const galleryGrid = document.querySelector(".gallery-grid");
+      if (show) {   
+          // Clear existing content and show loading skeletons
+          Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
+          
+          
           for (let i = 0; i < 20; i++){
               const loadingContainer = document.createElement("div");
               loadingContainer.classList.add("loading-img");
@@ -130,17 +131,21 @@ const showLoading = (show) => {
       }
       break;
     case 'carousel': { // If gallery type is carousel RAHEEL
-      const slider = document.querySelector('#slider'); // Select carousel container
-      if (!slider) return; // Null check
+      const galleryCarousel = document.querySelector('#slider'); // Select carousel container
       if (show) { // Show skeleton placeholders
-        slider.innerHTML = ''; // Clear existing content
+         // Clear existing content and show loading skeletons
+          Array.from(galleryCarousel.children).forEach(element => galleryCarousel.removeChild(element));
+
+
         for (let i = 0; i < 10; i++) { // Loop to create 10 skeleton divs
           const loadingContainer = document.createElement('div'); // Create div element
-          loadingContainer.classList.add('loading-img-carousel'); // Add skeleton class RAHEEL
-          slider.appendChild(loadingContainer); // Append to carousel container
+          loadingContainer.classList.add('loading-img'); // Add skeleton class RAHEEL
+          loadingContainer.innerHTML = gearsSVG; // Empty content
+          galleryCarousel.appendChild(loadingContainer); // Append to carousel container
         }
       } else { // Hide skeletons
-        slider.innerHTML = ''; // Clear container
+       // Clear all content including skeletons
+          Array.from(galleryCarousel.children).forEach(element => galleryCarousel.removeChild(element));
       }
       break; // Exit switch
     }
