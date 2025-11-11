@@ -5,41 +5,34 @@
 
 // Import state management from main module
 import { state } from './main.js'
+import { loadPages, loadGallery, createPagesNavigation } from './pagination.js';
 
 
 // Filters and displays images based on the currently active category
-export const displayByCategoriesDOM = () => {
-  const images = Array.from(document.querySelectorAll(".image-container"));
-  images.forEach((image) => {
-    switch (state.activeCategory) {
-      case "All":
-        // Show all images
-        image.classList.remove("hidden");
-        break;
-      case "Uncategorised":
-        // Show only images without category classes
-        if (
-          Array.from(image.classList).some((el) => el.startsWith("category-"))
-        ) {
-          image.classList.add("hidden");
-        } else {
-          image.classList.remove("hidden");
-        }
-        break;
-      default:
-        // Show only images matching the selected category
-        let imageCategory = Array.from(image.classList).find((el) =>
-          el.startsWith("category-")
-        );
-        if (imageCategory)
-          imageCategory = imageCategory.slice("category-".length);
-        if (imageCategory === state.activeCategory) {
-          image.classList.remove("hidden");
-        } else {
-          image.classList.add("hidden");
-        }
-    }
-  });
+export const displayByCategoriesDOM = async () => {
+  const allLoadedImages = state.imagesData.flatMap(page => page.data);
+  state.imagesByCategory = [];
+  let filteredImages;
+  state.currentPage = 1;
+
+  switch (state.activeCategory) {
+    case "All":
+      await loadPages(state.currentPage);
+      loadGallery();
+      break;
+    case "Uncategorised":
+      filteredImages = allLoadedImages.filter(image => !image.category);
+      state.imagesByCategory = filteredImages;
+      createPagesNavigation();
+      loadGallery();
+      break;
+    default:
+      filteredImages = allLoadedImages.filter(image => image.category === state.activeCategory.replaceAll("-", " "));
+      state.imagesByCategory = filteredImages;      
+      createPagesNavigation();
+      loadGallery();
+      break;
+  }
 };
 
 // Creates and updates category filter buttons in the UI
@@ -56,7 +49,11 @@ export const updateCategoriesDOM = () => {
   const categoriesList = [
     "All",
     "Uncategorised",
-    ...new Set(state.imagesData.map((element) => element.category)),
+    ...[...new Set(state.imagesData         // Get only unique categories
+      .flatMap(page => page.data            // Unwrap pages
+      .map(image => image.category)))       // Get category from ieach image data
+    ].sort((a, b) => a.localeCompare(b))    // Sort categories alphabeticly
+    
   ];
 
   // Generate button for each category

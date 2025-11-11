@@ -30,25 +30,24 @@ let intervalId = null;
 // Dynamically loaded Google AI SDK variables
 let GoogleGenAI, Type;
 
-// Starts loading animation with dots and timer
-export const ellipsisAnimation = () => {
-  let count = 0;
-  const timerStart = Date.now();
-  let timerNow;
-  intervalId = setInterval(() => {
-    // count = (count + 1) % 4;
-    // dotsAI.textContent = ".".repeat(count);
-    timerNow = Math.floor((Date.now() - timerStart) / 1000);
-    timerAI.textContent = `${timerNow}s`;
-  }, 500);
-};
-
-// Stops loading animation and clears indicators
-export const stopEllipsisAnimation = () => {
-  clearInterval(intervalId);
-  intervalId = null;
-  // dotsAI.textContent = "";
-  timerAI.textContent = "";
+const getMetadataTimer = (toggle) => {
+  switch (toggle) {
+    case 'start':
+      const timerStart = Date.now();
+      let timerNow;
+      intervalId = setInterval(() => {
+        timerNow = Math.floor((Date.now() - timerStart) / 1000);
+        timerAI.textContent = `${timerNow}s`;
+      }, 500);
+      break;
+    case 'stop':
+      clearInterval(intervalId);
+      intervalId = null;
+      timerAI.textContent = "";
+      break;
+    default:
+      bresk
+  }
 };
 
 // Updates image data with AI-generated metadata using page-based matching
@@ -148,12 +147,12 @@ export const getImageMetadata = async () => {
     }   
   } catch (err) {
     console.error("Error initialising google AI libraries:", err.message);
-    alert("🚨 Error initialising google AI libraries:", err.message);
+    alert(`🚨 Error initialising google AI libraries: ${err.message}`);
   }
 
   try {
     // Start loading animation
-    ellipsisAnimation();
+    getMetadataTimer('start');
 
     // Process images that don't have metadata yet
     const processedImages = await fetchImagesFromUrl();
@@ -161,7 +160,7 @@ export const getImageMetadata = async () => {
 
     // Check if there are any images to process
     if (initialArraysLength.length === 0) {
-      stopEllipsisAnimation();
+      getMetadataTimer('stop');
       return;
     }
 
@@ -196,13 +195,10 @@ export const getImageMetadata = async () => {
     }
   } catch (err) {
     console.error("Error fetching images:", err.message);
-    alert("🚨 Error fetching images:", err.message);
-    stopEllipsisAnimation();
+    alert(`🚨 Error fetching images: ${err.message}`);
+    getMetadataTimer('stop');;
     return;
   }
-
-  stopEllipsisAnimation();
-  ellipsisAnimation();
 
   // Initialize Google Gemini AI
   const ai = new GoogleGenAI({
@@ -320,25 +316,25 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
     
     if (!arraysMatch) {
       console.log("🚨 Error: Some metadata has been lost!");
-      alert("🚨 Error: Some metadata has been lost!");
+      alert(`🚨 Error: Some metadata has been lost!`);
     } else {
       // Success: update application data and UI
       //console.log(metadata);
       updateImagesData(metadata);
       //console.log(state.imagesData);
       updateImagesDOM();
-      // updateCategoriesDOM();
+      updateCategoriesDOM();
     }
   } catch (err) {
     console.error("Error generating content:", err);
-    alert("🚨 Error generating content:", err.message);
-    stopEllipsisAnimation();
+    alert(`🚨 Error generating content: ${err.message}`);
+    getMetadataTimer('stop');
     return;
   }
 
   // Success message and cleanup
   alert("🎉 Metadata generation: success! 🎉");
-  stopEllipsisAnimation();
+  getMetadataTimer('stop');
 };
 
 /**

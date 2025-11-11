@@ -14,11 +14,6 @@
  */
 
 // Module imports
-import { getImageMetadata } from "./gemini-api.js";
-import {
-  displayByCategoriesDOM,
-  updateCategoriesDOM,
-} from "./image-categories.js";
 import { loadPages, loadGallery, createPagesNavigation } from "./pagination.js";
 import { showLightbox } from "./lightbox.js";
 import { likeButtonOnClick } from "./likes-function.js";
@@ -38,6 +33,7 @@ export const state = {
   currentPage: 1, // Active page number
   loadedPages: [], // Cached pages to prevent duplicate API calls
   activeCategory: "All", // Current category filter
+  imagesByCategory: [],
 };
 
 /* #endregion VARIABLES DECLARATION */
@@ -102,14 +98,13 @@ export const createImage = (imageData) => {
   imageContainer.id = imageData.id;
   gallery.appendChild(imageContainer);
 
-  imageContainer.addEventListener('click', () => showLightbox(imageData)); // send all imageData to showLightbox
-
-
   // Create and configure the image element
   const appImg = document.createElement("img"); // Create new image element
   appImg.classList.add("app-img"); // Add CSS class for styling
   appImg.src = imageData.image_url; // Set the image source URL
   imageContainer.appendChild(appImg); // Append the image to the app container
+
+  appImg.addEventListener('click', () => showLightbox(imageData)); // send all imageData to showLightbox
 
   const hoverContainer = document.createElement("div");
   hoverContainer.classList.add("hover-container");
@@ -189,8 +184,6 @@ export const createImage = (imageData) => {
 
   iconContainer.appendChild(heartGroup);
   iconContainer.appendChild(commentGroup);
-  // Update category filtering after adding new image
-  displayByCategoriesDOM();
 };
 
 /**
@@ -312,6 +305,7 @@ const init = async () => {
   loadGallery(); // Renders loaded images in the active gallery mode
   // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
   // console.log(state);
+
 };
 
 init();

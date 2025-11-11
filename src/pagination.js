@@ -9,12 +9,19 @@ import { state } from './main.js'
 import { createImage } from './main.js'
 import { loadPageFromAPI } from './api.js'
 
-// Calculates the pair of API pages needed for grid mode display
+/**
+ * Calculates the pair of API pages needed for grid mode display
+ * @param {number} n - Grid page number
+ * @returns {number[]} Array of two consecutive API page numbers
+ */
 export const getPair = (n) => {
   return [n * 2 - 1, n * 2];
 };
 
-// Shows/hides loading skeleton animation during API requests
+/**
+ * Shows/hides loading skeleton animation during API requests
+ * @param {boolean} show - Whether to show or hide loading skeletons
+ */
 const showLoading = (show) => {
     switch (state.galleryType) {
         case 'grid':
@@ -130,7 +137,11 @@ const showLoading = (show) => {
 }
 
 
-// Loads pages from API based on gallery mode and user selection
+/**
+ * Loads pages from API based on gallery mode and user selection
+ * @param {number} [pageClicked] - The page number clicked by user (optional for initialization)
+ * @returns {Promise<void>} Promise that resolves when pages are loaded
+ */
 export const loadPages = async (pageClicked) => {
   // Initial application load: always load first two pages
   if (state.loadedPages.length === 0) {
@@ -163,7 +174,9 @@ export const loadPages = async (pageClicked) => {
   }
 };
 
-// Renders current page images to the appropriate gallery container
+/**
+ * Renders current page images to the appropriate gallery container
+ */
 export const loadGallery = () => {
   let currentImages;
   let pageData;
@@ -175,13 +188,21 @@ export const loadGallery = () => {
       currentImages = Array.from(galleryGrid.children);
       currentImages.forEach((image) => galleryGrid.removeChild(image));
 
-      // Get page pair data and flatten for display
-      const pages = getPair(state.currentPage);
-      pageData = state.imagesData
-        .filter((image) => pages.includes(image.page))
-        .map((page) => page.data);
-      pageData = pageData.flat(); // Flatten array of arrays for rendering
-      pageData.forEach((imageData) => createImage(imageData));
+      if (state.activeCategory === "All") {
+        const pages = getPair(state.currentPage); // Get page pair data and flatten for display
+        pageData = state.imagesData 
+          .filter((image) => pages.includes(image.page))
+          .map((page) => page.data);
+        pageData = pageData.flat(); // Flatten array of arrays for rendering
+        pageData.forEach((imageData) => createImage(imageData));
+      } else {
+        const start = (state.currentPage - 1) * 20;
+        let end = start + 19;
+        end = end >= state.imagesByCategory.length? state.imagesByCategory.length - 1 : end;
+        const pageToDisplay = state.imagesByCategory.slice(start, end + 1);
+        pageToDisplay.forEach((imageData) => createImage(imageData));
+      }
+
       break;
 
     case "carousel":
@@ -202,7 +223,9 @@ export const loadGallery = () => {
   }
 };
 
-// Creates pagination navigation with Previous/Next and numbered page buttons
+/**
+ * Creates pagination navigation with Previous/Next and numbered page buttons
+ */
 export const createPagesNavigation = () => {
   const pagesNavigationContainer = document.querySelector(".pages-navigation");
   let totalPages;
@@ -211,7 +234,8 @@ export const createPagesNavigation = () => {
   switch (state.galleryType) {
     case "grid":
       // Grid mode: each navigation page represents 2 API pages
-      totalPages = Math.ceil(state.totalAmountOfPages / 2);
+      if (state.activeCategory === "All") totalPages = Math.ceil(state.totalAmountOfPages / 2);
+      else totalPages = Math.ceil(state.imagesByCategory.length / 20);
       break;
     case "carousel":
       // Carousel mode: each navigation page represents 1 API page
@@ -252,7 +276,10 @@ export const createPagesNavigation = () => {
   next.textContent = "Next >";
   pagesNavigationContainer.appendChild(next);
 
-  // Handles numbered page button clicks for direct navigation
+  /**
+   * Handles numbered page button clicks for direct navigation
+   * @param {HTMLElement} button - The clicked numbered button element
+   */
   const numberedButtonsOnClick = async (button) => {
     if (!button.classList.contains("active")) {
       // Remove active state from all numbered buttons
@@ -267,12 +294,14 @@ export const createPagesNavigation = () => {
 
       // Update state and trigger data loading workflow
       state.currentPage = Number(buttonNumber);
-      await loadPages(state.currentPage);
+      if (state.activeCategory === "All") await loadPages(state.currentPage);
       loadGallery();
     }
   };
 
-  // Handles Previous button click with boundary checking
+  /**
+   * Handles Previous button click with boundary checking
+   */
   const previousOnClick = async () => {
     if (state.currentPage > 1) {
       // Decrement current page
@@ -293,24 +322,16 @@ export const createPagesNavigation = () => {
       }
 
       // Trigger data loading workflow
-      await loadPages(state.currentPage);
+      if (state.activeCategory === "All") await loadPages(state.currentPage);
       loadGallery();
     }
   };
 
-  // Handles Next button click with boundary checking
+  /**
+   * Handles Next button click with boundary checking
+   */
   const nextOnClick = async () => {
-    switch (state.galleryType) {
-      case "grid":
-        if (state.currentPage >= Math.ceil(state.totalAmountOfPages / 2))
-          return;
-        break;
-      case "carousel":
-        if (state.currentPage >= state.totalAmountOfPages) return;
-        break;
-      default:
-        break;
-    }
+    if (state.currentPage >= totalPages) return;
 
     // Increment current page
     state.currentPage++;
@@ -330,7 +351,7 @@ export const createPagesNavigation = () => {
     }
 
     // Trigger data loading workflow
-    await loadPages(state.currentPage);
+    if (state.activeCategory === "All") await loadPages(state.currentPage);
     loadGallery();
   };
 
