@@ -251,17 +251,21 @@ const viewToggleButton = document.getElementById("view-toggle");
 
 viewToggleButton.addEventListener("click", async () => {
   const galleryGrid = document.querySelector(".gallery-grid");
-  const galleryCarousel = document.querySelector(".gallery-carousel");
+  const galleryCarousel = document.querySelector("#gallery-carousel"); // Select the carousel gallery container
 
   switch (state.galleryType) {
     case "grid":
-      viewToggleButton.textContent = "Switch to grid";
-      state.currentPage = transmuteCurrentPage(state.currentPage);
-      state.galleryType = "carousel";
-      await loadPages(state.currentPage);
-      loadGallery();
-      galleryGrid.classList.add("hidden");
-      galleryCarousel.classList.remove("hidden");
+      state.galleryType = "carousel"; // Switch global gallery mode to carousel
+    state.currentPage = transmuteCurrentPage(state.currentPage); // Adjust page number for carousel (using helper function)
+    viewToggleButton.textContent = "Switch to grid"; // Update toggle button text
+    galleryGrid.classList.add("hidden"); // Hide the grid container
+    galleryCarousel.classList.remove("hidden"); // Show the carousel container
+
+    document.body.classList.toggle("carousel-active", state.galleryType === "carousel"); // Toggle body class for CSS styling
+
+    await loadPages(state.currentPage); // Load the current page images from API for carousel
+    loadGallery(); // Render loaded images in the carousel
+
       createPagesNavigation();
       break;
     case "carousel":

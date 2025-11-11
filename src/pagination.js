@@ -8,6 +8,7 @@
 import { state } from './main.js'
 import { createImage } from './main.js'
 import { loadPageFromAPI } from './api.js'
+import { renderCarousel } from './grid-carousel.js'; // Import function to render carousel view
 
 /**
  * Calculates the pair of API pages needed for grid mode display
@@ -128,13 +129,24 @@ const showLoading = (show) => {
                 Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
             }
             break;
-        case 'carousel':
-            // TODO: Implement carousel loading animation
-            break;
-        default:
-            break;
+         case 'carousel': { // If gallery type is carousel
+      const slider = document.querySelector('#slider'); // Select carousel container
+      if (!slider) return; // Null check
+      if (show) { // Show skeleton placeholders
+        slider.innerHTML = ''; // Clear existing content
+        for (let i = 0; i < 10; i++) { // Loop to create 10 skeleton divs
+          const loadingContainer = document.createElement('div'); // Create div element
+          loadingContainer.classList.add('loading-img'); // Add skeleton class
+          slider.appendChild(loadingContainer); // Append to carousel container
+        }
+      } else { // Hide skeletons
+        slider.innerHTML = ''; // Clear container
+      }
+      break; // Exit switch
     }
-}
+    default: break; // Do nothing for unknown gallery types
+  }
+};
 
 
 /**
@@ -149,6 +161,10 @@ export const loadPages = async (pageClicked) => {
     await loadPageFromAPI(1);
     await loadPageFromAPI(2);
     showLoading(false);
+    if (state.galleryType === 'carousel') { // If gallery is carousel
+      const firstPage = state.imagesData.find((p) => p.page === 1); // Find first page object
+      if (firstPage && firstPage.data) renderCarousel(firstPage.data); // Render carousel if data exists
+    }
     return;
   }
 
@@ -163,16 +179,21 @@ export const loadPages = async (pageClicked) => {
       }
       showLoading(false);
       break;
-    case "carousel":
-      // Carousel mode: load single page as requested
-      showLoading(true);
-      await loadPageFromAPI(pageClicked);
-      showLoading(false);
-      break;
-    default:
-      break;
+    case 'carousel': { // Carousel mode
+      showLoading(true); // Show skeletons
+      await loadPageFromAPI(requestedPage); // Load selected page from API
+      showLoading(false); // Hide skeletons
+      break; // Exit case
+    }
+    default: break; // Unknown gallery type
+  }
+
+  if (state.galleryType === 'carousel') { // Always render carousel if in carousel mode
+    const pageObject = state.imagesData.find((p) => p.page === requestedPage); // Find page object
+    if (pageObject && pageObject.data) renderCarousel(pageObject.data); // Render if data exists
   }
 };
+
 
 /**
  * Renders current page images to the appropriate gallery container
@@ -207,15 +228,14 @@ export const loadGallery = () => {
 
     case "carousel":
       // Carousel mode: display single page in carousel container
-      const galleryCarousel = document.querySelector(".gallery-carousel");
-      currentImages = Array.from(galleryCarousel.children);
-      currentImages.forEach((image) => galleryCarousel.removeChild(image));
-
-      // Get single page data for carousel display
-      pageData = state.imagesData.find(
-        (image) => image.page === state.currentPage
-      ).data;
-      pageData.forEach((imageData) => createImage(imageData));
+      const slider = document.querySelector('#slider'); // Select carousel container
+    if (!slider) return; // Null check
+    const pageObject = state.imagesData.find((p) => p.page === state.currentPage); // Get current page
+    if (!pageObject || !pageObject.data) { // If page missing or no data
+      slider.innerHTML = ''; // Clear container
+      return; // Exit
+    }
+    renderCarousel(pageObject.data); // Render carousel images
       break;
 
     default:
