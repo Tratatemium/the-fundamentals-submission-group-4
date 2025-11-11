@@ -1070,7 +1070,7 @@ body.lightbox-open {
   background-color: var(--secondary-color);
   border-radius: 4px;
   position: fixed;
-  top: 16em;
+  top: 30vh; /* Adjusted to be below header */
   left: calc(50vw -50%);
   z-index: 10;
   overflow: hidden;
@@ -1083,10 +1083,11 @@ body.lightbox-open {
   height: 100%; /* Height adjusts based on image aspect ratio */
   border-radius: 4px;
   margin: 1.5em;
+
 }
 
 .lightbox-comments-container {
-    width: 42%;
+  width: 42%;
   max-height: 85vh;
   overflow-y: auto;
   position: absolute;
