@@ -130,25 +130,7 @@ const showLoading = (show) => {
           Array.from(galleryGrid.children).forEach(element => galleryGrid.removeChild(element));
       }
       break;
-    case 'carousel': { // If gallery type is carousel RAHEEL
-      const galleryCarousel = document.querySelector('#slider'); // Select carousel container
-      if (show) { // Show skeleton placeholders
-         // Clear existing content and show loading skeletons
-          Array.from(galleryCarousel.children).forEach(element => galleryCarousel.removeChild(element));
-
-
-        for (let i = 0; i < 10; i++) { // Loop to create 10 skeleton divs
-          const loadingContainer = document.createElement('div'); // Create div element
-          loadingContainer.classList.add('loading-img'); // Add skeleton class RAHEEL
-          loadingContainer.innerHTML = gearsSVG; // Empty content
-          galleryCarousel.appendChild(loadingContainer); // Append to carousel container
-        }
-      } else { // Hide skeletons
-       // Clear all content including skeletons
-          Array.from(galleryCarousel.children).forEach(element => galleryCarousel.removeChild(element));
-      }
-      break; // Exit switch
-    }
+    
     default: 
     break; // Do nothing for unknown gallery types
   }
