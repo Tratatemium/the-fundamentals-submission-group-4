@@ -256,26 +256,30 @@ viewToggleButton.addEventListener("click", async () => {
   switch (state.galleryType) {
     case "grid":
       state.galleryType = "carousel"; // Switch global gallery mode to carousel
-    state.currentPage = transmuteCurrentPage(state.currentPage); // Adjust page number for carousel (using helper function)
-    viewToggleButton.textContent = "Switch to grid"; // Update toggle button text
-    galleryGrid.classList.add("hidden"); // Hide the grid container
-    galleryCarousel.classList.remove("hidden"); // Show the carousel container
+      state.currentPage = transmuteCurrentPage(state.currentPage); // Adjust page number for carousel (using helper function)
+      viewToggleButton.textContent = "Switch to grid"; // Update toggle button text
+      galleryGrid.classList.add("hidden"); // Hide the grid container
+      galleryCarousel.classList.remove("hidden"); // Show the carousel container
 
-    document.body.classList.toggle("carousel-active", state.galleryType === "carousel"); // Toggle body class for CSS styling
+      document.body.classList.toggle("carousel-active", state.galleryType === "carousel"); // Toggle body class for CSS styling
 
-    await loadPages(state.currentPage); // Load the current page images from API for carousel
-    loadGallery(); // Render loaded images in the carousel
+      await loadPages(state.currentPage); // Load the current page images from API for carousel
+      loadGallery(); // Render loaded images in the carousel
 
       createPagesNavigation();
       break;
     case "carousel":
-      viewToggleButton.textContent = "Switch to carousel";
-      state.currentPage = transmuteCurrentPage(state.currentPage);
       state.galleryType = "grid";
-      await loadPages(state.currentPage);
-      loadGallery();
+      state.currentPage = transmuteCurrentPage(state.currentPage);
+      viewToggleButton.textContent = "Switch to carousel";
       galleryCarousel.classList.add("hidden");
       galleryGrid.classList.remove("hidden");
+
+      document.body.classList.toggle("carousel-active", state.galleryType === "carousel");
+      
+      await loadPages(state.currentPage);
+      loadGallery();     
+      
       createPagesNavigation();
       break;
     default:

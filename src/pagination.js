@@ -181,7 +181,7 @@ export const loadPages = async (pageClicked) => {
       break;
     case 'carousel': { // Carousel mode
       showLoading(true); // Show skeletons
-      await loadPageFromAPI(requestedPage); // Load selected page from API
+      await loadPageFromAPI(pageClicked); // Load selected page from API
       showLoading(false); // Hide skeletons
       break; // Exit case
     }
@@ -189,7 +189,7 @@ export const loadPages = async (pageClicked) => {
   }
 
   if (state.galleryType === 'carousel') { // Always render carousel if in carousel mode
-    const pageObject = state.imagesData.find((p) => p.page === requestedPage); // Find page object
+    const pageObject = state.imagesData.find((p) => p.page === pageClicked); // Find page object
     if (pageObject && pageObject.data) renderCarousel(pageObject.data); // Render if data exists
   }
 };
