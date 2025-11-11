@@ -15,7 +15,7 @@ export const showLightbox = (imageData) => {
     const lightboxComments = document.querySelector('.lightbox-comments');
     lightboxComments.textContent = ''; // Clear previous comments
     
-    imageData.comments.forEach(commentItem => {
+    imageData.comments.reverse().forEach(commentItem => {
         const userNameParagraph = document.createElement('p');
         userNameParagraph.classList.add('lightbox-user-name');
         userNameParagraph.textContent = commentItem.commenter_name + ':';
@@ -31,21 +31,23 @@ export const showLightbox = (imageData) => {
     lightboxCloseButton.addEventListener('click', () => closeLightbox());
 
     const commentForm = document.querySelector('.lightbox-comment-form');
-    const userNameInput = document.querySelector('.lightbox-user-name');
+    const userNameInput = document.querySelector('.lightbox-user-name-input');
     const commentInput = document.querySelector('.lightbox-comment-input');
 
     commentForm.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevent reloading the page
 
+                const userCommentParagraph = document.createElement('p');
+        userCommentParagraph.classList.add('lightbox-user-comment');
+        userCommentParagraph.textContent = commentInput.value;
+        lightboxComments.prepend(userCommentParagraph);
+        
         const userNameParagraph = document.createElement('p');
         userNameParagraph.classList.add('lightbox-user-name');
         userNameParagraph.textContent = userNameInput.value + ':';
-        lightboxComments.appendChild(userNameParagraph);
+        lightboxComments.prepend(userNameParagraph);
 
-        const userCommentParagraph = document.createElement('p');
-        userCommentParagraph.classList.add('lightbox-user-comment');
-        userCommentParagraph.textContent = commentInput.value;
-        lightboxComments.appendChild(userCommentParagraph);
+
 
         commentInput.value = '';
     });
