@@ -1057,12 +1057,17 @@ main {
 @media (max-width: 600px) {
   
   .pages-navigation {
-  
     gap: 0.5em; 
     margin: 1.5em 0; 
   }
   .pages-navigation button {
     font-size: 0.9em;
+  }
+  .hamburger-stripes-container { 
+     width: 50%;
+  }
+  .header-content {
+    font-size: 1.8em ;
   }
 
 }
