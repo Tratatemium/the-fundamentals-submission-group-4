@@ -124,7 +124,7 @@ textarea:not([rows]) {
   --accent-color: #242424;
   --text-color: #1D1615;
   --font-primary: 'Roboto', sans-serif;
-  --font-secondary: 'Playfair', serif;
+  --font-secondary: 'Playfair Display', serif;
 }
 /*==== DARK MODE COLOR SCHEME ====*/
 
@@ -174,12 +174,23 @@ body.dark-mode header {
 
 /* Brand title */
 .header-content {
+  display: flex;
   font-weight: 500;
   color: var(--text-color);
   margin: auto 0;
   /* font-family: 'Playfair Display', serif; */
   font-family: var(--font-secondary);
   font-size: 2.3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+}
+
+.header-content svg {
+  width: 1em;
+  height: 1em;
+  color: var(--text-color);
+  fill: var(--text-color);
 }
 
 .hamburger-menu-button {
