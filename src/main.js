@@ -36,6 +36,11 @@ export const state = {
   imagesByCategory: [],
 };
 
+//set up the local storage for the liked images if there is not one
+if (!localStorage.getItem("images_liked")) {
+  localStorage.setItem("images_liked", JSON.stringify([]));
+}
+
 /* #endregion VARIABLES DECLARATION */
 
 /* ================================================================================================= */
@@ -104,7 +109,7 @@ export const createImage = (imageData) => {
   appImg.src = imageData.image_url; // Set the image source URL
   imageContainer.appendChild(appImg); // Append the image to the app container
 
-  appImg.addEventListener('click', () => showLightbox(imageData)); // send all imageData as an argument to showLightbox
+  appImg.addEventListener("click", () => showLightbox(imageData)); // send all imageData as an argument to showLightbox
 
   const hoverContainer = document.createElement("div");
   hoverContainer.classList.add("hover-container");
@@ -131,16 +136,12 @@ export const createImage = (imageData) => {
   iconContainer.classList.add("icon-container");
   hoverContainer.appendChild(iconContainer);
 
-  // --- Adding Icons --- //
-  /* Used DOMParser because direct 'innerHTML = svgContent`caused syntax error*/
-  const parser = new DOMParser(); // Creates a new DOMParser
-
-  //Heart icon and like number group
-
+  // --Creating like button-- //
   const heartGroup = document.createElement("button");
   heartGroup.classList.add("icon-group");
   heartGroup.classList.add("button-like");
-  if (imageData.userLiked === true) {
+  const likedImages = JSON.parse(localStorage.getItem("images_liked"));
+  if (likedImages.includes(imageData.id)) {
     //if the user already liked it before, adds "active" class
     heartGroup.classList.add("active");
   }
@@ -149,6 +150,10 @@ export const createImage = (imageData) => {
     likeButtonOnClick(heartGroup); //giving the button as an argument
   });
 
+  // --- Adding Icons --- //
+  /* Used DOMParser because direct 'innerHTML = svgContent`caused syntax error*/
+  const parser = new DOMParser(); // Creates a new DOMParser
+  //Heart icon and like number group
   const svgIconHeart = `<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -254,14 +259,17 @@ viewToggleButton.addEventListener("click", async () => {
   const galleryCarousel = document.querySelector("#gallery-carousel"); // Select the carousel gallery container
 
   switch (state.galleryType) {
-    case "grid":    
+    case "grid":
       state.currentPage = transmuteCurrentPage(state.currentPage); // Adjust page number for carousel (using helper function)
       state.galleryType = "carousel"; // Switch global gallery mode to carousel
       viewToggleButton.textContent = "Switch to grid"; // Update toggle button text
       galleryGrid.classList.add("hidden"); // Hide the grid container
       galleryCarousel.classList.remove("hidden"); // Show the carousel container
 
-      document.body.classList.toggle("carousel-active", state.galleryType === "carousel"); // Toggle body class for CSS styling      
+      document.body.classList.toggle(
+        "carousel-active",
+        state.galleryType === "carousel"
+      ); // Toggle body class for CSS styling
 
       await loadPages(state.currentPage); // Load the current page images from API for carousel
       loadGallery(); // Render loaded images in the carousel
@@ -270,44 +278,47 @@ viewToggleButton.addEventListener("click", async () => {
       break;
     case "carousel":
       state.currentPage = transmuteCurrentPage(state.currentPage);
-      state.galleryType = "grid"      
+      state.galleryType = "grid";
       viewToggleButton.textContent = "Switch to carousel";
       galleryCarousel.classList.add("hidden");
       galleryGrid.classList.remove("hidden");
 
-      document.body.classList.toggle("carousel-active", state.galleryType === "carousel");     
-      
+      document.body.classList.toggle(
+        "carousel-active",
+        state.galleryType === "carousel"
+      );
+
       await loadPages(state.currentPage);
-      loadGallery();     
-      
+      loadGallery();
+
       createPagesNavigation();
       break;
     default:
   }
 });
 
-const aboutDialog = document.querySelector('.about-dialog');
+const aboutDialog = document.querySelector(".about-dialog");
 
-const showAboutButton = document.querySelector('.button-show-about');
+const showAboutButton = document.querySelector(".button-show-about");
 
-showAboutButton?.addEventListener('click', () => {
+showAboutButton?.addEventListener("click", () => {
   if (!aboutDialog.open) {
     aboutDialog.showModal();
-    document.body.classList.add('lightbox-open');
+    document.body.classList.add("lightbox-open");
   }
 });
 
-const closeAboutButton = document.querySelector('.close-about-button');
-closeAboutButton?.addEventListener('click', () => {
+const closeAboutButton = document.querySelector(".close-about-button");
+closeAboutButton?.addEventListener("click", () => {
   if (aboutDialog.open) {
     aboutDialog.close();
-    document.body.classList.remove('lightbox-open');
+    document.body.classList.remove("lightbox-open");
   }
-})
-document.addEventListener('keydown', event => {
-  if (aboutDialog.open && event.key === 'Escape') {
+});
+document.addEventListener("keydown", (event) => {
+  if (aboutDialog.open && event.key === "Escape") {
     aboutDialog.close();
-    document.body.classList.remove('lightbox-open');
+    document.body.classList.remove("lightbox-open");
   }
 });
 
@@ -315,13 +326,18 @@ document.addEventListener('keydown', event => {
 /* #region FINAL HOME BUTTON RESET FIX — ALWAYS SWITCH TO GRID                                       */
 /* ================================================================================================= */
 
-document.addEventListener("DOMContentLoaded", () => { // Wait for full DOM to load before running the code
-  const homeLink = Array.from(document.querySelectorAll("nav a")).find(a => // Select all <a> links in <nav>, convert NodeList to array, then find the one matching "home"
-    a.textContent.trim().toLowerCase() === "home" // Check text content of each link, trim whitespace, convert to lowercase, match "home"
+document.addEventListener("DOMContentLoaded", () => {
+  // Wait for full DOM to load before running the code
+  const homeLink = Array.from(document.querySelectorAll("nav a")).find(
+    (
+      a // Select all <a> links in <nav>, convert NodeList to array, then find the one matching "home"
+    ) => a.textContent.trim().toLowerCase() === "home" // Check text content of each link, trim whitespace, convert to lowercase, match "home"
   );
 
-  if (homeLink) { // If a "Home" link was found
-    homeLink.addEventListener("click", async (e) => { // Attach click event listener; async because we will use await inside
+  if (homeLink) {
+    // If a "Home" link was found
+    homeLink.addEventListener("click", async (e) => {
+      // Attach click event listener; async because we will use await inside
       e.preventDefault(); // Prevent default link navigation
 
       //  Reset view to GRID mode
@@ -332,7 +348,6 @@ document.addEventListener("DOMContentLoaded", () => { // Wait for full DOM to lo
       document.body.classList.remove("carousel-active"); // Remove body class for carousel mode
       document.querySelector("#gallery-carousel")?.classList.add("hidden"); // Hide carousel container; ?. ensures this only runs if the element exists, preventing runtime errors if null
       document.querySelector(".gallery-grid")?.classList.remove("hidden"); // Show grid container; ?. safely calls classList.remove only if the element exists
-
 
       // Reload first grid view
       await loadPages(1); // Load first page via API (await ensures it completes before continuing)
@@ -373,7 +388,6 @@ const init = async () => {
   loadGallery(); // Renders loaded images in the active gallery mode
   // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
   // console.log(state);
-
 };
 
 init();

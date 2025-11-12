@@ -651,7 +651,7 @@ main  {
   cursor: pointer;
   border: none;
 }
-.button-like.active svg {
+.button-like.active .heart-icon {
   fill : white;
 
 }
