@@ -138,8 +138,8 @@ export const createImage = (imageData) => {
 
   // --Creating like button-- //
   const heartGroup = document.createElement("button");
-  heartGroup.classList.add("icon-group");
-  heartGroup.classList.add("button-like");
+  heartGroup.classList.add("icon-group"); //for css
+  heartGroup.classList.add("button-like"); //for css
   const likedImages = JSON.parse(localStorage.getItem("images_liked"));
   if (likedImages.includes(imageData.id)) {
     //if the user already liked it before, adds "active" class
@@ -160,7 +160,7 @@ export const createImage = (imageData) => {
     </svg>`;
 
   const svgDocHeart = parser.parseFromString(svgIconHeart, "image/svg+xml"); //Parse the SVG string into an SVG Document object
-  const heartIcon = svgDocHeart.documentElement; // Get the root SVG element from the parsed document
+  const heartIcon = svgDocHeart.documentElement; //SVG string converts to a DOM element
   heartIcon.classList.add("heart-icon");
   heartGroup.appendChild(heartIcon); // Append the actual SVG element to  'hoverContainer'
 
