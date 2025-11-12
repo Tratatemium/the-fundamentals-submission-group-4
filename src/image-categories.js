@@ -18,6 +18,7 @@ export const displayByCategoriesDOM = async () => {
   switch (state.activeCategory) {
     case "All":
       await loadPages(state.currentPage);
+      createPagesNavigation();
       loadGallery();
       break;
     case "Uncategorised":
