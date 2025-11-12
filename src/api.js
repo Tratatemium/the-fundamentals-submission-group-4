@@ -45,7 +45,31 @@ export const loadPageFromAPI = async (page) => {
 
   } catch (error) {
     console.error("Failed to fetch images:", error);
-    alert("🚨 Failed to fetch images:", error);
+    alert(`🚨 Failed to fetch images: ${error}`);
+  }
+};
+
+export const updateLikesAPI = async (ID, method) => {
+  if (method !== 'DELETE' && method !== 'POST') {
+    console.log("🚨 Error in updateLikesAPI() - bad argument.");
+  }
+
+  try {
+    const response = await fetch(`https://image-feed-api.vercel.app/api/images/${ID}/like`, {
+      method: method,
+    });
+
+    // Check if request was successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const json = await response.json();
+    console.log(json);
+
+  } catch (error) {
+    console.error("Failed to update likes on server:", error);
+    alert(`🚨 Failed to update likes on server: ${error}`);
   }
 };
 
