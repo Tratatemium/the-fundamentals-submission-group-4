@@ -8,7 +8,11 @@ import { state } from './main.js';
 import { createImage } from './main.js';
 import { createPagesNavigation } from './pagination.js';
 
-// Fetches images from external API with duplicate prevention and loading feedback
+/**
+ * Fetches images from external API with duplicate prevention and loading feedback
+ * @param {number} page - The page number to fetch from the API
+ * @returns {Promise<void>} Promise that resolves when page data is loaded and processed
+ */
 export const loadPageFromAPI = async (page) => {
 
   if (state.loadedPages.includes(page)) return;
@@ -49,9 +53,16 @@ export const loadPageFromAPI = async (page) => {
   }
 };
 
+/**
+ * Updates like count for an image via API
+ * @param {string} ID - The image ID to update likes for
+ * @param {string} method - The HTTP method ('POST' or 'DELETE')
+ * @returns {Promise<void>} Promise that resolves when like update is complete
+ */
 export const updateLikesAPI = async (ID, method) => {
   if (method !== 'DELETE' && method !== 'POST') {
     console.log("🚨 Error in updateLikesAPI() - bad argument.");
+    return;
   }
 
   try {
