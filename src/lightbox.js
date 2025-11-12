@@ -1,11 +1,16 @@
 
 import { state } from "./main";
 
-export const showLightbox = (imageData) => {
-    document.body.classList.add('lightbox-open');
-    lightbox.classList.remove('hidden');
+const lightbox = document.querySelector('.lightbox');
+const lightboxImage = document.querySelector('.lightbox-image');
+const overlay = document.querySelector('.overlay');
+const lightboxComments = document.querySelector('.lightbox-comments');
 
-    lightboxImage.src = imageData.image_url;
+export const showLightbox = (imageData) => {
+    document.body.classList.add('lightbox-open'); // Prevent background scrolling
+    lightbox.classList.remove('hidden'); // Show the lightbox
+
+    lightboxImage.src = imageData.image_url; // Set the lightbox image source
 
     overlay.classList.remove('hidden');
 
@@ -23,13 +28,7 @@ export const showLightbox = (imageData) => {
         lightboxComments.appendChild(userCommentParagraph);
 
     });
-
-
-
 };
-
-
-
 
 const closeLightbox = () => {
     document.body.classList.remove('lightbox-open');
@@ -39,11 +38,6 @@ const closeLightbox = () => {
     const overlay = document.querySelector('.overlay');
     overlay.classList.add('hidden');
 };
-
-const lightbox = document.querySelector('.lightbox');
-const lightboxImage = document.querySelector('.lightbox-image');
-const overlay = document.querySelector('.overlay');
-const lightboxComments = document.querySelector('.lightbox-comments');
 
 const lightboxCloseButton = document.querySelector('.lightbox-close-button');
 lightboxCloseButton.addEventListener('click', () => closeLightbox());

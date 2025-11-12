@@ -1130,15 +1130,41 @@ body.lightbox-open {
 
 .lightbox-comments-container {
   width: 42%;
-  max-height: 85vh;
+  max-height: 350px;
   overflow-y: auto;
-  position: absolute;
+  padding-left: 1.5em;
   top: 1.5em;
   right: 1.5em;
   bottom: 1.5em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: 1.5em;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1250px) {
+  .lightbox {
+    flex-direction: column;
+    align-items: center;
+    width: auto; /* optional: make it more responsive */
+    height: auto;
+  }
+
+  .lightbox-image {
+    width: 90%;
+    height: auto;
+    margin: 1.5em 1em 0em 1em;
+  }
+
+  .lightbox-comments-container {
+    position: static; /* remove absolute positioning for stacking */
+    width: 90%;
+    max-width: 350px;
+    max-height: 30vh; 
+    margin: 1.5em 0 1.5em 0;
+    overflow-y: auto;
+  }
 }
 
 .lightbox-comments {
@@ -1227,6 +1253,7 @@ body.lightbox-open {
   top: 0.2em;
   right: 0.2em;
 }
+
 
 .overlay.hidden {
   display: none;
