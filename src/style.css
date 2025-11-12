@@ -158,14 +158,18 @@ header {
   justify-content: space-between;
   padding: 1em 2em;
   color: var(--text-color);
-  background-color: var(--primary-color);
+  background-color: rgb(from var(--primary-color) r g b / 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--secondary-color);
   z-index: 1000;
 }
 
 /* Dark mode header styling */
 body.dark-mode header {
-  background-color: var(--primary-color);
+  background-color: rgb(from var(--primary-color) r g b / 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* Brand title */
