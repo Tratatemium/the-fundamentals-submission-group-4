@@ -804,6 +804,26 @@ body.carousel-active #gallery-carousel {
 .gallery-grid + #gallery-carousel button { display: none; }
 body.carousel-active #gallery-carousel button { display: block; }
 
+/* adding like comment section on carousel images */
+#slider .item .hover-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background: linear-gradient(to top, #1A1A1A, rgba(29, 22, 21, 0.3));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#slider .item:hover .hover-container {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
 /* #endregion CAROUSEL */
 
 /* ========================
@@ -1327,12 +1347,3 @@ body.lightbox-open {
 
 /* #endregion ABOUT-DIALOG */
 
-RAHEEL
-.loading-img-carousel{
-  display: flex;
-  width: 16em;
-  height: 16em;
-  border-radius: 4px;
-  margin: 2em;
-  background-color: red;
-}
