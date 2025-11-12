@@ -1030,7 +1030,7 @@ main {
 
 /* Category text styling within overlay */
 .image-category {
-  color: var(--primary-color);
+  color: #F5F4F1;
   font-size: 0.8rem;
   opacity: 0.9;
   margin: 0;
@@ -1038,7 +1038,7 @@ main {
 
 /* Author text styling within overlay */
 .image-author {
-  color: var(--primary-color);
+  color: #F5F4F1;
   font-weight: bold;
   font-size: 1rem;
   margin: 0;
