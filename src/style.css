@@ -1,12 +1,4 @@
 /* ================================================================================================= */
-/* #region NEW REGION                                                                                */
-/* ================================================================================================= */
-
-
-/* #endregion NEW REGION */
-
-
-/* ================================================================================================= */
 /* #region CSS RESET                                                                                 */
 /* ================================================================================================= */
 
@@ -142,11 +134,10 @@ body.dark-mode {
 /*========== END TOGGLE BUTTON DARK MODE VARIABLES =================*/
 
 
-/* #endregion CSS CUSTOM PROPERTIES (VARIABLES) 
-
+/* #endregion CSS CUSTOM PROPERTIES (VARIABLES) */
 
 /* ================================================================================================= */
-/* #region HEADER  and NAV                                                                           */
+/* #region HEADER & NAVIGATION                                                                       */
 /* ================================================================================================= */
 
 header {
@@ -551,7 +542,7 @@ body.dark-mode .theme-icon-dark {
   left: 0;
 }
 
-/* #endregion HEADER and NAV */
+/* #endregion HEADER & NAVIGATION */
 
 
 /* ================================================================================================= */
@@ -695,39 +686,13 @@ main  {
   margin: auto;
 }
 
-/* #endregion APP (GALERY) */
+/* #endregion APP (GALLERY) */
+
 /* ====================================== */
-/* #region CAROUSEL                        */
+/* #region CAROUSEL                                                                                 */
 /* ====================================== */
 
-/* Carousel container view */
-.carousel-view {
-  display: flex;                        /* Horizontal layout for images */
-  overflow-x: auto;                      /* Enable horizontal scrolling */
-  gap: 80px;                             /* Space between images */
-  scroll-snap-type: x mandatory;         /* Snap scrolling effect */
-  padding: 120px 10px;                   /* Top padding for spacing from header */
-}
 
-/* Carousel images */
-.carousel-view img {
-  min-width: 20%;                        /* Minimum width relative to container */
-  height: 370px;                          /* Fixed height */
-  object-fit: cover;                      /* Cover container proportionally */
-  scroll-snap-align: center;             /* Snap image to center when scrolling */
-  border-radius: 12px;                    /* Rounded corners */
-  transition: transform 0.3s;            /* Smooth scale effect on hover */
-}
-
-/* Slight zoom effect on hover */
-.carousel-view img:hover {
-  transform: scale(1.03);
-}
-
-/* Hide default horizontal scrollbar */
-.carousel-view::-webkit-scrollbar {
-  display: none;
-}
 
 /* Carousel wrapper container */
 #gallery-carousel {
@@ -918,7 +883,7 @@ body.carousel-active #gallery-carousel button { display: block; }
 
 
 /* ================================================================================================= */
-/* #region GEMENI API                                                                                */
+/* #region MAIN LAYOUT                                                                               */
 /* ================================================================================================= */
 
 body {
@@ -937,6 +902,7 @@ main {
   justify-content: center;
 }
 
+/* #endregion MAIN LAYOUT */
 
 /* ================================================================================================= */
 /* #region BUTTON STYLES                                                                             */
@@ -1047,6 +1013,8 @@ main {
 
 /* #endregion IMAGE CONTAINER & OVERLAY SYSTEM */
 
+/* #endregion BUTTON STYLES */
+
 /* ================================================================================================= */
 /* #region CATEGORY FILTER INTERFACE                                                                */
 /* ================================================================================================= */
@@ -1072,9 +1040,6 @@ main {
 }
 
 /* #endregion CATEGORY FILTER INTERFACE */
-
-/* #endregion GEMENI API */
-
 
 /* ================================================================================================= */
 /* #region PAGINATION                                                                                */
@@ -1390,3 +1355,4 @@ body.lightbox-open {
 
 /* #endregion ABOUT-DIALOG */
 
+/* End of file */

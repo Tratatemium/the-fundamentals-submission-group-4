@@ -1,14 +1,22 @@
 /**
+ * IMAGE CATEGORIES MODULE
+ * =======================
+ * 
  * Category filtering and UI management for dynamic image categorization
  * Handles category buttons, filtering logic, and visibility management
  */
 
-// Import state management from main module
 import { state } from './main.js'
 import { loadPages, loadGallery, createPagesNavigation } from './pagination.js';
 
+/* ================================================================================================= */
+/* #region CATEGORY FUNCTIONS                                                                       */
+/* ================================================================================================= */
 
-// Filters and displays images based on the currently active category
+/**
+ * Filter and display images by active category
+ * @returns {Promise<void>}
+ */
 export const displayByCategoriesDOM = async () => {
   const allLoadedImages = state.imagesData.flatMap(page => page.data);
   state.imagesByCategory = [];
@@ -36,7 +44,10 @@ export const displayByCategoriesDOM = async () => {
   }
 };
 
-// Creates and updates category filter buttons in the UI
+/**
+ * Create and update category filter buttons in UI
+ * @returns {void}
+ */
 export const updateCategoriesDOM = () => {
 
   let categoryButtons = Array.from(document.querySelectorAll(".button-category"));
@@ -71,10 +82,9 @@ export const updateCategoriesDOM = () => {
   categoryButtons = Array.from(document.querySelectorAll(".button-category"));
 
   /**
-   * Handles category button click events
+   * Handle category button click events
    * @param {HTMLButtonElement} button - The clicked category button
-   * @description Updates active category and refreshes the display when a different
-   * category button is clicked. Prevents unnecessary updates for already active buttons.
+   * @returns {void}
    */
   const categoryButtonsOnClick = (button) => {
     if (!button.classList.contains("active")) {
@@ -104,4 +114,6 @@ export const updateCategoriesDOM = () => {
   // Apply current category filter
   displayByCategoriesDOM();
 };
+
+/* #endregion CATEGORY FUNCTIONS */
 

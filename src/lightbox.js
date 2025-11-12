@@ -1,11 +1,32 @@
 
-import { state } from "./main";
+/**
+ * LIGHTBOX MODULE
+ * ===============
+ * 
+ * Image lightbox overlay with commenting functionality
+ * Handles full-screen image display and user comment interactions
+ */
+
+/* ================================================================================================= */
+/* #region DOM ELEMENTS                                                                             */
+/* ================================================================================================= */
 
 const lightbox = document.querySelector('.lightbox');
 const lightboxImage = document.querySelector('.lightbox-image');
 const overlay = document.querySelector('.overlay');
 const lightboxComments = document.querySelector('.lightbox-comments');
 
+/* #endregion DOM ELEMENTS */
+
+/* ================================================================================================= */
+/* #region LIGHTBOX FUNCTIONS                                                                       */
+/* ================================================================================================= */
+
+/**
+ * Show lightbox with image and comments
+ * @param {Object} imageData - Image data object with URL and comments
+ * @returns {void}
+ */
 export const showLightbox = (imageData) => {
     document.body.classList.add('lightbox-open'); // Prevent background scrolling
     lightbox.classList.remove('hidden'); // Show the lightbox
@@ -30,6 +51,10 @@ export const showLightbox = (imageData) => {
     });
 };
 
+/**
+ * Close lightbox and hide overlay
+ * @returns {void}
+ */
 const closeLightbox = () => {
     document.body.classList.remove('lightbox-open');
     const lightbox = document.querySelector('.lightbox');
@@ -38,6 +63,12 @@ const closeLightbox = () => {
     const overlay = document.querySelector('.overlay');
     overlay.classList.add('hidden');
 };
+
+/* #endregion LIGHTBOX FUNCTIONS */
+
+/* ================================================================================================= */
+/* #region EVENT LISTENERS                                                                          */
+/* ================================================================================================= */
 
 const lightboxCloseButton = document.querySelector('.lightbox-close-button');
 lightboxCloseButton.addEventListener('click', () => closeLightbox());
@@ -65,7 +96,9 @@ commentForm.addEventListener('submit', (e) => {
 
 });
 
-// Possibility to close the lightbox by pressing "Esc"
+//  Close lightbox with Escape key
 document.addEventListener('keydown', (event) => {
     if (document.body.classList.contains('lightbox-open') && event.key === 'Escape') closeLightbox();
 });
+
+/* #endregion EVENT LISTENERS */
