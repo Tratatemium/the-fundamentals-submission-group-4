@@ -1,4 +1,5 @@
 import { findImageDataByID } from "./main.js";
+import { updateLikesAPI } from "./api.js"
 
 export const likeButtonOnClick = (button) => {
   const likeNumber = button.children[1];
@@ -14,11 +15,13 @@ export const likeButtonOnClick = (button) => {
     //stores in data that user liked the picture
     likedImages.push(ID); // Add the id of liked image to array
     localStorage.setItem("images_liked", JSON.stringify(likedImages)); //save the updated array to local storage
+    updateLikesAPI(ID, "POST");
   } else {
     button.classList.remove("active");
     likeNumber.textContent = Number(likeNumber.textContent) - 1;
     imageData.likes_count--;
     likedImages = likedImages.filter((item) => item !== ID); // remove the id of liked image to array
     localStorage.setItem("images_liked", JSON.stringify(likedImages)); //unlike, removes the previous data
+    updateLikesAPI(ID, "DELETE");
   }
 };
