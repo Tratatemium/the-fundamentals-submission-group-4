@@ -10,7 +10,7 @@ An image gallery application with AI-powered metadata generation, dual viewing m
 - **Advanced Pagination**: Seamless navigation with Previous/Next and numbered page controls
 - **Category Filtering**: Dynamic filtering based on AI-generated categories
 - **Loading Animations**: Skeleton placeholders and real-time processing feedback
-- **Lightbox Display**: Full-screen image viewing with possibility to coment
+- **Lightbox Display**: Full-screen image viewing with possibility to comment
 - **Theme Switching**: Light/dark mode support with CSS custom properties
 - **Responsive Design**: Mobile-first design with CSS Grid and Flexbox
 
@@ -71,7 +71,7 @@ npm run build
 3. **Navigation**: Use pagination controls to browse through image pages
 4. **AI Processing**: Click "Get Metadata" to generate AI descriptions and categories
 5. **Filtering**: Use category buttons to filter images by type
-6. **Image Viewing**: Click images for lightbox view with full metadata
+6. **Image Viewing**: Click images for lightbox view comments
 
 ### Gallery Modes
 - **Grid Mode**: Displays multiple images in a responsive grid layout
