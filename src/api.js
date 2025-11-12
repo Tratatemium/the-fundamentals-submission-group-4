@@ -1,12 +1,17 @@
 /**
+ * API INTEGRATION MODULE
+ * ======================
+ * 
  * External image API integration with loading animations
  * Handles page-based data fetching and state management
  */
 
-// Import state management, UI functions, and pagination
 import { state } from './main.js';
-import { createImage } from './main.js';
 import { createPagesNavigation } from './pagination.js';
+
+/* ================================================================================================= */
+/* #region API FUNCTIONS                                                                            */
+/* ================================================================================================= */
 
 /**
  * Fetches images from external API with duplicate prevention and loading feedback
@@ -84,6 +89,6 @@ export const updateLikesAPI = async (ID, method) => {
   }
 };
 
-/* #endregion API REQUESTS */
+/* #endregion API FUNCTIONS */
 
 

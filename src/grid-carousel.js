@@ -1,23 +1,29 @@
-// ======================================
-// GRID–CAROUSEL MODULE (FINAL STABLE VERSION)
-// ======================================
+/**
+ * GRID CAROUSEL MODULE
+ * ====================
+ * 
+ * 3D carousel implementation with interactive navigation
+ * Handles carousel item creation, rotation controls, and click interactions
+ */
 
-import { showLightbox } from "./lightbox.js"; // Import lightbox function to show full-screen images
+import { showLightbox } from "./lightbox.js";
 
-// ======================
-// DOM ELEMENTS
-// ======================
-const carouselContainer = document.getElementById("gallery-carousel"); // Select the main carousel container
-const slider = document.getElementById("slider"); // Select the slider element inside carousel
-const nextBtn = document.getElementById("carousel-next"); // Select the "Next" button
-const prevBtn = document.getElementById("carousel-prev"); // Select the "Prev" button
+/* ================================================================================================= */
+/* #region DOM ELEMENTS & VARIABLES                                                                 */
+/* ================================================================================================= */
+const carouselContainer = document.getElementById("gallery-carousel");
+const slider = document.getElementById("slider");
+const nextBtn = document.getElementById("carousel-next");
+const prevBtn = document.getElementById("carousel-prev");
 
-// Internal rotation
-let rotation = 0; // Store current rotation angle of the 3D carousel
+// Internal rotation state
+let rotation = 0;
 
-// ======================================
-// A. RESET CAROUSEL (Clear + Reset Rotation)
-// ======================================
+/* #endregion DOM ELEMENTS & VARIABLES */
+
+/* ================================================================================================= */
+/* #region CAROUSEL FUNCTIONS                                                                       */
+/* ================================================================================================= */
 /**
  * Reset carousel rotation and clear items
  * @returns {void}
@@ -29,22 +35,14 @@ function resetCarousel() {
     slider.innerHTML = ""; // Remove all old carousel items
   }
 }
-
-// ======================================
-// B. CSS VARIABLE SETUP (Quantity)
-// ======================================
 /**
  * Set number of items for CSS carousel configuration
  * @param {number} count - Number of carousel items
  * @returns {void}
  */
 function configureCarouselVariables(count) {
-  if (slider) slider.style.setProperty("--quantity", count); // Update CSS variable --quantity with total items
+  if (slider) slider.style.setProperty("--quantity", count);
 }
-
-// ======================================
-// C. BUILD THE 3D ITEMS (with likes/comments overlay)
-// ======================================
 /**
  * Create carousel items with 3D positioning
  * @param {Array} images - Array of image data objects
@@ -119,24 +117,23 @@ function createCarouselItems(images) {
   });
 }
 
-// ======================================
-// D. MAIN EXPORT — CALLED BY pagination.js
-// ======================================
 /**
  * Render carousel with image data
  * @param {Array} images - Array of image objects to render
  * @returns {void}
  */
 export function renderCarousel(images) {
-  if (!slider || !images || !images.length) return; // Exit if no slider or no images
-  resetCarousel();                           // Clear old items
-  configureCarouselVariables(images.length); // Set CSS variable --quantity
-  createCarouselItems(images);               // Build carousel items with overlay
+  if (!slider || !images || !images.length) return;
+  resetCarousel();
+  configureCarouselVariables(images.length);
+  createCarouselItems(images);
 }
 
-// ======================================
-// ROTATION CONTROLS (Next / Prev)
-// ======================================
+/* #endregion CAROUSEL FUNCTIONS */
+
+/* ================================================================================================= */
+/* #region EVENT LISTENERS                                                                          */
+/* ================================================================================================= */
 document.addEventListener("DOMContentLoaded", () => { // Wait for DOM to fully load
   const slider = document.getElementById("slider"); // Re-select slider
   const nextBtn = document.getElementById("carousel-next"); // Re-select Next button
@@ -158,3 +155,5 @@ document.addEventListener("DOMContentLoaded", () => { // Wait for DOM to fully l
     slider.style.setProperty("--rotation", `${rotation}deg`); // Update CSS rotation
   });
 });
+
+/* #endregion EVENT LISTENERS */

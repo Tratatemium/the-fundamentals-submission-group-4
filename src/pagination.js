@@ -1,14 +1,20 @@
 /**
+ * PAGINATION MODULE
+ * =================
+ * 
  * Pagination and gallery management with dual-mode support
  * Handles grid mode (2 pages per view) and carousel mode (1 page per view)
  * Includes loading animations and page navigation controls
  */
 
-// Import state management, image creation, and API functions
 import { state } from './main.js'
 import { createImage } from './main.js'
 import { loadPageFromAPI } from './api.js'
-import { renderCarousel } from './grid-carousel.js'; // Import function to render carousel view
+import { renderCarousel } from './grid-carousel.js';
+
+/* ================================================================================================= */
+/* #region HELPER FUNCTIONS                                                                         */
+/* ================================================================================================= */
 
 /**
  * Calculates the pair of API pages needed for grid mode display
@@ -18,6 +24,12 @@ import { renderCarousel } from './grid-carousel.js'; // Import function to rende
 export const getPair = (n) => {
   return [n * 2 - 1, n * 2];
 };
+
+/* #endregion HELPER FUNCTIONS */
+
+/* ================================================================================================= */
+/* #region LOADING ANIMATION                                                                        */
+/* ================================================================================================= */
 
 /**
  * Shows/hides loading skeleton animation during API requests
@@ -136,6 +148,11 @@ const showLoading = (show) => {
   }
 };
 
+/* #endregion LOADING ANIMATION */
+
+/* ================================================================================================= */
+/* #region PAGINATION FUNCTIONS                                                                     */
+/* ================================================================================================= */
 
 /**
  * Loads pages from API based on gallery mode and user selection
@@ -375,3 +392,5 @@ export const createPagesNavigation = () => {
   previous.addEventListener("click", () => previousOnClick());
   next.addEventListener("click", () => nextOnClick());
 };
+
+/* #endregion PAGINATION FUNCTIONS */

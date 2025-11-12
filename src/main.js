@@ -319,9 +319,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-/* ================================================================================================= */
-/* #region FINAL HOME BUTTON RESET FIX — ALWAYS SWITCH TO GRID                                       */
-/* ================================================================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   // Wait for full DOM to load before running the code

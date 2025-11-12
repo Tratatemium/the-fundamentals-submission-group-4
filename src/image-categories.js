@@ -1,12 +1,17 @@
 /**
+ * IMAGE CATEGORIES MODULE
+ * =======================
+ * 
  * Category filtering and UI management for dynamic image categorization
  * Handles category buttons, filtering logic, and visibility management
  */
 
-// Import state management from main module
 import { state } from './main.js'
 import { loadPages, loadGallery, createPagesNavigation } from './pagination.js';
 
+/* ================================================================================================= */
+/* #region CATEGORY FUNCTIONS                                                                       */
+/* ================================================================================================= */
 
 /**
  * Filter and display images by active category
@@ -109,4 +114,6 @@ export const updateCategoriesDOM = () => {
   // Apply current category filter
   displayByCategoriesDOM();
 };
+
+/* #endregion CATEGORY FUNCTIONS */
 

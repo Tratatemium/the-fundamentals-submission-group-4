@@ -1,6 +1,14 @@
-// =======================
-// THEME TOGGLE (Dark/Light mode)
-// =======================
+/**
+ * HEADER FUNCTIONALITY MODULE
+ * ============================
+ * 
+ * Header interface controls including theme toggle and subscription popup
+ * Manages dark/light mode switching and user interaction elements
+ */
+
+/* ================================================================================================= */
+/* #region THEME TOGGLE                                                                             */
+/* ================================================================================================= */
 const themeToggleBtn = document.getElementById("theme-toggle");
 if (themeToggleBtn) {
   // Check for saved theme preference or default to light mode
@@ -42,9 +50,11 @@ if (themeToggleBtn) {
   }
 }
 
-// =======================
-// SUBSCRIBE POPUP
-// =======================
+/* #endregion THEME TOGGLE */
+
+/* ================================================================================================= */
+/* #region SUBSCRIBE POPUP                                                                          */
+/* ================================================================================================= */
 const subscribeBtn = document.getElementById("subscribe-btn"); // Button to open popup.
 const subscribePopup = document.getElementById("subscribe-popup"); // Popup element.
 const subscribeClose = document.getElementById("subscribe-close"); // Close button.
@@ -84,6 +94,11 @@ if (subscribePopup) {
   });
 }
 
+/* #endregion SUBSCRIBE POPUP */
+
+/* ================================================================================================= */
+/* #region MOBILE NAVIGATION                                                                        */
+/* ================================================================================================= */
 
 const hamburgerButton = document.querySelector('.hamburger-menu-button');
 const navigation = document.getElementById(hamburgerButton.getAttribute('aria-controls'));
@@ -94,3 +109,5 @@ hamburgerButton.addEventListener('click', () => {
 
   if (navigation) navigation.hidden = expanded;
 });
+
+/* #endregion MOBILE NAVIGATION */

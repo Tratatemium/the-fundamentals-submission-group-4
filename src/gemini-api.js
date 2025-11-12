@@ -1,25 +1,19 @@
 /**
+ * GEMINI AI MODULE
+ * ================
+ * 
  * AI metadata generation using Google Gemini 2.5 Pro
  * Processes pages of images to generate categories, descriptions, and author names
  * Includes real-time loading animations and error handling
  */
 
-// Import state and DOM update functions from main module
 import { state } from './main.js'
 import { updateImagesDOM } from './main.js'
+import { updateCategoriesDOM } from './image-categories.js';
 
-// Import category management functions from specialized image-categories module
-// Required for updating category filters and displays after AI metadata assignment
-import { displayByCategoriesDOM, updateCategoriesDOM } from './image-categories.js';
-
-// Import API functionality for additional image loading capability
-// import { fetchImages } from './api.js';
-
-// Dynamic imports for Google AI SDK (loaded when needed)
-// import { GoogleGenAI, Type } from "@google/genai" - loaded dynamically
-
-
-
+/* ================================================================================================= */
+/* #region VARIABLES & CONFIGURATION                                                                */
+/* ================================================================================================= */
 
 // Google Gemini AI API key from environment variables
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -29,6 +23,12 @@ let intervalId = null;
 
 // Dynamically loaded Google AI SDK variables
 let GoogleGenAI, Type;
+
+/* #endregion VARIABLES & CONFIGURATION */
+
+/* ================================================================================================= */
+/* #region HELPER FUNCTIONS                                                                         */
+/* ================================================================================================= */
 
 /**
  * Control AI metadata generation timer
@@ -143,6 +143,11 @@ const fetchImagesFromUrl = async () => {
   return processedImages;
 };
 
+/* #endregion HELPER FUNCTIONS */
+
+/* ================================================================================================= */
+/* #region AI PROCESSING                                                                            */
+/* ================================================================================================= */
 
 /**
  * Generate image metadata using Google Gemini AI
@@ -367,47 +372,30 @@ IMPORTANT: Keep the exact same page numbering and structure as provided in the i
  * - Interval ID for animation control
  */
 
+/* #endregion AI PROCESSING */
 
-const AIContainer = document.querySelector('.AI-container');
+/* ================================================================================================= */
+/* #region DOM ELEMENTS                                                                             */
+/* ================================================================================================= */
 
 const buttonAI = document.querySelector(".button-AI");
-
 export const timerAI = document.querySelector('.timer-AI');
 
-
+/* #endregion DOM ELEMENTS */
 
 /* ================================================================================================= */
-/* #region EVENT LISTENERS                                                                           */
+/* #region EVENT LISTENERS                                                                          */
 /* ================================================================================================= */
 
-/**
- * EVENT LISTENER SETUP
- * ====================
- *
- * This section configures all user interaction event handlers for the application.
- * Each button has specific functionality and proper state management.
- */
+// AI Metadata Button Event Listener
 
-/**
- * AI Metadata Button Event Listener
- * @description Triggers AI metadata generation for images that don't have metadata yet.
- * Includes button state management to prevent multiple simultaneous requests.
- * The getImageMetadata() function is imported from the modular gemini-api.js file.
- *
- * Features:
- * - Disables button during processing to prevent duplicate requests
- * - Calls modular AI functionality from separated gemini-api.js module
- * - Async handling with proper error management
- * - Re-enables button after completion (success or failure)
- * - Integrates with timer and loading animation systems
- */
 buttonAI.addEventListener("click", async () => {
   buttonAI.disabled = true; // Disable button during processing
   await getImageMetadata(); // Generate metadata with AI
   buttonAI.disabled = false; // Re-enable button when complete
 });
 
-/* #endregion EVENT LISTENERS  */
+/* #endregion EVENT LISTENERS */
 
 
 

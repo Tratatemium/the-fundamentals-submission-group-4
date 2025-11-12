@@ -1,8 +1,26 @@
 
+/**
+ * LIGHTBOX MODULE
+ * ===============
+ * 
+ * Image lightbox overlay with commenting functionality
+ * Handles full-screen image display and user comment interactions
+ */
+
+/* ================================================================================================= */
+/* #region DOM ELEMENTS                                                                             */
+/* ================================================================================================= */
+
 const lightbox = document.querySelector('.lightbox');
 const lightboxImage = document.querySelector('.lightbox-image');
 const overlay = document.querySelector('.overlay');
 const lightboxComments = document.querySelector('.lightbox-comments');
+
+/* #endregion DOM ELEMENTS */
+
+/* ================================================================================================= */
+/* #region LIGHTBOX FUNCTIONS                                                                       */
+/* ================================================================================================= */
 
 /**
  * Show lightbox with image and comments
@@ -46,6 +64,12 @@ const closeLightbox = () => {
     overlay.classList.add('hidden');
 };
 
+/* #endregion LIGHTBOX FUNCTIONS */
+
+/* ================================================================================================= */
+/* #region EVENT LISTENERS                                                                          */
+/* ================================================================================================= */
+
 const lightboxCloseButton = document.querySelector('.lightbox-close-button');
 lightboxCloseButton.addEventListener('click', () => closeLightbox());
 
@@ -72,7 +96,9 @@ commentForm.addEventListener('submit', (e) => {
 
 });
 
-// Possibility to close the lightbox by pressing "Esc"
+//  Close lightbox with Escape key
 document.addEventListener('keydown', (event) => {
     if (document.body.classList.contains('lightbox-open') && event.key === 'Escape') closeLightbox();
 });
+
+/* #endregion EVENT LISTENERS */

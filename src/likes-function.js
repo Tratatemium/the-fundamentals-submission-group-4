@@ -1,5 +1,17 @@
+/**
+ * LIKES FUNCTIONALITY MODULE
+ * ==========================
+ * 
+ * Handles like button interactions, local storage management, and API updates
+ * Manages like count display and user preference persistence
+ */
+
 import { findImageDataByID } from "./main.js";
 import { updateLikesAPI } from "./api.js"
+
+/* ================================================================================================= */
+/* #region LIKE FUNCTIONS                                                                           */
+/* ================================================================================================= */
 
 /**
  * Handle like button click and update like count
@@ -30,3 +42,5 @@ export const likeButtonOnClick = (button) => {
     updateLikesAPI(ID, "DELETE");
   }
 };
+
+/* #endregion LIKE FUNCTIONS */
