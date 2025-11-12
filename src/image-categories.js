@@ -38,9 +38,8 @@ export const displayByCategoriesDOM = async () => {
 
 // Creates and updates category filter buttons in the UI
 export const updateCategoriesDOM = () => {
-  let categoryButtons = Array.from(
-    document.querySelectorAll(".button-category")
-  );
+
+  let categoryButtons = Array.from(document.querySelectorAll(".button-category"));
   const categoriesContainer = document.querySelector(".categories-container");
 
   // Remove existing category buttons
@@ -53,8 +52,7 @@ export const updateCategoriesDOM = () => {
     ...[...new Set(state.imagesData         // Get only unique categories
       .flatMap(page => page.data            // Unwrap pages
       .map(image => image.category)))       // Get category from ieach image data
-    ].sort((a, b) => a.localeCompare(b))    // Sort categories alphabeticly
-    
+    ].sort((a, b) => a.localeCompare(b))    // Sort categories alphabeticly    
   ];
 
   // Generate button for each category

@@ -121,7 +121,7 @@ textarea:not([rows]) {
 :root {
   --primary-color: #F5F4F1;
   --secondary-color: #E0DFDC;
-  --accent-color: #242424;
+  --accent-color: #19341E;
   --text-color: #1D1615;
   --font-primary: 'Roboto', sans-serif;
   --font-secondary: 'Playfair Display', serif;
@@ -176,7 +176,7 @@ body.dark-mode header {
 .header-content {
   display: flex;
   font-weight: 500;
-  color: var(--text-color);
+  color: var(--accent-color);
   margin: auto 0;
   /* font-family: 'Playfair Display', serif; */
   font-family: var(--font-secondary);
@@ -189,8 +189,8 @@ body.dark-mode header {
 .header-content svg {
   width: 1em;
   height: 1em;
-  color: var(--text-color);
-  fill: var(--text-color);
+  color: var(--accent-color);
+  fill: var(--accent-color);
 }
 
 .hamburger-menu-button {
