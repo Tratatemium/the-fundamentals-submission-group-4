@@ -5,7 +5,7 @@ export const likeButtonOnClick = (button) => {
   const imageContainer = button.parentElement.parentElement.parentElement; //id is in the image container
   const ID = imageContainer.id;
   const imageData = findImageDataByID(ID); //find object in state.imagesData with matching id
-  const likedImages = JSON.parse(localStorage.getItem("images_liked"));
+  let likedImages = JSON.parse(localStorage.getItem("images_liked"));
   if (!button.classList.contains("active")) {
     //if button is not active - user has not clicked before
     button.classList.add("active");
