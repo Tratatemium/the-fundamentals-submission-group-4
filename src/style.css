@@ -347,6 +347,27 @@ nav:not([hidden]) {
   margin-right: 0.5em;
 }
 
+/* ================================================================================================= */
+/* #responsive settings pages-navigation / mobile                                                               */
+/* ================================================================================================= */
+@media (max-width: 600px) {
+  
+  .pages-navigation {
+    gap: 0.5em; 
+    font-size: 0.9em;
+  }
+  .pages-navigation button {
+    font-size: 0.8em;
+  }
+  .hamburger-stripes-container { 
+     width: 50%;
+  }
+  .header-content {
+    font-size: 1.8em ;
+  }
+}
+
+
 /* spinner keyframes */
 @keyframes spin {
   to { transform: rotate(360deg); }
