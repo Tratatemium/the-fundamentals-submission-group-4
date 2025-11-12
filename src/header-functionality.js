@@ -22,6 +22,10 @@ if (themeToggleBtn) {
     updateThemeToggleText();
   });
   
+  /**
+   * Update theme toggle button text and icon
+   * @returns {void}
+   */
   function updateThemeToggleText() {
     const isDarkMode = document.body.classList.contains("dark-mode");
     themeToggleBtn.innerHTML = `

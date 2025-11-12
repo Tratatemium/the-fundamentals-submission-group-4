@@ -36,7 +36,7 @@ export const state = {
   imagesByCategory: [],
 };
 
-//set up the local storage for the liked images if there is not one
+// Set up the local storage for the liked images if there is not one
 if (!localStorage.getItem("images_liked")) {
   localStorage.setItem("images_liked", JSON.stringify([]));
 }
@@ -49,6 +49,8 @@ if (!localStorage.getItem("images_liked")) {
 
 /**
  * Find image data by unique ID across all loaded pages
+ * @param {string} ID - Image unique identifier
+ * @returns {Object|null} Image data object or null if not found
  */
 export const findImageDataByID = (ID) => {
   let result = null;
@@ -62,7 +64,8 @@ export const findImageDataByID = (ID) => {
 
 /**
  * Convert page numbers between gallery modes
- * Grid mode shows 2 API pages per view, carousel shows 1 page per view
+ * @param {number} n - Page number to convert
+ * @returns {number} Converted page number for target gallery mode
  */
 const transmuteCurrentPage = (n) => {
   switch (state.galleryType) {
@@ -83,7 +86,8 @@ const transmuteCurrentPage = (n) => {
 
 /**
  * Creates image containers with interactive overlays and social elements
- * Adapts to current gallery mode and includes AI metadata display
+ * @param {Object} imageData - Image data object with URL, metadata, and stats
+ * @returns {void}
  */
 export const createImage = (imageData) => {
   let gallery;
@@ -193,7 +197,7 @@ export const createImage = (imageData) => {
 
 /**
  * Updates DOM with AI-generated metadata
- * Syncs category and author text content with state data
+ * @returns {void}
  */
 export const updateImagesDOM = () => {
   const imageContainers = Array.from(
@@ -227,17 +231,10 @@ export const updateImagesDOM = () => {
  * =======================================
  *
  * This section manages DOM element references for the dual-gallery system:
- * - Gallery containers for both grid and carousel modes
  * - View toggle functionality for switching between gallery types
  * - State management for gallery type transitions
  * - UI element references for pagination and navigation controls
  */
-
-/**
- * Main container for the grid-based image gallery
- * @type {HTMLElement}
- */
-const galleryGrid = document.querySelector(".gallery-grid");
 
 /* ================================================================================================= */
 /* #region EVENT LISTENERS                                                                           */
@@ -378,16 +375,16 @@ document.addEventListener("DOMContentLoaded", () => {
  * The initialization process:
  * 1. Loads initial pages (1 and 2) through the pagination system
  * 2. Renders the loaded images in the default grid gallery
- * 3. Sets up category filter buttons (starts with 'All' and 'Uncategorised')
- * 4. Establishes pagination controls and navigation
+ * 3. Establishes pagination controls and navigation
  */
 
-// Load initial set of pages and render gallery on application start
+/**
+ * Initialize application with initial data load and gallery setup
+ * @returns {Promise<void>}
+ */
 const init = async () => {
   await loadPages(); // Loads pages 1 and 2 initially with loading animation
   loadGallery(); // Renders loaded images in the active gallery mode
-  // updateCategoriesDOM(); // Initialize category filter buttons interface (starts with default categories)
-  // console.log(state);
 };
 
 init();

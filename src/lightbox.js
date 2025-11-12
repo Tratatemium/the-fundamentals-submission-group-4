@@ -1,11 +1,14 @@
 
-import { state } from "./main";
-
 const lightbox = document.querySelector('.lightbox');
 const lightboxImage = document.querySelector('.lightbox-image');
 const overlay = document.querySelector('.overlay');
 const lightboxComments = document.querySelector('.lightbox-comments');
 
+/**
+ * Show lightbox with image and comments
+ * @param {Object} imageData - Image data object with URL and comments
+ * @returns {void}
+ */
 export const showLightbox = (imageData) => {
     document.body.classList.add('lightbox-open'); // Prevent background scrolling
     lightbox.classList.remove('hidden'); // Show the lightbox
@@ -30,6 +33,10 @@ export const showLightbox = (imageData) => {
     });
 };
 
+/**
+ * Close lightbox and hide overlay
+ * @returns {void}
+ */
 const closeLightbox = () => {
     document.body.classList.remove('lightbox-open');
     const lightbox = document.querySelector('.lightbox');

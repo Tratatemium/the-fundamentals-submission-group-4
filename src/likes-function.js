@@ -1,6 +1,11 @@
 import { findImageDataByID } from "./main.js";
 import { updateLikesAPI } from "./api.js"
 
+/**
+ * Handle like button click and update like count
+ * @param {HTMLElement} button - The like button element
+ * @returns {void}
+ */
 export const likeButtonOnClick = (button) => {
   const likeNumber = button.children[1];
   const imageContainer = button.parentElement.parentElement.parentElement; //id is in the image container

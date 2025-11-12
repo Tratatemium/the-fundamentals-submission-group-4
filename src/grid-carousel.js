@@ -18,7 +18,11 @@ let rotation = 0; // Store current rotation angle of the 3D carousel
 // ======================================
 // A. RESET CAROUSEL (Clear + Reset Rotation)
 // ======================================
-function resetCarousel() { // Function to reset carousel rotation and clear items
+/**
+ * Reset carousel rotation and clear items
+ * @returns {void}
+ */
+function resetCarousel() {
   rotation = 0; // Reset rotation to 0 degrees
   if (slider) { // If slider exists
     slider.style.setProperty("--rotation", "0deg"); // Reset CSS variable controlling rotation
@@ -29,14 +33,24 @@ function resetCarousel() { // Function to reset carousel rotation and clear item
 // ======================================
 // B. CSS VARIABLE SETUP (Quantity)
 // ======================================
-function configureCarouselVariables(count) { // Function to set number of items for CSS
+/**
+ * Set number of items for CSS carousel configuration
+ * @param {number} count - Number of carousel items
+ * @returns {void}
+ */
+function configureCarouselVariables(count) {
   if (slider) slider.style.setProperty("--quantity", count); // Update CSS variable --quantity with total items
 }
 
 // ======================================
 // C. BUILD THE 3D ITEMS (with likes/comments overlay)
 // ======================================
-function createCarouselItems(images) { // Function to create carousel items
+/**
+ * Create carousel items with 3D positioning
+ * @param {Array} images - Array of image data objects
+ * @returns {void}
+ */
+function createCarouselItems(images) {
   if (!slider) return; // Exit if slider is null
 
   images.forEach((img, index) => { // Loop through all images
@@ -108,7 +122,12 @@ function createCarouselItems(images) { // Function to create carousel items
 // ======================================
 // D. MAIN EXPORT — CALLED BY pagination.js
 // ======================================
-export function renderCarousel(images) { // Exported function to render carousel
+/**
+ * Render carousel with image data
+ * @param {Array} images - Array of image objects to render
+ * @returns {void}
+ */
+export function renderCarousel(images) {
   if (!slider || !images || !images.length) return; // Exit if no slider or no images
   resetCarousel();                           // Clear old items
   configureCarouselVariables(images.length); // Set CSS variable --quantity

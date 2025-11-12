@@ -30,6 +30,11 @@ let intervalId = null;
 // Dynamically loaded Google AI SDK variables
 let GoogleGenAI, Type;
 
+/**
+ * Control AI metadata generation timer
+ * @param {string} toggle - Timer action: 'start' or 'stop'
+ * @returns {void}
+ */
 const getMetadataTimer = (toggle) => {
   switch (toggle) {
     case 'start':
@@ -50,7 +55,11 @@ const getMetadataTimer = (toggle) => {
   }
 };
 
-// Updates image data with AI-generated metadata using page-based matching
+/**
+ * Update image data with AI-generated metadata
+ * @param {Array} newMetadata - Array of metadata objects with page-based organization
+ * @returns {void}
+ */
 const updateImagesData = (newMetadata) => {
   for (const page of state.imagesData) {
     const metadataPage = newMetadata.find(metadataPage => metadataPage.page === page.page);
@@ -67,7 +76,10 @@ const updateImagesData = (newMetadata) => {
   }
 };
 
-// Fetches and processes images for AI analysis with page-based organization
+/**
+ * Fetch and process images for AI analysis
+ * @returns {Promise<Array>} Array of processed image data with URLs and page info
+ */
 const fetchImagesFromUrl = async () => {
   // Filter images that need metadata generation
 
@@ -132,7 +144,10 @@ const fetchImagesFromUrl = async () => {
 };
 
 
-// Main AI processing function for generating image metadata with Google Gemini 2.5 Pro
+/**
+ * Generate image metadata using Google Gemini AI
+ * @returns {Promise<void>}
+ */
 export const getImageMetadata = async () => {
   let initialArraysLength = [];
   let imageParts = [];
